@@ -1,0 +1,34 @@
+menu.clock=Clock
+
+atmega32.name=RTAVR board
+
+atmega32.bootloader.tool=avrdude
+atmega32.bootloader.path=stk500
+atmega32.bootloader.unlock_bits=0x3F
+atmega32.bootloader.lock_bits=0x0F
+
+atmega32.upload.tool=avrdude
+atmega32.upload.protocol=arduino
+atmega32.upload.maximum_size=30720
+atmega32.upload.speed=19200
+
+atmega32.build.mcu=atmega32
+atmega32.build.core=arduino
+atmega32.build.variant=standard
+atmega32.build.board = atmega32
+
+atmega32.menu.clock.external8=8 MHz (external)
+atmega32.menu.clock.external8.bootloader.low_fuses=0xff
+atmega32.menu.clock.external8.bootloader.high_fuses=0xda
+atmega32.menu.clock.external8.bootloader.extended_fuses=0xff
+atmega32.menu.clock.external8.build.f_cpu=8000000L
+atmega32.bootloader.file=ATmegaBOOT_168_atmega32_8MHZ.hex
+
+atmega32.menu.clock.external16=16 MHz (external)
+atmega32.menu.clock.external16.bootloader.low_fuses=0xff
+atmega32.menu.clock.external16.bootloader.high_fuses=0xda
+atmega32.menu.clock.external16.build.f_cpu=16000000L
+atmega32.bootloader.file=ATmegaBOOT_168_atmega32_16MHZ.hex
+
+
+

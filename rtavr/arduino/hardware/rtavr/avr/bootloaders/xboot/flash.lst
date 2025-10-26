@@ -1,0 +1,456 @@
+   1               		.file	"flash.c"
+   2               	__SREG__ = 0x3f
+   3               	__SP_H__ = 0x3e
+   4               	__SP_L__ = 0x3d
+   5               	__CCP__  = 0x34
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+   8               		.global __do_copy_data
+   9               		.global __do_clear_bss
+  11               		.text
+  12               	.Ltext0:
+ 100               		.section	.text.Flash_EraseApplicationSection,"ax",@progbits
+ 102               	.global	Flash_EraseApplicationSection
+ 104               	Flash_EraseApplicationSection:
+   1:flash.c       **** /************************************************************************/
+   2:flash.c       **** /* Generic ATMEL Flash Driver                                           */
+   3:flash.c       **** /*                                                                      */
+   4:flash.c       **** /* flash.c                                                              */
+   5:flash.c       **** /*                                                                      */
+   6:flash.c       **** /* Alex Forencich <alex@alexforencich.com>                              */
+   7:flash.c       **** /*                                                                      */
+   8:flash.c       **** /* Copyright (c) 2011 Alex Forencich                                    */
+   9:flash.c       **** /*                                                                      */
+  10:flash.c       **** /* Permission is hereby granted, free of charge, to any person          */
+  11:flash.c       **** /* obtaining a copy of this software and associated documentation       */
+  12:flash.c       **** /* files(the "Software"), to deal in the Software without restriction,  */
+  13:flash.c       **** /* including without limitation the rights to use, copy, modify, merge, */
+  14:flash.c       **** /* publish, distribute, sublicense, and/or sell copies of the Software, */
+  15:flash.c       **** /* and to permit persons to whom the Software is furnished to do so,    */
+  16:flash.c       **** /* subject to the following conditions:                                 */
+  17:flash.c       **** /*                                                                      */
+  18:flash.c       **** /* The above copyright notice and this permission notice shall be       */
+  19:flash.c       **** /* included in all copies or substantial portions of the Software.      */
+  20:flash.c       **** /*                                                                      */
+  21:flash.c       **** /* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,      */
+  22:flash.c       **** /* EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF   */
+  23:flash.c       **** /* MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND                */
+  24:flash.c       **** /* NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS  */
+  25:flash.c       **** /* BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN   */
+  26:flash.c       **** /* ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN    */
+  27:flash.c       **** /* CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE     */
+  28:flash.c       **** /* SOFTWARE.                                                            */
+  29:flash.c       **** /*                                                                      */
+  30:flash.c       **** /************************************************************************/
+  31:flash.c       **** 
+  32:flash.c       **** #include "flash.h"
+  33:flash.c       **** 
+  34:flash.c       **** #ifdef __AVR_XMEGA__
+  35:flash.c       **** 
+  36:flash.c       **** // XMega functions
+  37:flash.c       **** // (sp_driver wrapper)
+  38:flash.c       **** 
+  39:flash.c       **** void Flash_ProgramPage(uint32_t page, uint8_t *buf, uint8_t erase)
+  40:flash.c       **** {
+  41:flash.c       ****         Flash_LoadFlashPage(buf);
+  42:flash.c       ****         
+  43:flash.c       ****         if (erase)
+  44:flash.c       ****         {
+  45:flash.c       ****                 Flash_EraseWriteApplicationPage(page);
+  46:flash.c       ****         }
+  47:flash.c       ****         else
+  48:flash.c       ****         {
+  49:flash.c       ****                 Flash_WriteApplicationPage(page);
+  50:flash.c       ****         }
+  51:flash.c       ****         
+  52:flash.c       ****         Flash_WaitForSPM();
+  53:flash.c       **** }
+  54:flash.c       **** 
+  55:flash.c       **** #else
+  56:flash.c       **** 
+  57:flash.c       **** // ATMega Functions
+  58:flash.c       **** 
+  59:flash.c       **** void Flash_EraseApplicationSection(void)
+  60:flash.c       **** {
+ 105               	.LM0-.LFBB1
+ 106               	.LM0:
+ 107               	.LFBB1:
+ 108               	/* prologue: function */
+ 109               	/* frame size = 0 */
+ 111               	.LM1:
+ 112 0000 E0E0      		ldi r30,lo8(0)
+ 113 0002 F0E0      		ldi r31,hi8(0)
+ 114               	.LBB2:
+  61:flash.c       ****  += SPM_PAGESIZE) 
+  62:flash.c       ****         {
+  63:flash.c       ****                 boot_page_erase(addr);
+ 115               	,0,63,.LM2-.LFBB1
+ 116               	.LM2:
+ 117 0004 83E0      		ldi r24,lo8(3)
+ 118               	.L3:
+ 119               	/* #APP */
+ 120               	 ;  63 "flash.c" 1
+ 121 0006 8093 5700 		sts 87, r24
+ 122 000a E895      		spm
+ 123               		
+ 124               	 ;  0 "" 2
+ 125               	/* #NOAPP */
+ 126               	.L2:
+  64:flash.c       **** PAGESIZE) 
+ 127               	,64,.LM3-.LFBB1
+ 128               	.LM3:
+ 129 000c 07B6      		in __tmp_reg__,87-32
+ 130 000e 00FC      		sbrc __tmp_reg__,0
+ 131 0010 00C0      		rjmp .L2
+ 132 0012 E058      		subi r30,lo8(-(128))
+ 133 0014 FF4F      		sbci r31,hi8(-(128))
+ 135               	.LM4:
+ 136 0016 90E7      		ldi r25,hi8(28672)
+ 137 0018 E030      		cpi r30,lo8(28672)
+ 138 001a F907      		cpc r31,r25
+ 139 001c 01F4      		brne .L3
+ 140               	.LBE2:
+  65:flash.c       **** 32_t addr = 0; addr < APP_SECTION_END; addr += SPM_PAGESIZE) 
+  66:flash.c       ****         {
+ 141               	6,.LM5-.LFBB1
+ 142               	.LM5:
+ 143 001e 81E1      		ldi r24,lo8(17)
+ 144               	/* #APP */
+ 145               	 ;  66 "flash.c" 1
+ 146 0020 8093 5700 		sts 87, r24
+ 147 0024 E895      		spm
+ 148               		
+ 149               	 ;  0 "" 2
+ 150               	/* epilogue start */
+  67:flash.c       ****  0; addr < APP_SECTION_END; addr += SPM_PAGESIZE) 
+ 151               	,0,67,.LM6-.LFBB1
+ 152               	.LM6:
+ 153               	/* #NOAPP */
+ 154 0026 0895      		ret
+ 156               	.Lscope1:
+ 157               		.section	.text.Flash_EraseWriteApplicationPage,"ax",@progbits
+ 160               	.global	Flash_EraseWriteApplicationPage
+ 162               	Flash_EraseWriteApplicationPage:
+  68:flash.c       **** 32_t addr = 0; addr < APP_SECTION_END; addr += SPM_PAGESIZE) 
+  69:flash.c       ****         {
+  70:flash.c       ****                 boot_page_erase(addr);
+ 163               	,70,.LM7-.LFBB2
+ 164               	.LM7:
+ 165               	.LFBB2:
+ 166               	/* prologue: function */
+ 167               	/* frame size = 0 */
+  71:flash.c       **** PAGESIZE) 
+ 168               	bn	68,0,71,.LM8-.LFBB2
+ 169               	.LM8:
+ 170 0000 FB01      		movw r30,r22
+ 171 0002 83E0      		ldi r24,lo8(3)
+ 172               	/* #APP */
+ 173               	 ;  71 "flash.c" 1
+ 174 0004 8093 5700 		sts 87, r24
+ 175 0008 E895      		spm
+ 176               		
+ 177               	 ;  0 "" 2
+ 178               	/* #NOAPP */
+ 179               	.L8:
+  72:flash.c       **** 32_t addr = 0; addr < APP_SECTION_END; addr += SPM_PAGESIZE) 
+ 180               	,72,.LM9-.LFBB2
+ 181               	.LM9:
+ 182 000a 07B6      		in __tmp_reg__,87-32
+ 183 000c 00FC      		sbrc __tmp_reg__,0
+ 184 000e 00C0      		rjmp .L8
+  73:flash.c       **** 32_t addr = 0; addr < APP_SECTION_END; addr += SPM_PAGESIZE) 
+ 185               	bn	68,0,73,.LM10-.LFBB2
+ 186               	.LM10:
+ 187 0010 85E0      		ldi r24,lo8(5)
+ 188               	/* #APP */
+ 189               	 ;  73 "flash.c" 1
+ 190 0012 8093 5700 		sts 87, r24
+ 191 0016 E895      		spm
+ 192               		
+ 193               	 ;  0 "" 2
+ 194               	/* #NOAPP */
+ 195               	.L9:
+  74:flash.c       **** 32_t addr = 0; addr < APP_SECTION_END; addr += SPM_PAGESIZE) 
+ 196               	0,74,.LM11-.LFBB2
+ 197               	.LM11:
+ 198 0018 07B6      		in __tmp_reg__,87-32
+ 199 001a 00FC      		sbrc __tmp_reg__,0
+ 200 001c 00C0      		rjmp .L9
+ 201               	/* epilogue start */
+  75:flash.c       **** 32_t addr = 0; addr < APP_SECTION_END; addr += SPM_PAGESIZE) 
+ 202               	n	68,0,75,.LM12-.LFBB2
+ 203               	.LM12:
+ 204 001e 0895      		ret
+ 206               	.Lscope2:
+ 207               		.section	.text.Flash_LoadFlashPage,"ax",@progbits
+ 210               	.global	Flash_LoadFlashPage
+ 212               	Flash_LoadFlashPage:
+  76:flash.c       **** 32_t addr = 0; addr < APP_SECTION_END; addr += SPM_PAGESIZE) 
+  77:flash.c       ****         {
+  78:flash.c       ****                 boot_page_erase(addr);
+ 213               	0,78,.LM13-.LFBB3
+ 214               	.LM13:
+ 215               	.LFBB3:
+ 216               	/* prologue: function */
+ 217               	/* frame size = 0 */
+ 218 0000 DC01      		movw r26,r24
+ 220               	.LM14:
+ 221 0002 E0E0      		ldi r30,lo8(0)
+ 222 0004 F0E0      		ldi r31,hi8(0)
+ 223               	.LBB3:
+  79:flash.c       **** PAGESIZE) 
+  80:flash.c       ****         {
+  81:flash.c       ****                 boot_page_erase(addr);
+  82:flash.c       ****                 boot_spm_busy_wait();
+  83:flash.c       ****         }
+  84:flash.c       ****         boot_rww_enable();
+  85:flash.c       **** }
+ 224               	0,85,.LM15-.LFBB3
+ 225               	.LM15:
+ 226 0006 41E0      		ldi r20,lo8(1)
+ 227               	.L14:
+ 229               	.LM16:
+ 230 0008 8C91      		ld r24,X
+ 231 000a 90E0      		ldi r25,lo8(0)
+ 233               	.LM17:
+ 234 000c 1196      		adiw r26,1
+ 235 000e 3C91      		ld r19,X
+ 236 0010 1197      		sbiw r26,1
+ 237 0012 20E0      		ldi r18,lo8(0)
+ 238 0014 822B      		or r24,r18
+ 239 0016 932B      		or r25,r19
+ 241               	.LM18:
+ 242 0018 1296      		adiw r26,2
+ 244               	.LM19:
+ 245               	/* #APP */
+ 246               	 ;  85 "flash.c" 1
+ 247 001a 0C01      		movw  r0, r24
+ 248 001c 4093 5700 		sts 87, r20
+ 249 0020 E895      		spm
+ 250 0022 1124      		clr  r1
+ 251               		
+ 252               	 ;  0 "" 2
+ 254               	.LM20:
+ 255               	/* #NOAPP */
+ 256 0024 3296      		adiw r30,2
+ 257 0026 E038      		cpi r30,128
+ 258 0028 F105      		cpc r31,__zero_reg__
+ 259 002a 01F4      		brne .L14
+ 260               	/* epilogue start */
+ 261               	.LBE3:
+  86:flash.c       **** spm_busy_wait();
+  87:flash.c       ****         }
+ 262               	P */
+ 263               	 ;  85 "flash.c" 1
+ 264 002c 0895      		movw  r0, r24
+ 265               		sts 87, r20
+ 266               		spm
+ 267               		clr  r1
+ 268               		
+ 269               	 ;  0 "" 2
+ 271               	.LM20:
+ 272               	/* #NOAPP */
+ 273               		adiw r30,2
+ 274               		cpi r30,128
+ 275               		cpc r31,__zero_reg__
+ 276               		brne .L14
+ 277               	/* epilogue start */
+ 278               	.LBE3:
+  88:flash.c       **** se(addr);
+  89:flash.c       ****                 boot_spm_busy_wait();
+  90:flash.c       ****         }
+ 280               	 r0, r24
+ 281               		sts 87, r20
+ 282               		spm
+ 283 0000 CF93      		clr  r1
+ 284 0002 DF93      		
+ 285               	 ;  0 "" 2
+ 287 0004 EC01      	.LM20:
+ 288 0006 CB01      	/* #NOAPP */
+ 289 0008 BA01      		adiw r30,2
+ 290               		cpi r30,128
+ 291               		cpc r31,__zero_reg__
+ 292 000a 20E0      		brne .L14
+ 293 000c 30E0      	/* epilogue start */
+ 294 000e 40E0      	.LBE3:
+ 296               	.LM21:
+ 297 0012 D901      		ret
+  91:flash.c       **** se(addr);
+  92:flash.c       ****                 boot_spm_busy_wait();
+  93:flash.c       ****         }
+ 300               	*/
+ 301               		adiw r30,2
+ 302 0014 F901      		cpi r30,128
+ 303 0016 E60F      		cpc r31,__zero_reg__
+ 304 0018 F71F      		brne .L14
+ 305               	/* epilogue start */
+ 306               	.LBE3:
+ 308               	.LM21:
+ 309               		ret
+ 317 0026 4F4F      	.Lscope3:
+ 318 0028 5F4F      		.section	.text.Flash_ReadFlashPage,"ax",@progbits
+ 322 002c 3105      	.global	Flash_ReadFlashPage
+ 324 0030 5105      	Flash_ReadFlashPage:
+ 326               	.LM22:
+ 327               	.LFBB4:
+  94:flash.c       **** se(addr);
+  95:flash.c       ****                 boot_spm_busy_wait();
+ 328               	tabs	"data:P(0,16)",64,0,0,28
+ 330 0034 DF91      	.global	Flash_ReadFlashPage
+ 332 0038 0895      	Flash_ReadFlashPage:
+ 334               	.LM22:
+ 335               	.LFBB4:
+ 336               		push r28
+ 337               		push r29
+ 338               	/* prologue: function */
+ 339               	/* frame size = 0 */
+ 340               		movw r28,r24
+ 341               		movw r24,r22
+ 342               		movw r22,r20
+  96:flash.c       **** ot_page_erase(addr);
+  97:flash.c       ****                 boot_spm_busy_wait();
+  98:flash.c       ****         }
+ 343               	e, @function
+ 344               	Flash_ReadFlashPage:
+ 346 0000 EF92      	.LM22:
+ 347 0002 FF92      	.LFBB4:
+ 348 0004 0F93      		push r28
+ 349 0006 1F93      		push r29
+ 350 0008 CF93      	/* prologue: function */
+ 351 000a DF93      	/* frame size = 0 */
+ 352               		movw r28,r24
+ 353               		movw r24,r22
+ 354 000c 7B01      		movw r22,r20
+ 356 0010 DA01      	.LM23:
+ 357               		ldi r18,lo8(0)
+  99:flash.c       **** se(addr);
+ 100:flash.c       ****                 boot_spm_busy_wait();
+ 101:flash.c       ****         }
+ 358               	-.LFBB4
+ 359               	.LM22:
+ 360 0012 F999      	.LFBB4:
+ 361 0014 00C0      		push r28
+ 102:flash.c       **** se(addr);
+ 103:flash.c       ****                 boot_spm_busy_wait();
+ 362               	P(0,16)",64,0,0,28
+ 364 0016 2223      	.global	Flash_ReadFlashPage
+ 366               	Flash_ReadFlashPage:
+ 368 001c F701      	.LM22:
+ 369               	.LFBB4:
+ 104:flash.c       **** ot_page_erase(addr);
+ 105:flash.c       ****                 boot_spm_busy_wait();
+ 106:flash.c       ****         }
+ 107:flash.c       ****         boot_rww_enable();
+ 108:flash.c       **** }
+ 109:flash.c       **** 
+ 110:flash.c       **** void Flash_EraseWriteApplicationPage(uint32_t addr)
+ 111:flash.c       **** {
+ 112:flash.c       ****         boot_page_erase(addr);
+ 113:flash.c       ****         boot_spm_busy_wait();
+ 370               	tabs	"data:P(0,16)",64,0,0,28
+ 372 001e 11E0      	.global	Flash_ReadFlashPage
+ 374               	Flash_ReadFlashPage:
+ 376 0020 B701      	.LM22:
+ 377 0022 6058      	.LFBB4:
+ 378 0024 7F4F      		push r28
+ 379 0026 00C0      		push r29
+ 380               	/* prologue: function */
+ 381               	/* frame size = 0 */
+ 382               		movw r28,r24
+ 383 0028 83E0      		movw r24,r22
+ 384 002a F701      		movw r22,r20
+ 386               	.LM23:
+ 387 002c 8093 5700 		ldi r18,lo8(0)
+ 388 0030 E895      		ldi r19,hi8(0)
+ 389               		ldi r20,hlo8(0)
+ 390               		ldi r21,hhi8(0)
+ 391               	.L18:
+ 392               		movw r26,r18
+ 393               	.LBB4:
+ 394               	.LBB5:
+ 396 0034 00FC      	.LM24:
+ 397 0036 00C0      		movw r30,r18
+ 398 0038 00C0      		add r30,r22
+ 399               		adc r31,r23
+ 400               	/* #APP */
+ 401               	 ;  93 "flash.c" 1
+ 402               		lpm r30, Z
+ 403 003a 8C91      		
+ 404               	 ;  0 "" 2
+ 405               	/* #NOAPP */
+ 406 003c 1196      	.LBE5:
+ 407 003e 3C91      		add r26,r28
+ 408 0040 1197      		adc r27,r29
+ 409 0042 20E0      		st X,r30
+ 410 0044 E901      		subi r18,lo8(-(1))
+ 411 0046 C80F      		sbci r19,hi8(-(1))
+ 412 0048 D11D      		sbci r20,hlo8(-(1))
+ 413               		sbci r21,hhi8(-(1))
+ 415 004a 1296      	.LM25:
+ 416               		cpi r18,lo8(128)
+ 417               		cpc r19,__zero_reg__
+ 418               		cpc r20,__zero_reg__
+ 419               		cpc r21,__zero_reg__
+ 420 004c 0E01      		brne .L18
+ 421 004e 1093 5700 	/* epilogue start */
+ 422 0052 E895      	.LBE4:
+ 424               	.LM26:
+ 425               		pop r29
+ 426               		pop r28
+ 427 0056 3296      		ret
+ 429               	.Lscope4:
+ 430               		.section	.text.Flash_ProgramPage,"ax",@progbits
+ 114:flash.c       **** ot_page_erase(addr);
+ 115:flash.c       ****         boot_spm_busy_wait();
+ 116:flash.c       ****         boot_page_write(addr);
+ 434               	",@progbits
+ 439               	.global	Flash_ProgramPage
+ 441 0066 E895      	Flash_ProgramPage:
+ 443               	.LM27:
+ 444               	.LFBB5:
+ 445               		push r14
+ 117:flash.c       **** t_spm_busy_wait();
+ 446               	l	Flash_ProgramPage
+ 448 0068 07B6      	Flash_ProgramPage:
+ 450 006c 00C0      	.LM27:
+ 118:flash.c       **** ot_page_erase(addr);
+ 451               	2)",64,0,0,18
+ 452               	.global	Flash_ProgramPage
+ 454               	Flash_ProgramPage:
+ 456 0070 8093 5700 	.LM27:
+ 457 0074 E895      	.LFBB5:
+ 458               		push r14
+ 459               		push r15
+ 460               		push r16
+ 119:flash.c       **** age(uint32_t addr)
+ 461               	type	Flash_ProgramPage, @function
+ 462               	Flash_ProgramPage:
+ 464 0076 DF91      	.LM27:
+ 465 0078 CF91      	.LFBB5:
+ 466 007a 1F91      		push r14
+ 467 007c 0F91      		push r15
+ 468 007e FF90      		push r16
+ 469 0080 EF90      		push r17
+ 470 0082 0895      		push r28
+ 471               		push r29
+ 472               	/* prologue: function */
+ 473               	/* frame size = 0 */
+ 474               		movw r14,r22
+ 475               		movw r16,r24
+DEFINED SYMBOLS
+                            *ABS*:00000000 flash.c
+C:\DOCUME~1\Edwin\LOCALS~1\Temp/ccjkZu8y.s:2      *ABS*:0000003f __SREG__
+C:\DOCUME~1\Edwin\LOCALS~1\Temp/ccjkZu8y.s:3      *ABS*:0000003e __SP_H__
+C:\DOCUME~1\Edwin\LOCALS~1\Temp/ccjkZu8y.s:4      *ABS*:0000003d __SP_L__
+C:\DOCUME~1\Edwin\LOCALS~1\Temp/ccjkZu8y.s:5      *ABS*:00000034 __CCP__
+C:\DOCUME~1\Edwin\LOCALS~1\Temp/ccjkZu8y.s:6      *ABS*:00000000 __tmp_reg__
+C:\DOCUME~1\Edwin\LOCALS~1\Temp/ccjkZu8y.s:7      *ABS*:00000001 __zero_reg__
+C:\DOCUME~1\Edwin\LOCALS~1\Temp/ccjkZu8y.s:104    .text.Flash_EraseApplicationSection:00000000 Flash_EraseApplicationSection
+C:\DOCUME~1\Edwin\LOCALS~1\Temp/ccjkZu8y.s:162    .text.Flash_EraseWriteApplicationPage:00000000 Flash_EraseWriteApplicationPage
+C:\DOCUME~1\Edwin\LOCALS~1\Temp/ccjkZu8y.s:212    .text.Flash_LoadFlashPage:00000000 Flash_LoadFlashPage
+C:\DOCUME~1\Edwin\LOCALS~1\Temp/ccjkZu8y.s:279    .text.Flash_ReadFlashPage:00000000 Flash_ReadFlashPage
+C:\DOCUME~1\Edwin\LOCALS~1\Temp/ccjkZu8y.s:342    .text.Flash_ProgramPage:00000000 Flash_ProgramPage
+
+UNDEFINED SYMBOLS
+__do_copy_data
+__do_clear_bss

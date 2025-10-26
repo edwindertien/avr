@@ -1,0 +1,969 @@
+Archive member included to satisfy reference by file (symbol)
+
+/opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_exit.o)
+                              /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/crtatmega32.o (exit)
+/opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_tablejump2.o)
+                              main.o (__tablejump2__)
+/opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_copy_data.o)
+                              main.o (__do_copy_data)
+/opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_clear_bss.o)
+                              main.o (__do_clear_bss)
+/opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/libc.a(malloc.o)
+                              ../usbn2mc/main/usbnapi.o (malloc)
+/opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/libc.a(memcpy.o)
+                              main.o (memcpy)
+/opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/libatmega32.a(eerd_byte.o)
+                              main.o (eeprom_read_byte)
+/opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/libatmega32.a(eewr_byte.o)
+                              main.o (eeprom_write_byte)
+
+There are no discarded input sections
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+text             0x00000000         0x00008000         xr
+data             0x00800060         0x00000800         rw!x
+eeprom           0x00810000         0x00000400         rw!x
+fuse             0x00820000         0x00000002         rw!x
+lock             0x00830000         0x00000400         rw!x
+signature        0x00840000         0x00000400         rw!x
+user_signatures  0x00850000         0x00000400         rw!x
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+LOAD /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/crtatmega32.o
+LOAD main.o
+LOAD ../usbn2mc/main/usbn960x.o
+LOAD usbn2mc.o
+LOAD ../usbn2mc/main/usbnapi.o
+LOAD ../usbn2mc/fifo.o
+LOAD ../usbprog_base/firmwarelib/avrupdate.o
+LOAD wait.o
+LOAD /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/libm.a
+START GROUP
+LOAD /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a
+LOAD /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/libm.a
+LOAD /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/libc.a
+LOAD /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/libatmega32.a
+END GROUP
+                [0x00008000]                      __TEXT_REGION_LENGTH__ = DEFINED (__TEXT_REGION_LENGTH__)?__TEXT_REGION_LENGTH__:0x20000
+                [0x00800060]                      __DATA_REGION_ORIGIN__ = DEFINED (__DATA_REGION_ORIGIN__)?__DATA_REGION_ORIGIN__:0x800060
+                [0x00000800]                      __DATA_REGION_LENGTH__ = DEFINED (__DATA_REGION_LENGTH__)?__DATA_REGION_LENGTH__:0xffa0
+                [0x00000400]                      __EEPROM_REGION_LENGTH__ = DEFINED (__EEPROM_REGION_LENGTH__)?__EEPROM_REGION_LENGTH__:0x10000
+                [0x00000002]                      __FUSE_REGION_LENGTH__ = DEFINED (__FUSE_REGION_LENGTH__)?__FUSE_REGION_LENGTH__:0x400
+                0x00000400                        __LOCK_REGION_LENGTH__ = DEFINED (__LOCK_REGION_LENGTH__)?__LOCK_REGION_LENGTH__:0x400
+                0x00000400                        __SIGNATURE_REGION_LENGTH__ = DEFINED (__SIGNATURE_REGION_LENGTH__)?__SIGNATURE_REGION_LENGTH__:0x400
+                0x00000400                        __USER_SIGNATURE_REGION_LENGTH__ = DEFINED (__USER_SIGNATURE_REGION_LENGTH__)?__USER_SIGNATURE_REGION_LENGTH__:0x400
+
+.hash
+ *(.hash)
+
+.dynsym
+ *(.dynsym)
+
+.dynstr
+ *(.dynstr)
+
+.gnu.version
+ *(.gnu.version)
+
+.gnu.version_d
+ *(.gnu.version_d)
+
+.gnu.version_r
+ *(.gnu.version_r)
+
+.rel.init
+ *(.rel.init)
+
+.rela.init
+ *(.rela.init)
+
+.rel.text
+ *(.rel.text)
+ *(.rel.text.*)
+ *(.rel.gnu.linkonce.t*)
+
+.rela.text
+ *(.rela.text)
+ *(.rela.text.*)
+ *(.rela.gnu.linkonce.t*)
+
+.rel.fini
+ *(.rel.fini)
+
+.rela.fini
+ *(.rela.fini)
+
+.rel.rodata
+ *(.rel.rodata)
+ *(.rel.rodata.*)
+ *(.rel.gnu.linkonce.r*)
+
+.rela.rodata
+ *(.rela.rodata)
+ *(.rela.rodata.*)
+ *(.rela.gnu.linkonce.r*)
+
+.rel.data
+ *(.rel.data)
+ *(.rel.data.*)
+ *(.rel.gnu.linkonce.d*)
+
+.rela.data
+ *(.rela.data)
+ *(.rela.data.*)
+ *(.rela.gnu.linkonce.d*)
+
+.rel.ctors
+ *(.rel.ctors)
+
+.rela.ctors
+ *(.rela.ctors)
+
+.rel.dtors
+ *(.rel.dtors)
+
+.rela.dtors
+ *(.rela.dtors)
+
+.rel.got
+ *(.rel.got)
+
+.rela.got
+ *(.rela.got)
+
+.rel.bss
+ *(.rel.bss)
+
+.rela.bss
+ *(.rela.bss)
+
+.rel.plt
+ *(.rel.plt)
+
+.rela.plt
+ *(.rela.plt)
+
+.text           0x00000000     0x2600
+ *(.vectors)
+ .vectors       0x00000000       0x54 /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/crtatmega32.o
+                0x00000000                __vectors
+                0x00000000                __vector_default
+ *(.vectors)
+ *(.progmem.gcc*)
+                0x00000054                        . = ALIGN (0x2)
+                0x00000054                        __trampolines_start = .
+ *(.trampolines)
+ .trampolines   0x00000054        0x0 linker stubs
+ *(.trampolines*)
+                0x00000054                        __trampolines_end = .
+ *libprintf_flt.a:*(.progmem.data)
+ *libc.a:*(.progmem.data)
+ *(.progmem.*)
+ .progmem.data  0x00000054      0x148 main.o
+                0x00000054                sck_lookup
+                0x0000019c                        . = ALIGN (0x2)
+ *(.lowtext)
+ *(.lowtext*)
+                0x0000019c                        __ctors_start = .
+ *(.ctors)
+                0x0000019c                        __ctors_end = .
+                0x0000019c                        __dtors_start = .
+ *(.dtors)
+                0x0000019c                        __dtors_end = .
+ SORT_BY_NAME(*)(.ctors)
+ SORT_BY_NAME(*)(.dtors)
+ *(.init0)
+ .init0         0x0000019c        0x0 /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/crtatmega32.o
+                0x0000019c                __init
+ *(.init0)
+ *(.init1)
+ *(.init1)
+ *(.init2)
+ .init2         0x0000019c        0xc /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/crtatmega32.o
+ *(.init2)
+ *(.init3)
+ *(.init3)
+ *(.init4)
+ .init4         0x000001a8       0x16 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_copy_data.o)
+                0x000001a8                __do_copy_data
+ .init4         0x000001be       0x10 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_clear_bss.o)
+                0x000001be                __do_clear_bss
+ *(.init4)
+ *(.init5)
+ *(.init5)
+ *(.init6)
+ *(.init6)
+ *(.init7)
+ *(.init7)
+ *(.init8)
+ *(.init8)
+ *(.init9)
+ .init9         0x000001ce        0x8 /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/crtatmega32.o
+ *(.init9)
+ *(.text)
+ .text          0x000001d6        0x4 /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/crtatmega32.o
+                0x000001d6                __vector_20
+                0x000001d6                __bad_interrupt
+                0x000001d6                __vector_6
+                0x000001d6                __vector_3
+                0x000001d6                __vector_11
+                0x000001d6                __vector_13
+                0x000001d6                __vector_17
+                0x000001d6                __vector_19
+                0x000001d6                __vector_7
+                0x000001d6                __vector_5
+                0x000001d6                __vector_4
+                0x000001d6                __vector_9
+                0x000001d6                __vector_2
+                0x000001d6                __vector_15
+                0x000001d6                __vector_8
+                0x000001d6                __vector_14
+                0x000001d6                __vector_10
+                0x000001d6                __vector_16
+                0x000001d6                __vector_18
+                0x000001d6                __vector_12
+ .text          0x000001da      0xe9e main.o
+                0x000001da                __vector_1
+                0x00000222                USBNDecodeVendorRequest
+                0x00000230                spi_init
+                0x000002ce                spi_idle
+                0x000002d8                spi_active
+                0x000002e8                spi_inout
+                0x0000035e                spi_pulseclockonce
+                0x00000388                spi_cmd
+                0x000003b0                spi_out
+                0x000003b4                spi_in
+                0x000003ba                USBToglAndSend
+                0x000003f8                SendCompleteAnswer
+                0x000004c6                CommandAnswer
+                0x00000510                program_fsm
+                0x0000089c                cmd_enter_progmode
+                0x000009b4                cmd_spi_multi
+                0x00000a52                USBFlash
+ .text          0x00001078      0x5b6 ../usbn2mc/main/usbn960x.o
+                0x00001078                _USBNInitEP0
+                0x000010a8                _USBNNackEvent
+                0x000010ae                _USBNAlternateEvent
+                0x0000110a                _USBNReceive
+                0x0000110c                _USBNTransmit
+                0x0000119e                _USBNTransmitFIFO0
+                0x000011e6                _USBNTransmitEvent
+                0x0000121c                _USBNSetAddress
+                0x00001240                _USBNGetDescriptor
+                0x00001334                _USBNGetStatus
+                0x00001336                _USBNSetConfiguration
+                0x00001366                _USBNGetConfiguration
+                0x00001370                _USBNReceiveFIFO0
+                0x000014ce                _USBNReceiveEvent
+ .text          0x0000162e       0x7a usbn2mc.o
+                0x0000162e                USBNInitMC
+                0x00001646                USBNBurstRead
+                0x0000165c                USBNRead
+                0x00001678                USBNBurstWrite
+                0x0000168a                USBNWrite
+                0x000016a6                USBNDebug
+ .text          0x000016a8      0xa44 ../usbn2mc/main/usbnapi.o
+                0x000016a8                USBNInit
+                0x00001700                USBNDeviceIDs
+                0x00001712                USBNDeviceVendorID
+                0x0000171c                USBNDeviceProductID
+                0x00001726                USBNDeviceBCDDevice
+                0x00001730                USBNDeviceClass
+                0x00001736                USBNDeviceSubClass
+                0x0000173c                USBNDeviceProtocol
+                0x00001742                USBNConfigurationPower
+                0x00001780                USBNAlternateSetting
+                0x000017be                USBNNackEvent
+                0x000017c8                _USBNCreateConfDescrField
+                0x00001a28                _USBNCreateStringField
+                0x00001ad0                USBNStart
+                0x00001b4e                USBNInterrupt
+                0x00001b8a                USBNAddToStringList
+                0x00001c08                _USBNAddStringDescriptor
+                0x00001c84                USBNDeviceManufacture
+                0x00001c9a                USBNDeviceProduct
+                0x00001cb0                USBNDeviceSerialNumber
+                0x00001cc6                USBNConfigurationName
+                0x00001d06                USBNInterfaceName
+                0x00001d54                _USBNAddToList
+                0x00001dec                USBNAddConfiguration
+                0x00001e48                USBNAddInterfaceClass
+                0x00001ee2                USBNAddInterface
+                0x00001f70                _USBNAddEndpoint
+                0x0000200a                USBNAddOutEndpoint
+                0x00002070                USBNAddInEndpoint
+ .text          0x000020ec       0xe8 ../usbn2mc/fifo.o
+                0x000020ec                fifo_init
+                0x0000210c                fifo_put
+                0x00002150                fifo_get_wait
+                0x00002188                fifo_get_nowait
+ .text          0x000021d4        0xe ../usbprog_base/firmwarelib/avrupdate.o
+                0x000021d4                avrupdate_start
+ .text          0x000021e2       0x1e wait.o
+                0x000021e2                wait_ms
+ .text          0x00002200        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_exit.o)
+ .text          0x00002200        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_tablejump2.o)
+ .text          0x00002200        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_copy_data.o)
+ .text          0x00002200        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_clear_bss.o)
+ .text          0x00002200        0x0 /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/libc.a(malloc.o)
+ .text          0x00002200        0x0 /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/libc.a(memcpy.o)
+ .text          0x00002200        0x0 /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/libatmega32.a(eerd_byte.o)
+ .text          0x00002200        0x0 /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/libatmega32.a(eewr_byte.o)
+                0x00002200                        . = ALIGN (0x2)
+ *(.text.*)
+ .text.startup  0x00002200      0x106 main.o
+                0x00002200                main
+ .text.libgcc.mul
+                0x00002306        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_exit.o)
+ .text.libgcc.div
+                0x00002306        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_exit.o)
+ .text.libgcc   0x00002306        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_exit.o)
+ .text.libgcc.prologue
+                0x00002306        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_exit.o)
+ .text.libgcc.builtins
+                0x00002306        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_exit.o)
+ .text.libgcc.fmul
+                0x00002306        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_exit.o)
+ .text.libgcc.fixed
+                0x00002306        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_exit.o)
+ .text.libgcc.mul
+                0x00002306        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_tablejump2.o)
+ .text.libgcc.div
+                0x00002306        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_tablejump2.o)
+ .text.libgcc   0x00002306        0xc /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_tablejump2.o)
+                0x00002306                __tablejump2__
+ .text.libgcc.prologue
+                0x00002312        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_tablejump2.o)
+ .text.libgcc.builtins
+                0x00002312        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_tablejump2.o)
+ .text.libgcc.fmul
+                0x00002312        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_tablejump2.o)
+ .text.libgcc.fixed
+                0x00002312        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_tablejump2.o)
+ .text.libgcc.mul
+                0x00002312        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_copy_data.o)
+ .text.libgcc.div
+                0x00002312        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_copy_data.o)
+ .text.libgcc   0x00002312        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_copy_data.o)
+ .text.libgcc.prologue
+                0x00002312        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_copy_data.o)
+ .text.libgcc.builtins
+                0x00002312        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_copy_data.o)
+ .text.libgcc.fmul
+                0x00002312        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_copy_data.o)
+ .text.libgcc.fixed
+                0x00002312        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_copy_data.o)
+ .text.libgcc.mul
+                0x00002312        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_clear_bss.o)
+ .text.libgcc.div
+                0x00002312        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_clear_bss.o)
+ .text.libgcc   0x00002312        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_clear_bss.o)
+ .text.libgcc.prologue
+                0x00002312        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_clear_bss.o)
+ .text.libgcc.builtins
+                0x00002312        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_clear_bss.o)
+ .text.libgcc.fmul
+                0x00002312        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_clear_bss.o)
+ .text.libgcc.fixed
+                0x00002312        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_clear_bss.o)
+ .text.avr-libc
+                0x00002312      0x24e /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/libc.a(malloc.o)
+                0x00002312                malloc
+                0x0000243e                free
+ .text.avr-libc
+                0x00002560       0x12 /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/libc.a(memcpy.o)
+                0x00002560                memcpy
+ .text.avr-libc
+                0x00002572       0x10 /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/libatmega32.a(eerd_byte.o)
+                0x00002572                eeprom_read_byte
+ .text.avr-libc
+                0x00002582       0x1a /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/libatmega32.a(eewr_byte.o)
+                0x00002582                eeprom_write_byte
+                0x00002584                eeprom_write_r18
+                0x0000259c                        . = ALIGN (0x2)
+ *(.fini9)
+ .fini9         0x0000259c        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_exit.o)
+                0x0000259c                exit
+                0x0000259c                _exit
+ *(.fini9)
+ *(.fini8)
+ *(.fini8)
+ *(.fini7)
+ *(.fini7)
+ *(.fini6)
+ *(.fini6)
+ *(.fini5)
+ *(.fini5)
+ *(.fini4)
+ *(.fini4)
+ *(.fini3)
+ *(.fini3)
+ *(.fini2)
+ *(.fini2)
+ *(.fini1)
+ *(.fini1)
+ *(.fini0)
+ .fini0         0x0000259c        0x4 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_exit.o)
+ *(.fini0)
+ *(.hightext)
+ *(.hightext*)
+ *(.progmemx.*)
+                0x000025a0                        . = ALIGN (0x2)
+ *(.jumptables)
+ *(.jumptables*)
+ .jumptables.gcc.spi_init
+                0x000025a0        0xe main.o
+ .jumptables.gcc.USBFlash
+                0x000025ae       0x3a main.o
+ .jumptables.gcc._USBNReceiveFIFO0
+                0x000025e8       0x18 ../usbn2mc/main/usbn960x.o
+                0x00002600                        _etext = .
+
+.data           0x00800060       0x30 load address 0x00002600
+                0x00800060                        PROVIDE (__data_start = .)
+ *(.data)
+ .data          0x00800060        0x0 /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/crtatmega32.o
+ .data          0x00800060        0x0 main.o
+ .data          0x00800060        0x0 ../usbn2mc/main/usbn960x.o
+ .data          0x00800060        0x0 usbn2mc.o
+ .data          0x00800060        0x0 ../usbn2mc/main/usbnapi.o
+ .data          0x00800060        0x0 ../usbn2mc/fifo.o
+ .data          0x00800060        0x2 ../usbprog_base/firmwarelib/avrupdate.o
+                0x00800060                avrupdate_jump_to_boot
+ .data          0x00800062        0x0 wait.o
+ .data          0x00800062        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_exit.o)
+ .data          0x00800062        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_tablejump2.o)
+ .data          0x00800062        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_copy_data.o)
+ .data          0x00800062        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_clear_bss.o)
+ .data          0x00800062        0x6 /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/libc.a(malloc.o)
+                0x00800062                __malloc_heap_end
+                0x00800064                __malloc_heap_start
+                0x00800066                __malloc_margin
+ .data          0x00800068        0x0 /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/libc.a(memcpy.o)
+ .data          0x00800068        0x0 /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/libatmega32.a(eerd_byte.o)
+ .data          0x00800068        0x0 /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/libatmega32.a(eewr_byte.o)
+ *(.data*)
+ *(.gnu.linkonce.d*)
+ *(.rodata)
+ *(.rodata*)
+ .rodata.str1.1
+                0x00800068       0x28 main.o
+ *(.gnu.linkonce.r*)
+                0x00800090                        . = ALIGN (0x2)
+                0x00800090                        _edata = .
+                0x00800090                        PROVIDE (__data_end = .)
+
+.bss            0x00800090      0x1a2
+                0x00800090                        PROVIDE (__bss_start = .)
+ *(.bss)
+ .bss           0x00800090        0x0 /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/crtatmega32.o
+ .bss           0x00800090      0x156 main.o
+                0x00800090                pgmmode
+                0x008000a7                answer
+                0x008001d3                usbprog
+                0x008001e2                sck_delay_value
+ .bss           0x008001e6       0x48 ../usbn2mc/main/usbn960x.o
+                0x008001e6                USBNFunctionInfo
+                0x008001e8                StringList
+                0x008001ea                DescriptorList
+                0x008001ec                FinalStringArray
+                0x008001ee                FinalConfigurationArray
+                0x008001f0                DeviceDescriptor
+                0x00800202                rxfifos
+                0x0080020d                txfifos
+                0x00800216                EP0tx
+                0x00800222                EP0rx
+ .bss           0x0080022e        0x0 usbn2mc.o
+ .bss           0x0080022e        0x0 ../usbn2mc/main/usbnapi.o
+ .bss           0x0080022e        0x0 ../usbn2mc/fifo.o
+ .bss           0x0080022e        0x0 ../usbprog_base/firmwarelib/avrupdate.o
+ .bss           0x0080022e        0x0 wait.o
+ .bss           0x0080022e        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_exit.o)
+ .bss           0x0080022e        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_tablejump2.o)
+ .bss           0x0080022e        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_copy_data.o)
+ .bss           0x0080022e        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_clear_bss.o)
+ .bss           0x0080022e        0x4 /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/libc.a(malloc.o)
+                0x0080022e                __flp
+                0x00800230                __brkval
+ .bss           0x00800232        0x0 /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/libc.a(memcpy.o)
+ .bss           0x00800232        0x0 /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/libatmega32.a(eerd_byte.o)
+ .bss           0x00800232        0x0 /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/libatmega32.a(eewr_byte.o)
+ *(.bss*)
+ *(COMMON)
+                0x00800232                        PROVIDE (__bss_end = .)
+                0x00002600                        __data_load_start = LOADADDR (.data)
+                0x00002630                        __data_load_end = (__data_load_start + SIZEOF (.data))
+
+.noinit         0x00800232        0x0
+                [!provide]                        PROVIDE (__noinit_start = .)
+ *(.noinit .noinit.* .gnu.linkonce.n.*)
+                [!provide]                        PROVIDE (__noinit_end = .)
+                0x00800232                        _end = .
+                0x00800232                        PROVIDE (__heap_start = .)
+
+.eeprom         0x00810000        0x1
+ *(.eeprom*)
+ .eeprom        0x00810000        0x1 main.o
+                0x00810000                ee_sck_duration
+                0x00810001                        __eeprom_end = .
+
+.fuse
+ *(.fuse)
+ *(.lfuse)
+ *(.hfuse)
+ *(.efuse)
+
+.lock
+ *(.lock*)
+
+.signature
+ *(.signature*)
+
+.stab
+ *(.stab)
+
+.stabstr
+ *(.stabstr)
+
+.stab.excl
+ *(.stab.excl)
+
+.stab.exclstr
+ *(.stab.exclstr)
+
+.stab.index
+ *(.stab.index)
+
+.stab.indexstr
+ *(.stab.indexstr)
+
+.comment        0x00000000       0x12
+ *(.comment)
+ .comment       0x00000000       0x12 main.o
+                                 0x13 (size before relaxing)
+ .comment       0x00000012       0x13 ../usbn2mc/main/usbn960x.o
+ .comment       0x00000012       0x13 usbn2mc.o
+ .comment       0x00000012       0x13 ../usbn2mc/main/usbnapi.o
+ .comment       0x00000012       0x13 ../usbn2mc/fifo.o
+ .comment       0x00000012       0x13 ../usbprog_base/firmwarelib/avrupdate.o
+ .comment       0x00000012       0x13 wait.o
+ .comment       0x00000012       0x13 /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/libc.a(malloc.o)
+
+.note.gnu.avr.deviceinfo
+                0x00000000       0x3c
+ .note.gnu.avr.deviceinfo
+                0x00000000       0x3c /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/crtatmega32.o
+
+.gnu.build.attributes
+ *(.gnu.build.attributes .gnu.build.attributes.*)
+
+.note.gnu.build-id
+ *(.note.gnu.build-id)
+
+.debug
+ *(.debug)
+
+.line
+ *(.line)
+
+.debug_srcinfo
+ *(.debug_srcinfo)
+
+.debug_sfnames
+ *(.debug_sfnames)
+
+.debug_aranges  0x00000000      0x168
+ *(.debug_aranges)
+ .debug_aranges
+                0x00000000       0x28 main.o
+ .debug_aranges
+                0x00000028       0x20 ../usbn2mc/main/usbn960x.o
+ .debug_aranges
+                0x00000048       0x20 usbn2mc.o
+ .debug_aranges
+                0x00000068       0x20 ../usbn2mc/main/usbnapi.o
+ .debug_aranges
+                0x00000088       0x20 ../usbn2mc/fifo.o
+ .debug_aranges
+                0x000000a8       0x20 ../usbprog_base/firmwarelib/avrupdate.o
+ .debug_aranges
+                0x000000c8       0x20 wait.o
+ .debug_aranges
+                0x000000e8       0x20 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_exit.o)
+ .debug_aranges
+                0x00000108       0x20 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_tablejump2.o)
+ .debug_aranges
+                0x00000128       0x20 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_copy_data.o)
+ .debug_aranges
+                0x00000148       0x20 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_clear_bss.o)
+
+.debug_pubnames
+ *(.debug_pubnames)
+
+.debug_info     0x00000000     0x48b4
+ *(.debug_info .gnu.linkonce.wi.*)
+ .debug_info    0x00000000      0x4e6 /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/crtatmega32.o
+ .debug_info    0x000004e6     0x1a1b main.o
+ .debug_info    0x00001f01      0xe0c ../usbn2mc/main/usbn960x.o
+ .debug_info    0x00002d0d      0x180 usbn2mc.o
+ .debug_info    0x00002e8d     0x14cd ../usbn2mc/main/usbnapi.o
+ .debug_info    0x0000435a      0x2f2 ../usbn2mc/fifo.o
+ .debug_info    0x0000464c       0x9d ../usbprog_base/firmwarelib/avrupdate.o
+ .debug_info    0x000046e9      0x13b wait.o
+ .debug_info    0x00004824       0x24 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_exit.o)
+ .debug_info    0x00004848       0x24 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_tablejump2.o)
+ .debug_info    0x0000486c       0x24 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_copy_data.o)
+ .debug_info    0x00004890       0x24 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_clear_bss.o)
+
+.debug_abbrev   0x00000000     0x1352
+ *(.debug_abbrev)
+ .debug_abbrev  0x00000000      0x4a3 /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/crtatmega32.o
+ .debug_abbrev  0x000004a3      0x431 main.o
+ .debug_abbrev  0x000008d4      0x34e ../usbn2mc/main/usbn960x.o
+ .debug_abbrev  0x00000c22      0x10c usbn2mc.o
+ .debug_abbrev  0x00000d2e      0x2fd ../usbn2mc/main/usbnapi.o
+ .debug_abbrev  0x0000102b      0x159 ../usbn2mc/fifo.o
+ .debug_abbrev  0x00001184       0x73 ../usbprog_base/firmwarelib/avrupdate.o
+ .debug_abbrev  0x000011f7      0x10b wait.o
+ .debug_abbrev  0x00001302       0x14 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_exit.o)
+ .debug_abbrev  0x00001316       0x14 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_tablejump2.o)
+ .debug_abbrev  0x0000132a       0x14 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_copy_data.o)
+ .debug_abbrev  0x0000133e       0x14 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_clear_bss.o)
+
+.debug_line     0x00000000     0x5831
+ *(.debug_line .debug_line.* .debug_line_end)
+ .debug_line    0x00000000       0x1d /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/crtatmega32.o
+ .debug_line    0x0000001d     0x270a main.o
+ .debug_line    0x00002727      0xbbb ../usbn2mc/main/usbn960x.o
+ .debug_line    0x000032e2      0x239 usbn2mc.o
+ .debug_line    0x0000351b     0x1be1 ../usbn2mc/main/usbnapi.o
+ .debug_line    0x000050fc      0x41d ../usbn2mc/fifo.o
+ .debug_line    0x00005519       0x73 ../usbprog_base/firmwarelib/avrupdate.o
+ .debug_line    0x0000558c       0xef wait.o
+ .debug_line    0x0000567b       0x51 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_exit.o)
+ .debug_line    0x000056cc       0x69 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_tablejump2.o)
+ .debug_line    0x00005735       0x87 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_copy_data.o)
+ .debug_line    0x000057bc       0x75 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_clear_bss.o)
+
+.debug_frame    0x00000000      0x924
+ *(.debug_frame)
+ .debug_frame   0x00000000      0x260 main.o
+ .debug_frame   0x00000260      0x194 ../usbn2mc/main/usbn960x.o
+ .debug_frame   0x000003f4       0x74 usbn2mc.o
+ .debug_frame   0x00000468      0x414 ../usbn2mc/main/usbnapi.o
+ .debug_frame   0x0000087c       0x60 ../usbn2mc/fifo.o
+ .debug_frame   0x000008dc       0x24 ../usbprog_base/firmwarelib/avrupdate.o
+ .debug_frame   0x00000900       0x24 wait.o
+
+.debug_str      0x00000000      0xfff
+ *(.debug_str)
+ .debug_str     0x00000000      0x196 /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/crtatmega32.o
+ .debug_str     0x00000196      0xe69 main.o
+                                0x6ca (size before relaxing)
+ .debug_str     0x00000fff      0x4f7 ../usbn2mc/main/usbn960x.o
+ .debug_str     0x00000fff      0x175 usbn2mc.o
+ .debug_str     0x00000fff      0x7b8 ../usbn2mc/main/usbnapi.o
+ .debug_str     0x00000fff      0x149 ../usbn2mc/fifo.o
+ .debug_str     0x00000fff      0x13f ../usbprog_base/firmwarelib/avrupdate.o
+ .debug_str     0x00000fff      0x15e wait.o
+ .debug_str     0x00000fff      0x11b /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_exit.o)
+ .debug_str     0x00000fff      0x11b /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_tablejump2.o)
+ .debug_str     0x00000fff      0x11b /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_copy_data.o)
+ .debug_str     0x00000fff      0x11b /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_clear_bss.o)
+
+.debug_loc
+ *(.debug_loc)
+
+.debug_macinfo
+ *(.debug_macinfo)
+
+.debug_weaknames
+ *(.debug_weaknames)
+
+.debug_funcnames
+ *(.debug_funcnames)
+
+.debug_typenames
+ *(.debug_typenames)
+
+.debug_varnames
+ *(.debug_varnames)
+
+.debug_pubtypes
+ *(.debug_pubtypes)
+
+.debug_ranges
+ *(.debug_ranges)
+
+.debug_addr
+ *(.debug_addr)
+
+.debug_line_str
+                0x00000000      0x324
+ *(.debug_line_str)
+ .debug_line_str
+                0x00000000      0x324 main.o
+                                0x14f (size before relaxing)
+ .debug_line_str
+                0x00000324       0xfb ../usbn2mc/main/usbn960x.o
+ .debug_line_str
+                0x00000324       0x90 usbn2mc.o
+ .debug_line_str
+                0x00000324      0x11b ../usbn2mc/main/usbnapi.o
+ .debug_line_str
+                0x00000324       0x84 ../usbn2mc/fifo.o
+ .debug_line_str
+                0x00000324       0xce ../usbprog_base/firmwarelib/avrupdate.o
+ .debug_line_str
+                0x00000324       0xab wait.o
+ .debug_line_str
+                0x00000324      0x10f /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_exit.o)
+ .debug_line_str
+                0x00000324      0x10f /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_tablejump2.o)
+ .debug_line_str
+                0x00000324      0x10f /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_copy_data.o)
+ .debug_line_str
+                0x00000324      0x10f /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_clear_bss.o)
+
+.debug_loclists
+                0x00000000     0x2158
+ *(.debug_loclists)
+ .debug_loclists
+                0x00000000      0xa65 main.o
+ .debug_loclists
+                0x00000a65      0x357 ../usbn2mc/main/usbn960x.o
+ .debug_loclists
+                0x00000dbc       0x8b usbn2mc.o
+ .debug_loclists
+                0x00000e47     0x10ee ../usbn2mc/main/usbnapi.o
+ .debug_loclists
+                0x00001f35      0x1bb ../usbn2mc/fifo.o
+ .debug_loclists
+                0x000020f0       0x68 wait.o
+
+.debug_macro
+ *(.debug_macro)
+
+.debug_names
+ *(.debug_names)
+
+.debug_rnglists
+                0x00000000       0xab
+ *(.debug_rnglists)
+ .debug_rnglists
+                0x00000000       0x89 main.o
+ .debug_rnglists
+                0x00000089       0x22 ../usbn2mc/main/usbn960x.o
+
+.debug_str_offsets
+ *(.debug_str_offsets)
+
+.debug_sup
+ *(.debug_sup)
+OUTPUT(main.elf elf32-avr)
+LOAD linker stubs
+
+Cross Reference Table
+
+Symbol                                            File
+CommandAnswer                                     main.o
+DescriptorList                                    ../usbn2mc/main/usbn960x.o
+                                                  ../usbn2mc/main/usbnapi.o
+DeviceDescriptor                                  ../usbn2mc/main/usbn960x.o
+                                                  ../usbn2mc/main/usbnapi.o
+EP0rx                                             ../usbn2mc/main/usbn960x.o
+EP0tx                                             ../usbn2mc/main/usbn960x.o
+FinalConfigurationArray                           ../usbn2mc/main/usbn960x.o
+                                                  ../usbn2mc/main/usbnapi.o
+FinalStringArray                                  ../usbn2mc/main/usbn960x.o
+                                                  ../usbn2mc/main/usbnapi.o
+SendCompleteAnswer                                main.o
+StringList                                        ../usbn2mc/main/usbn960x.o
+                                                  ../usbn2mc/main/usbnapi.o
+USBFlash                                          main.o
+USBNAddConfiguration                              ../usbn2mc/main/usbnapi.o
+                                                  main.o
+USBNAddInEndpoint                                 ../usbn2mc/main/usbnapi.o
+                                                  main.o
+USBNAddInterface                                  ../usbn2mc/main/usbnapi.o
+                                                  main.o
+USBNAddInterfaceClass                             ../usbn2mc/main/usbnapi.o
+USBNAddOutEndpoint                                ../usbn2mc/main/usbnapi.o
+                                                  main.o
+USBNAddToStringList                               ../usbn2mc/main/usbnapi.o
+USBNAlternateSetting                              ../usbn2mc/main/usbnapi.o
+                                                  main.o
+USBNBurstRead                                     usbn2mc.o
+                                                  ../usbn2mc/main/usbn960x.o
+USBNBurstWrite                                    usbn2mc.o
+USBNConfigurationName                             ../usbn2mc/main/usbnapi.o
+USBNConfigurationPower                            ../usbn2mc/main/usbnapi.o
+                                                  main.o
+USBNDebug                                         usbn2mc.o
+USBNDecodeVendorRequest                           main.o
+                                                  ../usbn2mc/main/usbn960x.o
+USBNDeviceBCDDevice                               ../usbn2mc/main/usbnapi.o
+                                                  main.o
+USBNDeviceClass                                   ../usbn2mc/main/usbnapi.o
+USBNDeviceIDs                                     ../usbn2mc/main/usbnapi.o
+USBNDeviceManufacture                             ../usbn2mc/main/usbnapi.o
+                                                  main.o
+USBNDeviceProduct                                 ../usbn2mc/main/usbnapi.o
+                                                  main.o
+USBNDeviceProductID                               ../usbn2mc/main/usbnapi.o
+                                                  main.o
+USBNDeviceProtocol                                ../usbn2mc/main/usbnapi.o
+USBNDeviceSerialNumber                            ../usbn2mc/main/usbnapi.o
+                                                  main.o
+USBNDeviceSubClass                                ../usbn2mc/main/usbnapi.o
+USBNDeviceVendorID                                ../usbn2mc/main/usbnapi.o
+                                                  main.o
+USBNFunctionInfo                                  ../usbn2mc/main/usbn960x.o
+USBNInit                                          ../usbn2mc/main/usbnapi.o
+                                                  main.o
+USBNInitMC                                        usbn2mc.o
+                                                  main.o
+USBNInterfaceName                                 ../usbn2mc/main/usbnapi.o
+USBNInterrupt                                     ../usbn2mc/main/usbnapi.o
+                                                  main.o
+USBNNackEvent                                     ../usbn2mc/main/usbnapi.o
+USBNRead                                          usbn2mc.o
+                                                  ../usbn2mc/main/usbnapi.o
+                                                  ../usbn2mc/main/usbn960x.o
+USBNStart                                         ../usbn2mc/main/usbnapi.o
+                                                  main.o
+USBNWrite                                         usbn2mc.o
+                                                  ../usbn2mc/main/usbnapi.o
+                                                  ../usbn2mc/main/usbn960x.o
+                                                  main.o
+USBToglAndSend                                    main.o
+_USBNAddEndpoint                                  ../usbn2mc/main/usbnapi.o
+_USBNAddStringDescriptor                          ../usbn2mc/main/usbnapi.o
+                                                  main.o
+_USBNAddToList                                    ../usbn2mc/main/usbnapi.o
+_USBNAlternateEvent                               ../usbn2mc/main/usbn960x.o
+                                                  ../usbn2mc/main/usbnapi.o
+_USBNCreateConfDescrField                         ../usbn2mc/main/usbnapi.o
+_USBNCreateStringField                            ../usbn2mc/main/usbnapi.o
+_USBNGetConfiguration                             ../usbn2mc/main/usbn960x.o
+_USBNGetDescriptor                                ../usbn2mc/main/usbn960x.o
+_USBNGetStatus                                    ../usbn2mc/main/usbn960x.o
+_USBNInitEP0                                      ../usbn2mc/main/usbn960x.o
+                                                  ../usbn2mc/main/usbnapi.o
+_USBNNackEvent                                    ../usbn2mc/main/usbn960x.o
+                                                  ../usbn2mc/main/usbnapi.o
+_USBNReceive                                      ../usbn2mc/main/usbn960x.o
+_USBNReceiveEvent                                 ../usbn2mc/main/usbn960x.o
+                                                  ../usbn2mc/main/usbnapi.o
+_USBNReceiveFIFO0                                 ../usbn2mc/main/usbn960x.o
+_USBNSetAddress                                   ../usbn2mc/main/usbn960x.o
+_USBNSetConfiguration                             ../usbn2mc/main/usbn960x.o
+_USBNTransmit                                     ../usbn2mc/main/usbn960x.o
+_USBNTransmitEvent                                ../usbn2mc/main/usbn960x.o
+                                                  ../usbn2mc/main/usbnapi.o
+_USBNTransmitFIFO0                                ../usbn2mc/main/usbn960x.o
+__DATA_REGION_LENGTH__                            /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/crtatmega32.o
+__DATA_REGION_ORIGIN__                            /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/crtatmega32.o
+__EEPROM_REGION_LENGTH__                          /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/crtatmega32.o
+__FUSE_REGION_LENGTH__                            /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/crtatmega32.o
+__TEXT_REGION_LENGTH__                            /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/crtatmega32.o
+__TEXT_REGION_ORIGIN__                            /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/crtatmega32.o
+__bad_interrupt                                   /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/crtatmega32.o
+__brkval                                          /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/libc.a(malloc.o)
+__bss_end                                         /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_clear_bss.o)
+__bss_start                                       /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_clear_bss.o)
+__data_end                                        /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_copy_data.o)
+__data_load_start                                 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_copy_data.o)
+__data_start                                      /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_copy_data.o)
+__do_clear_bss                                    /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_clear_bss.o)
+                                                  /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/libc.a(malloc.o)
+                                                  ../usbn2mc/main/usbn960x.o
+                                                  main.o
+__do_copy_data                                    /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_copy_data.o)
+                                                  /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/libc.a(malloc.o)
+                                                  ../usbprog_base/firmwarelib/avrupdate.o
+                                                  main.o
+__flp                                             /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/libc.a(malloc.o)
+__heap_end                                        /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/crtatmega32.o
+                                                  /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/libc.a(malloc.o)
+__heap_start                                      /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/libc.a(malloc.o)
+__init                                            /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/crtatmega32.o
+__malloc_heap_end                                 /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/libc.a(malloc.o)
+__malloc_heap_start                               /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/libc.a(malloc.o)
+__malloc_margin                                   /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/libc.a(malloc.o)
+__stack                                           /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/crtatmega32.o
+__tablejump2__                                    /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_tablejump2.o)
+                                                  ../usbn2mc/main/usbn960x.o
+                                                  main.o
+__vector_1                                        main.o
+                                                  /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/crtatmega32.o
+__vector_10                                       /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/crtatmega32.o
+__vector_11                                       /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/crtatmega32.o
+__vector_12                                       /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/crtatmega32.o
+__vector_13                                       /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/crtatmega32.o
+__vector_14                                       /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/crtatmega32.o
+__vector_15                                       /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/crtatmega32.o
+__vector_16                                       /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/crtatmega32.o
+__vector_17                                       /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/crtatmega32.o
+__vector_18                                       /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/crtatmega32.o
+__vector_19                                       /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/crtatmega32.o
+__vector_2                                        /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/crtatmega32.o
+__vector_20                                       /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/crtatmega32.o
+__vector_3                                        /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/crtatmega32.o
+__vector_4                                        /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/crtatmega32.o
+__vector_5                                        /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/crtatmega32.o
+__vector_6                                        /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/crtatmega32.o
+__vector_7                                        /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/crtatmega32.o
+__vector_8                                        /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/crtatmega32.o
+__vector_9                                        /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/crtatmega32.o
+__vector_default                                  /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/crtatmega32.o
+__vectors                                         /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/crtatmega32.o
+_exit                                             /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_exit.o)
+answer                                            main.o
+avrupdate_jump_to_boot                            ../usbprog_base/firmwarelib/avrupdate.o
+avrupdate_start                                   ../usbprog_base/firmwarelib/avrupdate.o
+                                                  main.o
+cmd_enter_progmode                                main.o
+cmd_spi_multi                                     main.o
+ee_sck_duration                                   main.o
+eeprom_read_byte                                  /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/libatmega32.a(eerd_byte.o)
+                                                  main.o
+eeprom_write_byte                                 /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/libatmega32.a(eewr_byte.o)
+                                                  main.o
+eeprom_write_r18                                  /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/libatmega32.a(eewr_byte.o)
+exit                                              /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_exit.o)
+                                                  /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/crtatmega32.o
+fifo_get_nowait                                   ../usbn2mc/fifo.o
+fifo_get_wait                                     ../usbn2mc/fifo.o
+fifo_init                                         ../usbn2mc/fifo.o
+fifo_put                                          ../usbn2mc/fifo.o
+free                                              /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/libc.a(malloc.o)
+main                                              main.o
+                                                  /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/crtatmega32.o
+malloc                                            /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/libc.a(malloc.o)
+                                                  ../usbn2mc/main/usbnapi.o
+memcpy                                            /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/libc.a(memcpy.o)
+                                                  main.o
+pgmmode                                           main.o
+program_fsm                                       main.o
+rxfifos                                           ../usbn2mc/main/usbn960x.o
+                                                  ../usbn2mc/main/usbnapi.o
+sck_delay_value                                   main.o
+sck_lookup                                        main.o
+spi_active                                        main.o
+spi_cmd                                           main.o
+spi_idle                                          main.o
+spi_in                                            main.o
+spi_init                                          main.o
+spi_inout                                         main.o
+spi_out                                           main.o
+spi_pulseclockonce                                main.o
+txfifos                                           ../usbn2mc/main/usbn960x.o
+                                                  ../usbn2mc/main/usbnapi.o
+usbprog                                           main.o
+wait_ms                                           wait.o
+                                                  main.o

@@ -1,0 +1,654 @@
+   1               		.file	"eeprom_driver.c"
+   2               	__SREG__ = 0x3f
+   3               	__SP_H__ = 0x3e
+   4               	__SP_L__ = 0x3d
+   5               	__CCP__  = 0x34
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+   8               		.global __do_copy_data
+   9               		.global __do_clear_bss
+  11               		.text
+  12               	.Ltext0:
+  98               		.section	.text.EEPROM_erase_all,"ax",@progbits
+ 100               	.global	EEPROM_erase_all
+ 102               	EEPROM_erase_all:
+   1:eeprom_driver.c **** /************************************************************************/
+   2:eeprom_driver.c **** /* XMEGA EEPROM Driver                                                  */
+   3:eeprom_driver.c **** /*                                                                      */
+   4:eeprom_driver.c **** /* eeprom.c                                                             */
+   5:eeprom_driver.c **** /*                                                                      */
+   6:eeprom_driver.c **** /* Alex Forencich <alex@alexforencich.com>                              */
+   7:eeprom_driver.c **** /*                                                                      */
+   8:eeprom_driver.c **** /* Copyright (c) 2011 Alex Forencich                                    */
+   9:eeprom_driver.c **** /*                                                                      */
+  10:eeprom_driver.c **** /* Permission is hereby granted, free of charge, to any person          */
+  11:eeprom_driver.c **** /* obtaining a copy of this software and associated documentation       */
+  12:eeprom_driver.c **** /* files(the "Software"), to deal in the Software without restriction,  */
+  13:eeprom_driver.c **** /* including without limitation the rights to use, copy, modify, merge, */
+  14:eeprom_driver.c **** /* publish, distribute, sublicense, and/or sell copies of the Software, */
+  15:eeprom_driver.c **** /* and to permit persons to whom the Software is furnished to do so,    */
+  16:eeprom_driver.c **** /* subject to the following conditions:                                 */
+  17:eeprom_driver.c **** /*                                                                      */
+  18:eeprom_driver.c **** /* The above copyright notice and this permission notice shall be       */
+  19:eeprom_driver.c **** /* included in all copies or substantial portions of the Software.      */
+  20:eeprom_driver.c **** /*                                                                      */
+  21:eeprom_driver.c **** /* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,      */
+  22:eeprom_driver.c **** /* EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF   */
+  23:eeprom_driver.c **** /* MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND                */
+  24:eeprom_driver.c **** /* NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS  */
+  25:eeprom_driver.c **** /* BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN   */
+  26:eeprom_driver.c **** /* ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN    */
+  27:eeprom_driver.c **** /* CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE     */
+  28:eeprom_driver.c **** /* SOFTWARE.                                                            */
+  29:eeprom_driver.c **** /*                                                                      */
+  30:eeprom_driver.c **** /************************************************************************/
+  31:eeprom_driver.c **** 
+  32:eeprom_driver.c **** #include "eeprom_driver.h"
+  33:eeprom_driver.c **** #include "string.h"
+  34:eeprom_driver.c **** 
+  35:eeprom_driver.c **** #ifdef __AVR_XMEGA__
+  36:eeprom_driver.c **** 
+  37:eeprom_driver.c **** // NVM call
+  38:eeprom_driver.c **** static inline void NVM_EXEC(void)
+  39:eeprom_driver.c **** {
+  40:eeprom_driver.c ****         void *z = (void *)&NVM_CTRLA;
+  41:eeprom_driver.c ****         
+  42:eeprom_driver.c ****         __asm__ volatile("out %[ccp], %[ioreg]"  "\n\t"
+  43:eeprom_driver.c ****         "st z, %[cmdex]"
+  44:eeprom_driver.c ****         :
+  45:eeprom_driver.c ****         : [ccp] "I" (_SFR_IO_ADDR(CCP)),
+  46:eeprom_driver.c ****         [ioreg] "d" (CCP_IOREG_gc),
+  47:eeprom_driver.c ****                      [cmdex] "r" (NVM_CMDEX_bm),
+  48:eeprom_driver.c ****                      [z] "z" (z)
+  49:eeprom_driver.c ****                      );
+  50:eeprom_driver.c **** }
+  51:eeprom_driver.c **** 
+  52:eeprom_driver.c **** #ifdef USE_AVR1008_EEPROM
+  53:eeprom_driver.c **** 
+  54:eeprom_driver.c **** // Interrupt handler for the EEPROM write "done" interrupt
+  55:eeprom_driver.c **** ISR(NVM_EE_vect)
+  56:eeprom_driver.c **** {
+  57:eeprom_driver.c ****         // Disable the EEPROM interrupt
+  58:eeprom_driver.c ****         NVM.INTCTRL = (NVM.INTCTRL & ~NVM_EELVL_gm);
+  59:eeprom_driver.c **** }
+  60:eeprom_driver.c **** 
+  61:eeprom_driver.c **** // AVR1008 fix
+  62:eeprom_driver.c **** static inline void NVM_EXEC_WRAPPER(void)
+  63:eeprom_driver.c **** {
+  64:eeprom_driver.c ****         // Save the Sleep register
+  65:eeprom_driver.c ****         uint8_t sleepCtr = SLEEP.CTRL;
+  66:eeprom_driver.c ****         // Set sleep mode to IDLE
+  67:eeprom_driver.c ****         SLEEP.CTRL = (SLEEP.CTRL & ~SLEEP.CTRL) | SLEEP_SMODE_IDLE_gc;
+  68:eeprom_driver.c ****         // Save the PMIC Status and control registers
+  69:eeprom_driver.c ****         uint8_t statusStore = PMIC.STATUS;
+  70:eeprom_driver.c ****         uint8_t pmicStore = PMIC.CTRL;
+  71:eeprom_driver.c ****         
+  72:eeprom_driver.c ****         // Enable only the highest level of interrupts
+  73:eeprom_driver.c ****         PMIC.CTRL = (PMIC.CTRL & ~(PMIC_MEDLVLEN_bm | PMIC_LOLVLEN_bm)) | PMIC_HILVLEN_bm;
+  74:eeprom_driver.c ****         // Save SREG for later use
+  75:eeprom_driver.c ****         uint8_t globalInt = SREG;
+  76:eeprom_driver.c ****         // Enable global interrupts
+  77:eeprom_driver.c ****         sei();
+  78:eeprom_driver.c ****         // Set sleep enabled
+  79:eeprom_driver.c ****         SLEEP.CTRL |= SLEEP_SEN_bm;
+  80:eeprom_driver.c ****         // Save eeprom interrupt settings for later
+  81:eeprom_driver.c ****         uint8_t eepromintStore = NVM.INTCTRL;
+  82:eeprom_driver.c ****         NVM_EXEC();
+  83:eeprom_driver.c ****         // Enable EEPROM interrupt
+  84:eeprom_driver.c ****         NVM.INTCTRL =  NVM_EELVL0_bm | NVM_EELVL1_bm;
+  85:eeprom_driver.c ****         // Sleep before 2.5uS has passed
+  86:eeprom_driver.c ****         sleep_cpu();
+  87:eeprom_driver.c ****         // Restore sleep settings
+  88:eeprom_driver.c ****         SLEEP.CTRL = sleepCtr;
+  89:eeprom_driver.c ****         // Restore PMIC status and control registers
+  90:eeprom_driver.c ****         PMIC.STATUS = statusStore;
+  91:eeprom_driver.c ****         PMIC.CTRL = pmicStore;
+  92:eeprom_driver.c ****         // Restore EEPROM interruptsettings
+  93:eeprom_driver.c ****         NVM.INTCTRL = eepromintStore;
+  94:eeprom_driver.c ****         // Restore global interrupt settings
+  95:eeprom_driver.c ****         SREG = globalInt;
+  96:eeprom_driver.c **** }
+  97:eeprom_driver.c **** 
+  98:eeprom_driver.c **** #else
+  99:eeprom_driver.c **** 
+ 100:eeprom_driver.c **** #define NVM_EXEC_WRAPPER NVM_EXEC
+ 101:eeprom_driver.c **** 
+ 102:eeprom_driver.c **** #endif // USE_AVR1008_EEPROM
+ 103:eeprom_driver.c **** 
+ 104:eeprom_driver.c **** 
+ 105:eeprom_driver.c **** void wait_for_nvm(void)
+ 106:eeprom_driver.c **** {
+ 107:eeprom_driver.c ****         while (NVM.STATUS & NVM_NVMBUSY_bm) { };
+ 108:eeprom_driver.c **** }
+ 109:eeprom_driver.c **** 
+ 110:eeprom_driver.c **** void flush_buffer(void)
+ 111:eeprom_driver.c **** {
+ 112:eeprom_driver.c ****         wait_for_nvm();
+ 113:eeprom_driver.c ****         
+ 114:eeprom_driver.c ****         if ((NVM.STATUS & NVM_EELOAD_bm) != 0) {
+ 115:eeprom_driver.c ****                 NVM.CMD = NVM_CMD_ERASE_EEPROM_BUFFER_gc;
+ 116:eeprom_driver.c ****                 NVM_EXEC();
+ 117:eeprom_driver.c ****         }
+ 118:eeprom_driver.c **** }
+ 119:eeprom_driver.c **** 
+ 120:eeprom_driver.c **** 
+ 121:eeprom_driver.c **** uint8_t EEPROM_read_byte(uint16_t addr)
+ 122:eeprom_driver.c **** {
+ 123:eeprom_driver.c ****         wait_for_nvm();
+ 124:eeprom_driver.c ****         
+ 125:eeprom_driver.c ****         NVM.ADDR0 = addr & 0xFF;
+ 126:eeprom_driver.c ****         NVM.ADDR1 = (addr >> 8) & 0x1F;
+ 127:eeprom_driver.c ****         NVM.ADDR2 = 0;
+ 128:eeprom_driver.c ****         
+ 129:eeprom_driver.c ****         NVM.CMD = NVM_CMD_READ_EEPROM_gc;
+ 130:eeprom_driver.c ****         NVM_EXEC();
+ 131:eeprom_driver.c ****         
+ 132:eeprom_driver.c ****         return NVM.DATA0;
+ 133:eeprom_driver.c **** }
+ 134:eeprom_driver.c **** 
+ 135:eeprom_driver.c **** 
+ 136:eeprom_driver.c **** void EEPROM_write_byte(uint16_t addr, uint8_t byte)
+ 137:eeprom_driver.c **** {
+ 138:eeprom_driver.c ****         flush_buffer();
+ 139:eeprom_driver.c ****         NVM.CMD = NVM_CMD_LOAD_EEPROM_BUFFER_gc;
+ 140:eeprom_driver.c ****         
+ 141:eeprom_driver.c ****         NVM.ADDR0 = addr & 0xFF;
+ 142:eeprom_driver.c ****         NVM.ADDR1 = (addr >> 8) & 0x1F;
+ 143:eeprom_driver.c ****         NVM.ADDR2 = 0;
+ 144:eeprom_driver.c ****         
+ 145:eeprom_driver.c ****         NVM.DATA0 = byte;
+ 146:eeprom_driver.c ****         
+ 147:eeprom_driver.c ****         NVM.CMD = NVM_CMD_ERASE_WRITE_EEPROM_PAGE_gc;
+ 148:eeprom_driver.c ****         NVM_EXEC_WRAPPER();
+ 149:eeprom_driver.c **** }
+ 150:eeprom_driver.c **** 
+ 151:eeprom_driver.c **** 
+ 152:eeprom_driver.c **** uint16_t EEPROM_read_block(uint16_t addr, uint8_t *dest, uint16_t len)
+ 153:eeprom_driver.c **** {
+ 154:eeprom_driver.c ****         uint16_t cnt = 0;
+ 155:eeprom_driver.c ****         
+ 156:eeprom_driver.c ****         NVM.ADDR2 = 0;
+ 157:eeprom_driver.c ****         
+ 158:eeprom_driver.c ****         wait_for_nvm();
+ 159:eeprom_driver.c ****         
+ 160:eeprom_driver.c ****         while (len > 0)
+ 161:eeprom_driver.c ****         {
+ 162:eeprom_driver.c ****                 NVM.ADDR0 = addr & 0xFF;
+ 163:eeprom_driver.c ****                 NVM.ADDR1 = (addr >> 8) & 0x1F;
+ 164:eeprom_driver.c ****                 
+ 165:eeprom_driver.c ****                 NVM.CMD = NVM_CMD_READ_EEPROM_gc;
+ 166:eeprom_driver.c ****                 NVM_EXEC();
+ 167:eeprom_driver.c ****                 
+ 168:eeprom_driver.c ****                 *(dest++) = NVM.DATA0; addr++;
+ 169:eeprom_driver.c ****                 
+ 170:eeprom_driver.c ****                 len--; cnt++;
+ 171:eeprom_driver.c ****         }
+ 172:eeprom_driver.c ****         return cnt;
+ 173:eeprom_driver.c **** }
+ 174:eeprom_driver.c **** 
+ 175:eeprom_driver.c **** 
+ 176:eeprom_driver.c **** uint16_t EEPROM_write_block(uint16_t addr, const uint8_t *src, uint16_t len)
+ 177:eeprom_driver.c **** {
+ 178:eeprom_driver.c ****         uint8_t byte_addr = addr % EEPROM_PAGE_SIZE;
+ 179:eeprom_driver.c ****         uint16_t page_addr = addr - byte_addr;
+ 180:eeprom_driver.c ****         uint16_t cnt = 0;
+ 181:eeprom_driver.c ****         
+ 182:eeprom_driver.c ****         flush_buffer();
+ 183:eeprom_driver.c ****         wait_for_nvm();
+ 184:eeprom_driver.c ****         NVM.CMD = NVM_CMD_LOAD_EEPROM_BUFFER_gc;
+ 185:eeprom_driver.c ****         
+ 186:eeprom_driver.c ****         NVM.ADDR1 = 0;
+ 187:eeprom_driver.c ****         NVM.ADDR2 = 0;
+ 188:eeprom_driver.c ****         
+ 189:eeprom_driver.c ****         while (len > 0)
+ 190:eeprom_driver.c ****         {
+ 191:eeprom_driver.c ****                 NVM.ADDR0 = byte_addr;
+ 192:eeprom_driver.c ****                 
+ 193:eeprom_driver.c ****                 NVM.DATA0 = *(src++);
+ 194:eeprom_driver.c ****                 
+ 195:eeprom_driver.c ****                 byte_addr++;
+ 196:eeprom_driver.c ****                 len--;
+ 197:eeprom_driver.c ****                 
+ 198:eeprom_driver.c ****                 if (len == 0 || byte_addr >= EEPROM_PAGE_SIZE)
+ 199:eeprom_driver.c ****                 {
+ 200:eeprom_driver.c ****                         NVM.ADDR0 = page_addr & 0xFF;
+ 201:eeprom_driver.c ****                         NVM.ADDR1 = (page_addr >> 8) & 0x1F;
+ 202:eeprom_driver.c ****                         
+ 203:eeprom_driver.c ****                         NVM.CMD = NVM_CMD_ERASE_WRITE_EEPROM_PAGE_gc;
+ 204:eeprom_driver.c ****                         NVM_EXEC();
+ 205:eeprom_driver.c ****                         
+ 206:eeprom_driver.c ****                         page_addr += EEPROM_PAGE_SIZE;
+ 207:eeprom_driver.c ****                         byte_addr = 0;
+ 208:eeprom_driver.c ****                         
+ 209:eeprom_driver.c ****                         wait_for_nvm();
+ 210:eeprom_driver.c ****                         
+ 211:eeprom_driver.c ****                         NVM.CMD = NVM_CMD_LOAD_EEPROM_BUFFER_gc;
+ 212:eeprom_driver.c ****                 }
+ 213:eeprom_driver.c ****                 
+ 214:eeprom_driver.c ****                 cnt++;
+ 215:eeprom_driver.c ****         }
+ 216:eeprom_driver.c ****         
+ 217:eeprom_driver.c ****         return cnt;
+ 218:eeprom_driver.c **** }
+ 219:eeprom_driver.c **** 
+ 220:eeprom_driver.c **** 
+ 221:eeprom_driver.c **** void EEPROM_erase_page(uint16_t addr)
+ 222:eeprom_driver.c **** {
+ 223:eeprom_driver.c ****         NVM.ADDR0 = addr & 0xFF;
+ 224:eeprom_driver.c ****         NVM.ADDR1 = (addr >> 8) & 0x1F;
+ 225:eeprom_driver.c ****         NVM.ADDR2 = 0;
+ 226:eeprom_driver.c ****         
+ 227:eeprom_driver.c ****         wait_for_nvm();
+ 228:eeprom_driver.c ****         
+ 229:eeprom_driver.c ****         NVM.CMD = NVM_CMD_ERASE_EEPROM_PAGE_gc;
+ 230:eeprom_driver.c ****         NVM_EXEC_WRAPPER();
+ 231:eeprom_driver.c **** }
+ 232:eeprom_driver.c **** 
+ 233:eeprom_driver.c **** 
+ 234:eeprom_driver.c **** void EEPROM_erase_all(void)
+ 235:eeprom_driver.c **** {
+ 236:eeprom_driver.c ****         wait_for_nvm();
+ 237:eeprom_driver.c ****         
+ 238:eeprom_driver.c ****         NVM.CMD = NVM_CMD_ERASE_EEPROM_gc;
+ 239:eeprom_driver.c ****         NVM_EXEC_WRAPPER();
+ 240:eeprom_driver.c **** }
+ 241:eeprom_driver.c **** 
+ 242:eeprom_driver.c **** #else // __AVR_XMEGA__
+ 243:eeprom_driver.c **** 
+ 244:eeprom_driver.c **** void EEPROM_erase_all(void)
+ 245:eeprom_driver.c **** {
+ 103               	OM_erase_all
+ 105               	EEPROM_erase_all:
+ 107               	.LM0:
+ 108               	.LFBB1:
+ 109               	/* prologue: function */
+ 110 0000 80E0      	/* frame size = 0 */
+ 112               	.LM1:
+ 113               		ldi r24,lo8(0)
+ 114               		ldi r25,hi8(0)
+ 115               	.LBB5:
+ 116               	.LBB6:
+   1:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** /* Copyright (c) 2002, 2003, 2004, 2007 Marek Michalkiewicz
+   2:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****    Copyright (c) 2005, 2006 Bjoern Haase
+   3:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****    Copyright (c) 2008 Atmel Corporation
+   4:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****    Copyright (c) 2008 Wouter van Gulik
+   5:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****    All rights reserved.
+   6:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** 
+   7:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****    Redistribution and use in source and binary forms, with or without
+   8:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****    modification, are permitted provided that the following conditions are met:
+   9:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** 
+  10:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****    * Redistributions of source code must retain the above copyright
+  11:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****      notice, this list of conditions and the following disclaimer.
+  12:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****    * Redistributions in binary form must reproduce the above copyright
+  13:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****      notice, this list of conditions and the following disclaimer in
+  14:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****      the documentation and/or other materials provided with the
+  15:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****      distribution.
+  16:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****    * Neither the name of the copyright holders nor the names of
+  17:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****      contributors may be used to endorse or promote products derived
+  18:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****      from this software without specific prior written permission.
+  19:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** 
+  20:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  21:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****   AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  22:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****   IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+  23:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****   ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+  24:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****   LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+  25:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****   CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+  26:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****   SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+  27:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****   INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+  28:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****   CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+  29:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+  30:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****   POSSIBILITY OF SUCH DAMAGE. */
+  31:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** 
+  32:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** /* $Id: eeprom.h,v 1.21.2.6 2008/08/19 22:10:39 arcanum Exp $ */
+  33:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** 
+  34:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** #ifndef _AVR_EEPROM_H_
+  35:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** #define _AVR_EEPROM_H_ 1
+  36:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** 
+  37:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** #include <avr/io.h>
+  38:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** #include <stddef.h>	/* size_t */
+  39:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** #include <stdint.h>
+  40:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** 
+  41:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** #ifdef __cplusplus
+  42:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** extern "C" {
+  43:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** #endif
+  44:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** 
+  45:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** #ifndef	__ATTR_PURE__
+  46:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** # ifdef	 __DOXYGEN__
+  47:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** #  define __ATTR_PURE__
+  48:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** # else
+  49:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** #  define __ATTR_PURE__  __attribute__((__pure__))
+  50:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** # endif
+  51:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** #endif
+  52:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** 
+  53:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** #if (! (defined(__AVR_ATmega2560__) || defined(__AVR_ATmega2561__)) )
+  54:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** uint16_t __eerd_word (const uint16_t *, uint8_t (*)(const uint8_t *))
+  55:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     __ATTR_PURE__;
+  56:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** uint32_t __eerd_dword (const uint32_t *, uint8_t (*)(const uint8_t *))
+  57:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     __ATTR_PURE__;
+  58:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** void __eerd_block (void *, const void *, size_t, uint8_t (*)(const uint8_t *));
+  59:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** 
+  60:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** void __eewr_word (uint16_t *, uint16_t, void (*)(uint8_t *, uint8_t));
+  61:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** void __eewr_dword (uint32_t *, uint32_t, void (*)(uint8_t *, uint8_t));
+  62:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** void __eewr_block (void *, const void *, size_t, void (*)(uint8_t *, uint8_t));
+  63:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** #endif /* (! (defined(__AVR_ATmega2560__) || defined(__AVR_ATmega2561__)) ) */
+  64:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** 
+  65:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** #if !E2END && !defined(__DOXYGEN__)
+  66:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** # ifndef __COMPILING_AVR_LIBC__
+  67:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** #  warning "Device does not have EEPROM available."
+  68:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** # endif
+  69:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****   /* Omit below for chips without EEPROM. */
+  70:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** 
+  71:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** #else
+  72:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** 
+  73:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** /** \defgroup avr_eeprom <avr/eeprom.h>: EEPROM handling
+  74:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     \code #include <avr/eeprom.h> \endcode
+  75:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** 
+  76:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     This header file declares the interface to some simple library
+  77:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     routines suitable for handling the data EEPROM contained in the
+  78:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     AVR microcontrollers.  The implementation uses a simple polled
+  79:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     mode interface.  Applications that require interrupt-controlled
+  80:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     EEPROM access to ensure that no time will be wasted in spinloops
+  81:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     will have to deploy their own implementation.
+  82:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** 
+  83:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     \note All of the read/write functions first make sure the EEPROM
+  84:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     is ready to be accessed.  Since this may cause long delays if a
+  85:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     write operation is still pending, time-critical applications
+  86:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     should first poll the EEPROM e. g. using eeprom_is_ready() before
+  87:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     attempting any actual I/O.  But this functions are not wait until
+  88:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     SELFPRGEN in SPMCSR becomes zero.  Do this manually, if your
+  89:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     softwate contains the Flash burning.
+  90:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** 
+  91:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     \note As these functions modify IO registers, they are known to be
+  92:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     non-reentrant.  If any of these functions are used from both,
+  93:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     standard and interrupt context, the applications must ensure
+  94:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     proper protection (e.g. by disabling interrupts before accessing
+  95:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     them).
+  96:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** 
+  97:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     \note All write functions force erase_and_write programming mode.
+  98:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****  */
+  99:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** 
+ 100:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** /** \def EEMEM
+ 101:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     \ingroup avr_eeprom
+ 102:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     Attribute expression causing a variable to be allocated within the
+ 103:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     .eeprom section.	*/
+ 104:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** #define EEMEM __attribute__((section(".eeprom")))
+ 105:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** 
+ 106:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** 
+ 107:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** /* Register definitions */
+ 108:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** 
+ 109:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** /* Check for aliases. */
+ 110:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** #if	!defined(EEWE) && defined(EEPE)
+ 111:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** # define EEWE EEPE
+ 112:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** #endif
+ 113:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** 
+ 114:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** #if	!defined(EEMWE) && defined(EEMPE)
+ 115:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** # define EEMWE EEMPE
+ 116:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** #endif
+ 117:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** 
+ 118:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** #if	!defined(EECR) && defined(DEECR)
+ 119:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** /* AT86RF401 */
+ 120:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** # define EECR  DEECR
+ 121:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** # define EEAR  DEEAR
+ 122:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** # define EEARL DEEAR
+ 123:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** # define EEDR  DEEDR
+ 124:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** # define EERE  EER
+ 125:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** # define EEWE  EEL
+ 126:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** # define EEMWE EEU
+ 127:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** #endif
+ 128:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** 
+ 129:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** 
+ 130:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** #if	!defined(EECR) || !defined(EEDR) || !defined(EEARL)
+ 131:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** 
+ 132:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** # if	 !defined(__EEPROM_REG_LOCATIONS__) \
+ 133:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****       && !defined(EEPROM_REG_LOCATIONS_OVERRIDE)
+ 134:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****    /* 6-byte string denoting where to find the EEPROM registers in memory
+ 135:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****       space.  Adresses denoted in hex syntax with uppercase letters. Used
+ 136:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****       by the EEPROM subroutines.
+ 137:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** 	First two letters:  EECR address.
+ 138:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** 	Second two letters: EEDR address.
+ 139:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** 	Last two letters:   EEAR address.
+ 140:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     */
+ 141:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** #  error "Unknown EEPROM register(s) location."
+ 142:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** # endif
+ 143:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** 
+ 144:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** /* If needed, override the locations defined in the IO headers. */
+ 145:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** # ifdef  EEPROM_REG_LOCATIONS_OVERRIDE
+ 146:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** #  undef  __EEPROM_REG_LOCATIONS__
+ 147:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** #  define __EEPROM_REG_LOCATIONS__ EEPROM_REG_LOCATIONS_OVERRIDE
+ 148:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** # endif
+ 149:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** 
+ 150:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** # define CONCAT1(a, b) CONCAT2(a, b)
+ 151:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** # define CONCAT2(a, b) a ## b
+ 152:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** # define HEXNR CONCAT1(0x, __EEPROM_REG_LOCATIONS__)
+ 153:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** 
+ 154:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** # undef EECR
+ 155:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** # define EECR _SFR_IO8((HEXNR >> 16) & 0xFF)
+ 156:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** 
+ 157:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** # undef EEDR
+ 158:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** # define EEDR _SFR_IO8((HEXNR >> 8) & 0xFF)
+ 159:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** 
+ 160:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** # undef EEAR
+ 161:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** # define EEAR _SFR_IO8(HEXNR & 0xFF)
+ 162:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** 
+ 163:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** # undef EEARH
+ 164:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** 
+ 165:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** # undef EEARL
+ 166:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** # define EEARL EEAR
+ 167:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** 
+ 168:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** #endif
+ 169:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** 
+ 170:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** 
+ 171:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** /** \def eeprom_is_ready
+ 172:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     \ingroup avr_eeprom
+ 173:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     \returns 1 if EEPROM is ready for a new read/write operation, 0 if not.
+ 174:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****  */
+ 175:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** #if	defined(__DOXYGEN__)
+ 176:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** # define eeprom_is_ready()
+ 177:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** #elif	defined(DEECR)
+ 178:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** # define eeprom_is_ready() bit_is_clear(DEECR, BSY)
+ 179:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** #else
+ 180:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** # define eeprom_is_ready() bit_is_clear(EECR, EEWE)
+ 181:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** #endif
+ 182:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** 
+ 183:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** 
+ 184:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** /** \def eeprom_busy_wait
+ 185:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     \ingroup avr_eeprom
+ 186:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     Loops until the eeprom is no longer busy.
+ 187:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     \returns Nothing.
+ 188:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****  */ 	 
+ 189:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** #define eeprom_busy_wait() do {} while (!eeprom_is_ready())
+ 190:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** 
+ 191:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** 
+ 192:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** /** \ingroup avr_eeprom
+ 193:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     Read one byte from EEPROM address \a __p.
+ 194:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****  */
+ 195:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** __ATTR_PURE__ static __inline__ uint8_t eeprom_read_byte (const uint8_t *__p)
+ 196:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** {
+ 197:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     do {} while (!eeprom_is_ready ());
+ 198:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** #if E2END <= 0xFF
+ 199:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     EEARL = (uint8_t)(uint16_t)__p;
+ 200:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** #else
+ 201:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     EEAR = (uint16_t)__p;
+ 202:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** #endif
+ 203:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     /* Use inline assembly below as some AVRs have problems with accessing
+ 204:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     EECR with STS instructions. For example, see errata for ATmega64. 
+ 205:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     The code below also assumes that EECR and EEDR are in the I/O space.
+ 206:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     */
+ 207:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     uint8_t __result;
+ 208:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     __asm__ __volatile__
+ 209:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     (
+ 210:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****         "/* START EEPROM READ CRITICAL SECTION */ \n\t"
+ 211:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****         "sbi %1, %2 \n\t"
+ 212:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****         "in %0, %3 \n\t"
+ 213:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****         "/* END EEPROM READ CRITICAL SECTION */ \n\t"
+ 214:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****         : "=r" (__result)
+ 215:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****         : "i" (_SFR_IO_ADDR(EECR)),
+ 216:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****           "i" (EERE),
+ 217:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****           "i" (_SFR_IO_ADDR(EEDR))
+ 218:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     );
+ 219:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     return __result;
+ 220:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** }
+ 221:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** 
+ 222:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** /** \ingroup avr_eeprom
+ 223:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     Read one 16-bit word (little endian) from EEPROM address \a __p.
+ 224:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****  */
+ 225:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** __ATTR_PURE__ static __inline__ uint16_t eeprom_read_word (const uint16_t *__p)
+ 226:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** {
+ 227:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** #if (! (defined(__AVR_ATmega2560__) || defined(__AVR_ATmega2561__)) )
+ 228:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     return __eerd_word (__p, eeprom_read_byte);
+ 229:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** #else
+ 230:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     /* If ATmega256x device, do not call function. */
+ 231:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     union
+ 232:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     {
+ 233:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****         uint16_t word;
+ 234:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****         struct
+ 235:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****         {
+ 236:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****             uint8_t lo;
+ 237:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****             uint8_t hi;
+ 238:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****         } byte;
+ 239:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     } x;
+ 240:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** 
+ 241:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     x.byte.lo = eeprom_read_byte ((const uint8_t *)__p);
+ 242:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     x.byte.hi = eeprom_read_byte ((const uint8_t *)__p + 1);
+ 243:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     return x.word;
+ 244:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** #endif
+ 245:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** }
+ 246:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** 
+ 247:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** /** \ingroup avr_eeprom
+ 248:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     Read one 32-bit double word (little endian) from EEPROM address \a __p.
+ 249:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****  */
+ 250:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** __ATTR_PURE__ static __inline__
+ 251:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** uint32_t eeprom_read_dword (const uint32_t *__p)
+ 252:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** {
+ 253:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** #if (! (defined(__AVR_ATmega2560__) || defined(__AVR_ATmega2561__)) )
+ 254:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     return __eerd_dword (__p, eeprom_read_byte);
+ 255:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** #else
+ 256:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     /* If ATmega256x device, do not call function. */
+ 257:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     union
+ 258:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     {
+ 259:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****         uint32_t dword;
+ 260:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****         struct
+ 261:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****         {
+ 262:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****             uint8_t byte0;
+ 263:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****             uint8_t byte1;
+ 264:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****             uint8_t byte2;
+ 265:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****             uint8_t byte3;
+ 266:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****         } byte;
+ 267:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     } x;
+ 268:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** 
+ 269:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     x.byte.byte0 = eeprom_read_byte ((const uint8_t *)__p);
+ 270:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     x.byte.byte1 = eeprom_read_byte ((const uint8_t *)__p + 1);
+ 271:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     x.byte.byte2 = eeprom_read_byte ((const uint8_t *)__p + 2);
+ 272:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     x.byte.byte3 = eeprom_read_byte ((const uint8_t *)__p + 3);
+ 273:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     return x.dword;
+ 274:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** #endif
+ 275:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** }
+ 276:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** 
+ 277:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** /** \ingroup avr_eeprom
+ 278:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     Read a block of \a __n bytes from EEPROM address \a __src to SRAM
+ 279:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     \a __dst.
+ 280:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****  */
+ 281:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** static __inline__ void
+ 282:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** eeprom_read_block (void *__dst, const void *__src, size_t __n)
+ 283:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** {
+ 284:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** #if (! (defined(__AVR_ATmega2560__) || defined(__AVR_ATmega2561__)) )
+ 285:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     __eerd_block (__dst, __src, __n, eeprom_read_byte);
+ 286:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** #else
+ 287:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     /* If ATmega256x device, do not call function. */
+ 288:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** 	char	*_myDstPtr;
+ 289:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** 	char	*_mySrcPtr;
+ 290:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** 	
+ 291:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** 	_myDstPtr	=	(char *)__dst;
+ 292:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** 	_mySrcPtr	=	(char *)__src;
+ 293:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** 	while (__n--)
+ 294:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     {
+ 295:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     //*	Jul  6,	2010	modifed by Mark Sproul to work with the 2560
+ 296:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** 	//	*(char *)__dst++	=	eeprom_read_byte((const uint8_t *)__src++);
+ 297:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** 		*_myDstPtr			=	eeprom_read_byte((const uint8_t *)_mySrcPtr);
+ 298:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** 		_myDstPtr++;
+ 299:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** 		_mySrcPtr++;
+ 300:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     }
+ 301:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** #endif
+ 302:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** }
+ 303:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** 
+ 304:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** /** \ingroup avr_eeprom
+ 305:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     Write a byte \a __value to EEPROM address \a __p.
+ 306:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****  */
+ 307:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** static __inline__ void eeprom_write_byte (uint8_t *__p, uint8_t __value)
+ 308:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** {
+ 309:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     do {} while (!eeprom_is_ready ());
+ 310:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** 
+ 311:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** #if	defined(EEPM0) && defined(EEPM1)
+ 312:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     EECR = 0;		/* Set programming mode: erase and write.	*/
+ 313:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** #elif	defined(EEPM0) || defined(EEPM1)
+ 314:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** # warning "Unknown EECR register, eeprom_write_byte() has become outdated."
+ 315:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** #endif
+ 316:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** 
+ 317:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** #if	E2END <= 0xFF
+ 318:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     EEARL = (unsigned)__p;
+ 319:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** #else
+ 320:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     EEAR = (unsigned)__p;
+ 321:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h **** #endif
+ 322:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****     EEDR = __value;
+ 117               	B1
+ 118               	.LM1:
+ 119 0004 2FEF      		ldi r24,lo8(0)
+ 120               		ldi r25,hi8(0)
+ 121               	.LBB5:
+ 122               	.LBB6:
+ 123 0006 F999      	.LBB7:
+ 125               	.Ltext1:
+ 127 000a 1FBA      	.LM2:
+ 128               		ldi r18,lo8(-1)
+ 129               	.L6:
+ 131 000e 81BD      	.LM3:
+ 132               		sbic 63-32,1
+ 133               		rjmp .L6
+ 323:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****  SECTION */\n\t"
+ 324:d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h ****         "in	r0, %[__sreg]		\n\t"
+ 135               	2,1
+ 136               		rjmp .L6
+ 138               	.LM4:
+ 139               		out 63-32,__zero_reg__
+ 141 0014 F894      	.LM5:
+ 142 0016 FA9A      		out (65)+1-32,r25
+ 143 0018 F99A      		out 65-32,r24
+ 145               	.LM6:
+ 146               		out 64-32,r18
+ 148               	.LM7:
+ 149               	/* #APP */
+ 150               	 ;  324 "d:/program files/arduino/hardware/tools/avr/lib/gcc/../../avr/include/avr/eeprom.h" 1
+ 151               		/* START EEPROM WRITE CRITICAL SECTION */
+ 246:eeprom_driver.c **** l(void)
+ 152               	OM WRITE CRITICAL SECTION */
+ 153               		in	r0, 63		
+ 154 001c 0196      		cli				
+ 155 001e 33E0      		sbi	31, 2	
+ 156 0020 8F3F      		sbi	31, 1	
+ 157 0022 9307      		out	63, r0		
+ 158 0024 01F4      		/* END EEPROM WRITE CRITICAL SECTION */
+ 159               	 ;  0 "" 2
+ 160               	/* #NOAPP */
+ 247:eeprom_driver.c **** _all(void)
+ 248:eeprom_driver.c **** {
+ 249:eeprom_driver.c ****         for (uint16_t i = 0; i < E2END; i++)
+ 250:eeprom_driver.c ****         {
+ 161               	 0 "" 2
+ 162               	/* #NOAPP */
+ 163 0026 0895      	.LBE7:
+ 164               	.LBE6:
+ 166               	.Ltext2:
+ 168               	.LM8:
+DEFINED SYMBOLS
+                            *ABS*:00000000 eeprom_driver.c
+C:\DOCUME~1\Edwin\LOCALS~1\Temp/ccJtnaFF.s:2      *ABS*:0000003f __SREG__
+C:\DOCUME~1\Edwin\LOCALS~1\Temp/ccJtnaFF.s:3      *ABS*:0000003e __SP_H__
+C:\DOCUME~1\Edwin\LOCALS~1\Temp/ccJtnaFF.s:4      *ABS*:0000003d __SP_L__
+C:\DOCUME~1\Edwin\LOCALS~1\Temp/ccJtnaFF.s:5      *ABS*:00000034 __CCP__
+C:\DOCUME~1\Edwin\LOCALS~1\Temp/ccJtnaFF.s:6      *ABS*:00000000 __tmp_reg__
+C:\DOCUME~1\Edwin\LOCALS~1\Temp/ccJtnaFF.s:7      *ABS*:00000001 __zero_reg__
+C:\DOCUME~1\Edwin\LOCALS~1\Temp/ccJtnaFF.s:102    .text.EEPROM_erase_all:00000000 EEPROM_erase_all
+
+UNDEFINED SYMBOLS
+__do_copy_data
+__do_clear_bss

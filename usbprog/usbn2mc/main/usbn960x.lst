@@ -1,0 +1,2991 @@
+   1               		.file	"usbn960x.c"
+   2               	__SP_H__ = 0x3e
+   3               	__SP_L__ = 0x3d
+   4               	__SREG__ = 0x3f
+   5               	__tmp_reg__ = 0
+   6               	__zero_reg__ = 1
+   7               		.text
+   8               	.Ltext0:
+   9               		.cfi_sections	.debug_frame
+  10               		.file 0 "/Users/Dertien/git/usbprog/avrispmk2klon" "../usbn2mc/main/usbn960x.c"
+  11               	.global	_USBNInitEP0
+  13               	_USBNInitEP0:
+  14               	.LFB12:
+  15               		.file 1 "../usbn2mc/main/usbn960x.c"
+   1:../usbn2mc/main/usbn960x.c **** /* usbn960x.c
+   2:../usbn2mc/main/usbn960x.c **** * Copyright (C) 2006  Benedikt Sauter
+   3:../usbn2mc/main/usbn960x.c **** *
+   4:../usbn2mc/main/usbn960x.c **** * This program is free software; you can redistribute it and/or modify
+   5:../usbn2mc/main/usbn960x.c **** * it under the terms of the GNU General Public License as published by
+   6:../usbn2mc/main/usbn960x.c **** * the Free Software Foundation; either version 2 of the License, or
+   7:../usbn2mc/main/usbn960x.c **** * (at your option) any later version.
+   8:../usbn2mc/main/usbn960x.c **** *
+   9:../usbn2mc/main/usbn960x.c **** * This program is distributed in the hope that it will be useful,
+  10:../usbn2mc/main/usbn960x.c **** * but WITHOUT ANY WARRANTY; without even the implied warranty of
+  11:../usbn2mc/main/usbn960x.c **** * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  12:../usbn2mc/main/usbn960x.c **** * GNU General Public License for more details.
+  13:../usbn2mc/main/usbn960x.c **** *
+  14:../usbn2mc/main/usbn960x.c **** * You should have received a copy of the GNU General Public License
+  15:../usbn2mc/main/usbn960x.c **** * along with this program; if not, write to the Free Software
+  16:../usbn2mc/main/usbn960x.c **** * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+  17:../usbn2mc/main/usbn960x.c **** */
+  18:../usbn2mc/main/usbn960x.c **** 
+  19:../usbn2mc/main/usbn960x.c **** #include <stdlib.h>
+  20:../usbn2mc/main/usbn960x.c **** #include <stdio.h>
+  21:../usbn2mc/main/usbn960x.c **** #include <string.h>
+  22:../usbn2mc/main/usbn960x.c **** #include "usbn960x.h"
+  23:../usbn2mc/main/usbn960x.c **** #include "../fifo.h"
+  24:../usbn2mc/main/usbn960x.c **** #include "../jtagicemk2klon/usbn2mc.h"
+  25:../usbn2mc/main/usbn960x.c **** 
+  26:../usbn2mc/main/usbn960x.c **** #define DEBUG 0
+  27:../usbn2mc/main/usbn960x.c **** 
+  28:../usbn2mc/main/usbn960x.c **** EPInfo	EP0rx;
+  29:../usbn2mc/main/usbn960x.c **** EPInfo	EP0tx;
+  30:../usbn2mc/main/usbn960x.c **** 
+  31:../usbn2mc/main/usbn960x.c **** /* actual variable definitions */
+  32:../usbn2mc/main/usbn960x.c **** struct TxFIFOCaller txfifos;
+  33:../usbn2mc/main/usbn960x.c **** struct RxFIFOCaller rxfifos;
+  34:../usbn2mc/main/usbn960x.c **** struct usb_device_descriptor DeviceDescriptor;
+  35:../usbn2mc/main/usbn960x.c **** char **FinalConfigurationArray = NULL;
+  36:../usbn2mc/main/usbn960x.c **** char** FinalStringArray = NULL;
+  37:../usbn2mc/main/usbn960x.c **** struct list_entry*    DescriptorList;
+  38:../usbn2mc/main/usbn960x.c **** struct string_entry*  StringList;
+  39:../usbn2mc/main/usbn960x.c **** 
+  40:../usbn2mc/main/usbn960x.c **** 
+  41:../usbn2mc/main/usbn960x.c **** FunctionInfo  USBNFunctionInfo;
+  42:../usbn2mc/main/usbn960x.c **** 
+  43:../usbn2mc/main/usbn960x.c **** void _USBNInitEP0(void)
+  44:../usbn2mc/main/usbn960x.c **** {
+  16               		.loc 1 44 1 view -0
+  17               		.cfi_startproc
+  18               	/* prologue: function */
+  19               	/* frame size = 0 */
+  20               	/* stack size = 0 */
+  21               	.L__stack_usage = 0
+  45:../usbn2mc/main/usbn960x.c ****   EP0rx.usbnCommand   = RXC0;
+  22               		.loc 1 45 3 view .LVU1
+  23               		.loc 1 45 23 is_stmt 0 view .LVU2
+  24 0000 E0E0      		ldi r30,lo8(EP0rx)
+  25 0002 F0E0      		ldi r31,hi8(EP0rx)
+  26 0004 87E2      		ldi r24,lo8(39)
+  27 0006 8183      		std Z+1,r24
+  46:../usbn2mc/main/usbn960x.c ****   EP0rx.usbnData      = RXD0;
+  28               		.loc 1 46 3 is_stmt 1 view .LVU3
+  29               		.loc 1 46 23 is_stmt 0 view .LVU4
+  30 0008 85E2      		ldi r24,lo8(37)
+  31 000a 8083      		st Z,r24
+  47:../usbn2mc/main/usbn960x.c ****   EP0rx.usbnControl   = EPC0;
+  32               		.loc 1 47 3 is_stmt 1 view .LVU5
+  33               		.loc 1 47 23 is_stmt 0 view .LVU6
+  34 000c 20E2      		ldi r18,lo8(32)
+  35 000e 2283      		std Z+2,r18
+  48:../usbn2mc/main/usbn960x.c ****   EP0rx.DataPid	      = 0;
+  36               		.loc 1 48 3 is_stmt 1 view .LVU7
+  37               		.loc 1 48 23 is_stmt 0 view .LVU8
+  38 0010 1382      		std Z+3,__zero_reg__
+  49:../usbn2mc/main/usbn960x.c ****   EP0rx.usbnfifo      = 8;
+  39               		.loc 1 49 3 is_stmt 1 view .LVU9
+  40               		.loc 1 49 23 is_stmt 0 view .LVU10
+  41 0012 88E0      		ldi r24,lo8(8)
+  42 0014 90E0      		ldi r25,0
+  43 0016 9583      		std Z+5,r25
+  44 0018 8483      		std Z+4,r24
+  50:../usbn2mc/main/usbn960x.c **** 
+  51:../usbn2mc/main/usbn960x.c **** 
+  52:../usbn2mc/main/usbn960x.c ****   EP0tx.usbnCommand   = TXC0;
+  45               		.loc 1 52 3 is_stmt 1 view .LVU11
+  46               		.loc 1 52 23 is_stmt 0 view .LVU12
+  47 001a E0E0      		ldi r30,lo8(EP0tx)
+  48 001c F0E0      		ldi r31,hi8(EP0tx)
+  49 001e 33E2      		ldi r19,lo8(35)
+  50 0020 3183      		std Z+1,r19
+  53:../usbn2mc/main/usbn960x.c ****   EP0tx.usbnData      = TXD0;
+  51               		.loc 1 53 3 is_stmt 1 view .LVU13
+  52               		.loc 1 53 23 is_stmt 0 view .LVU14
+  53 0022 31E2      		ldi r19,lo8(33)
+  54 0024 3083      		st Z,r19
+  54:../usbn2mc/main/usbn960x.c ****   EP0tx.usbnControl   = EPC0;
+  55               		.loc 1 54 3 is_stmt 1 view .LVU15
+  56               		.loc 1 54 23 is_stmt 0 view .LVU16
+  57 0026 2283      		std Z+2,r18
+  55:../usbn2mc/main/usbn960x.c ****   EP0tx.DataPid	      = 0;
+  58               		.loc 1 55 3 is_stmt 1 view .LVU17
+  59               		.loc 1 55 23 is_stmt 0 view .LVU18
+  60 0028 1382      		std Z+3,__zero_reg__
+  56:../usbn2mc/main/usbn960x.c ****   EP0tx.usbnfifo      = 8;
+  61               		.loc 1 56 3 is_stmt 1 view .LVU19
+  62               		.loc 1 56 23 is_stmt 0 view .LVU20
+  63 002a 9583      		std Z+5,r25
+  64 002c 8483      		std Z+4,r24
+  65               	/* epilogue start */
+  57:../usbn2mc/main/usbn960x.c **** 
+  58:../usbn2mc/main/usbn960x.c **** } 
+  66               		.loc 1 58 1 view .LVU21
+  67 002e 0895      		ret
+  68               		.cfi_endproc
+  69               	.LFE12:
+  71               	.global	_USBNNackEvent
+  73               	_USBNNackEvent:
+  74               	.LFB13:
+  59:../usbn2mc/main/usbn960x.c **** 
+  60:../usbn2mc/main/usbn960x.c **** 
+  61:../usbn2mc/main/usbn960x.c **** // ********************************************************************
+  62:../usbn2mc/main/usbn960x.c **** // copy data to fifo for sending 
+  63:../usbn2mc/main/usbn960x.c **** // ********************************************************************
+  64:../usbn2mc/main/usbn960x.c **** /// copy mem to software fifo for endpoint
+  65:../usbn2mc/main/usbn960x.c **** /*
+  66:../usbn2mc/main/usbn960x.c **** void _USBNMemFIFO(fifo_t *fifo,char* data,int size)
+  67:../usbn2mc/main/usbn960x.c **** {  
+  68:../usbn2mc/main/usbn960x.c ****   int i;
+  69:../usbn2mc/main/usbn960x.c ****   for(i=0;i<size;i++)
+  70:../usbn2mc/main/usbn960x.c ****   {
+  71:../usbn2mc/main/usbn960x.c ****     fifo_put (fifo, (char)data[i]); 
+  72:../usbn2mc/main/usbn960x.c ****   } 
+  73:../usbn2mc/main/usbn960x.c **** }
+  74:../usbn2mc/main/usbn960x.c **** */
+  75:../usbn2mc/main/usbn960x.c **** 
+  76:../usbn2mc/main/usbn960x.c **** 
+  77:../usbn2mc/main/usbn960x.c **** // ********************************************************************
+  78:../usbn2mc/main/usbn960x.c **** // Interrupt Event Handler
+  79:../usbn2mc/main/usbn960x.c **** // ********************************************************************
+  80:../usbn2mc/main/usbn960x.c **** 
+  81:../usbn2mc/main/usbn960x.c **** 
+  82:../usbn2mc/main/usbn960x.c **** void _USBNNackEvent(void)
+  83:../usbn2mc/main/usbn960x.c **** {
+  75               		.loc 1 83 1 is_stmt 1 view -0
+  76               		.cfi_startproc
+  77               	/* prologue: function */
+  78               	/* frame size = 0 */
+  79               	/* stack size = 0 */
+  80               	.L__stack_usage = 0
+  84:../usbn2mc/main/usbn960x.c ****   unsigned char event;
+  81               		.loc 1 84 3 view .LVU23
+  85:../usbn2mc/main/usbn960x.c ****   //void (*ptr)();
+  86:../usbn2mc/main/usbn960x.c ****   
+  87:../usbn2mc/main/usbn960x.c ****   event = USBNRead(NAKEV);
+  82               		.loc 1 87 3 view .LVU24
+  83               		.loc 1 87 11 is_stmt 0 view .LVU25
+  84 0030 8EE0      		ldi r24,lo8(14)
+  85 0032 0C94 0000 		jmp USBNRead
+  86               	.LVL0:
+  87               		.cfi_endproc
+  88               	.LFE13:
+  90               	.global	_USBNAlternateEvent
+  92               	_USBNAlternateEvent:
+  93               	.LFB16:
+  88:../usbn2mc/main/usbn960x.c ****   //SendHex(event);
+  89:../usbn2mc/main/usbn960x.c ****   
+  90:../usbn2mc/main/usbn960x.c ****   //ptr = rxfifos.nack_callback;
+  91:../usbn2mc/main/usbn960x.c ****   //(*ptr)((unsigned int)event);
+  92:../usbn2mc/main/usbn960x.c **** 
+  93:../usbn2mc/main/usbn960x.c ****   if(event & 0x01)
+  94:../usbn2mc/main/usbn960x.c ****   {
+  95:../usbn2mc/main/usbn960x.c **** 
+  96:../usbn2mc/main/usbn960x.c ****   }
+  97:../usbn2mc/main/usbn960x.c ****   /* transmit fifo 1 */
+  98:../usbn2mc/main/usbn960x.c ****   if(event & 0x02)
+  99:../usbn2mc/main/usbn960x.c ****   {
+ 100:../usbn2mc/main/usbn960x.c ****     //USBNWrite(RXC1,FLUSH);	//re-enable the receiver  
+ 101:../usbn2mc/main/usbn960x.c ****     //USBNWrite(RXC1,RX_EN);	//re-enable the receiver  
+ 102:../usbn2mc/main/usbn960x.c ****    /* 
+ 103:../usbn2mc/main/usbn960x.c ****     USBNWrite(TXC1,FLUSH);	//re-enable the receiver  
+ 104:../usbn2mc/main/usbn960x.c ****     USBNWrite(TXC1,TX_LAST+TX_EN+TX_TOGL);
+ 105:../usbn2mc/main/usbn960x.c ****     
+ 106:../usbn2mc/main/usbn960x.c ****     USBNWrite(TXC1,FLUSH);	//re-enable the receiver  
+ 107:../usbn2mc/main/usbn960x.c ****     USBNWrite(TXC1,TX_LAST+TX_EN);
+ 108:../usbn2mc/main/usbn960x.c ****    */ 
+ 109:../usbn2mc/main/usbn960x.c ****     
+ 110:../usbn2mc/main/usbn960x.c ****     //USBNWrite(TXC1,RX_EN);	//re-enable the receiver  
+ 111:../usbn2mc/main/usbn960x.c **** 
+ 112:../usbn2mc/main/usbn960x.c ****   }
+ 113:../usbn2mc/main/usbn960x.c **** 
+ 114:../usbn2mc/main/usbn960x.c ****   /*
+ 115:../usbn2mc/main/usbn960x.c ****   USBNWrite(RXC1,FLUSH);	//re-enable the receiver  
+ 116:../usbn2mc/main/usbn960x.c ****   USBNWrite(RXC1,RX_EN);	//re-enable the receiver  
+ 117:../usbn2mc/main/usbn960x.c ****   //USBNDebug("nack event\r\n");
+ 118:../usbn2mc/main/usbn960x.c ****  
+ 119:../usbn2mc/main/usbn960x.c ****   if (EP0tx.Size > EP0tx.usbnfifo)	  //multi-pkt status stage? 
+ 120:../usbn2mc/main/usbn960x.c ****   {
+ 121:../usbn2mc/main/usbn960x.c ****     //USBNDebug("flush");
+ 122:../usbn2mc/main/usbn960x.c ****     USBNWrite(TXC0,FLUSH);	    //flush TX0 and disable   
+ 123:../usbn2mc/main/usbn960x.c ****     USBNWrite(RXC0,RX_EN);	//re-enable the receiver  
+ 124:../usbn2mc/main/usbn960x.c ****     EP0tx.DataPid	      = 1;
+ 125:../usbn2mc/main/usbn960x.c ****   }
+ 126:../usbn2mc/main/usbn960x.c ****   */ 
+ 127:../usbn2mc/main/usbn960x.c **** }
+ 128:../usbn2mc/main/usbn960x.c **** 
+ 129:../usbn2mc/main/usbn960x.c **** 
+ 130:../usbn2mc/main/usbn960x.c **** 
+ 131:../usbn2mc/main/usbn960x.c **** void _USBNReceiveEvent(void)
+ 132:../usbn2mc/main/usbn960x.c **** {
+ 133:../usbn2mc/main/usbn960x.c ****   unsigned char event;
+ 134:../usbn2mc/main/usbn960x.c ****   void (*ptr)(void *) = (void*)NULL;
+ 135:../usbn2mc/main/usbn960x.c ****   char buf[64];
+ 136:../usbn2mc/main/usbn960x.c ****   char *bufp=&buf[0];
+ 137:../usbn2mc/main/usbn960x.c ****   event = USBNRead(RXEV);
+ 138:../usbn2mc/main/usbn960x.c ****   //char tmp;
+ 139:../usbn2mc/main/usbn960x.c ****   int i=0;
+ 140:../usbn2mc/main/usbn960x.c ****   
+ 141:../usbn2mc/main/usbn960x.c ****   //USBNDebug("rx event\r\n");
+ 142:../usbn2mc/main/usbn960x.c ****   if(event & RX_FIFO0) _USBNReceiveFIFO0();
+ 143:../usbn2mc/main/usbn960x.c ****   
+ 144:../usbn2mc/main/usbn960x.c ****   // dynamic function call
+ 145:../usbn2mc/main/usbn960x.c ****   else if(event & RX_FIFO1) 
+ 146:../usbn2mc/main/usbn960x.c ****   {
+ 147:../usbn2mc/main/usbn960x.c ****     USBNRead(RXS1);
+ 148:../usbn2mc/main/usbn960x.c **** 
+ 149:../usbn2mc/main/usbn960x.c ****     *bufp = USBNRead(RXD1);
+ 150:../usbn2mc/main/usbn960x.c ****     for(i=0;i<63;i++) 
+ 151:../usbn2mc/main/usbn960x.c ****       *(++bufp)=USBNBurstRead(); 
+ 152:../usbn2mc/main/usbn960x.c ****     
+ 153:../usbn2mc/main/usbn960x.c ****     if(rxfifos.rx1==1){
+ 154:../usbn2mc/main/usbn960x.c ****       ptr = rxfifos.func1;
+ 155:../usbn2mc/main/usbn960x.c ****       (*ptr)(&buf);
+ 156:../usbn2mc/main/usbn960x.c ****     }
+ 157:../usbn2mc/main/usbn960x.c ****     USBNWrite(RXC1,FLUSH);   
+ 158:../usbn2mc/main/usbn960x.c ****     USBNWrite(RXC1,RX_EN);    
+ 159:../usbn2mc/main/usbn960x.c ****     return;
+ 160:../usbn2mc/main/usbn960x.c ****   }
+ 161:../usbn2mc/main/usbn960x.c **** 
+ 162:../usbn2mc/main/usbn960x.c ****   // dynamic function call
+ 163:../usbn2mc/main/usbn960x.c ****   else if(event & RX_FIFO2) 
+ 164:../usbn2mc/main/usbn960x.c ****   {
+ 165:../usbn2mc/main/usbn960x.c ****     USBNRead(RXS2);
+ 166:../usbn2mc/main/usbn960x.c **** 
+ 167:../usbn2mc/main/usbn960x.c ****     *bufp = USBNRead(RXD2);
+ 168:../usbn2mc/main/usbn960x.c ****     for(i=0;i<63;i++) 
+ 169:../usbn2mc/main/usbn960x.c ****       *(++bufp)=USBNBurstRead(); 
+ 170:../usbn2mc/main/usbn960x.c ****     
+ 171:../usbn2mc/main/usbn960x.c ****     if(rxfifos.rx2==1){
+ 172:../usbn2mc/main/usbn960x.c ****       ptr = rxfifos.func2;
+ 173:../usbn2mc/main/usbn960x.c ****       (*ptr)(&buf);
+ 174:../usbn2mc/main/usbn960x.c ****     }
+ 175:../usbn2mc/main/usbn960x.c ****     USBNWrite(RXC2,FLUSH);   
+ 176:../usbn2mc/main/usbn960x.c ****     USBNWrite(RXC2,RX_EN);    
+ 177:../usbn2mc/main/usbn960x.c ****     return;
+ 178:../usbn2mc/main/usbn960x.c ****   }
+ 179:../usbn2mc/main/usbn960x.c **** 
+ 180:../usbn2mc/main/usbn960x.c ****   // dynamic function call
+ 181:../usbn2mc/main/usbn960x.c ****   else if(event & RX_FIFO3) 
+ 182:../usbn2mc/main/usbn960x.c ****   {
+ 183:../usbn2mc/main/usbn960x.c ****     USBNRead(RXS3);
+ 184:../usbn2mc/main/usbn960x.c ****     for(i=0;i<64;i++) 
+ 185:../usbn2mc/main/usbn960x.c ****       buf[i]=USBNRead(RXD3); 
+ 186:../usbn2mc/main/usbn960x.c **** 
+ 187:../usbn2mc/main/usbn960x.c ****     if(rxfifos.rx3==1){
+ 188:../usbn2mc/main/usbn960x.c ****       ptr = rxfifos.func1;
+ 189:../usbn2mc/main/usbn960x.c ****       (*ptr)(&buf);
+ 190:../usbn2mc/main/usbn960x.c ****     }
+ 191:../usbn2mc/main/usbn960x.c ****   }
+ 192:../usbn2mc/main/usbn960x.c ****   else {}
+ 193:../usbn2mc/main/usbn960x.c **** }
+ 194:../usbn2mc/main/usbn960x.c **** 
+ 195:../usbn2mc/main/usbn960x.c **** 
+ 196:../usbn2mc/main/usbn960x.c **** void _USBNTransmitEvent(void)
+ 197:../usbn2mc/main/usbn960x.c **** {
+ 198:../usbn2mc/main/usbn960x.c ****   unsigned char event;
+ 199:../usbn2mc/main/usbn960x.c ****   void (*ptr)(void) = (void *)NULL;
+ 200:../usbn2mc/main/usbn960x.c ****   event = USBNRead(TXEV);
+ 201:../usbn2mc/main/usbn960x.c ****   //USBNDebug("tx event\r\n");
+ 202:../usbn2mc/main/usbn960x.c ****   if(event & TX_FIFO0) _USBNTransmitFIFO0();
+ 203:../usbn2mc/main/usbn960x.c ****   // dynamic function call
+ 204:../usbn2mc/main/usbn960x.c ****   
+ 205:../usbn2mc/main/usbn960x.c ****   else if(event & TX_FIFO1) 
+ 206:../usbn2mc/main/usbn960x.c ****   {
+ 207:../usbn2mc/main/usbn960x.c ****     USBNRead(TXS1);
+ 208:../usbn2mc/main/usbn960x.c **** 
+ 209:../usbn2mc/main/usbn960x.c ****     if(txfifos.tx1==1){
+ 210:../usbn2mc/main/usbn960x.c ****       ptr = txfifos.func1;
+ 211:../usbn2mc/main/usbn960x.c ****       (*ptr)();
+ 212:../usbn2mc/main/usbn960x.c ****     }
+ 213:../usbn2mc/main/usbn960x.c ****     return;
+ 214:../usbn2mc/main/usbn960x.c ****   }
+ 215:../usbn2mc/main/usbn960x.c ****   else {
+ 216:../usbn2mc/main/usbn960x.c ****     #if DEBUG
+ 217:../usbn2mc/main/usbn960x.c ****       USBNDebug("tx event\r\n");
+ 218:../usbn2mc/main/usbn960x.c ****     #endif
+ 219:../usbn2mc/main/usbn960x.c **** 
+ 220:../usbn2mc/main/usbn960x.c ****     //USBNRead(TXS1);                        // get transmitter status
+ 221:../usbn2mc/main/usbn960x.c ****     USBNRead(TXS2);                        // get transmitter status
+ 222:../usbn2mc/main/usbn960x.c ****     USBNRead(TXS3);                        // get transmitter status
+ 223:../usbn2mc/main/usbn960x.c ****   }
+ 224:../usbn2mc/main/usbn960x.c **** }
+ 225:../usbn2mc/main/usbn960x.c **** 
+ 226:../usbn2mc/main/usbn960x.c **** void _USBNAlternateEvent(void)
+ 227:../usbn2mc/main/usbn960x.c **** {
+  94               		.loc 1 227 1 is_stmt 1 view -0
+  95               		.cfi_startproc
+  96 0036 CF93      		push r28
+  97               		.cfi_def_cfa_offset 3
+  98               		.cfi_offset 28, -2
+  99               	/* prologue: function */
+ 100               	/* frame size = 0 */
+ 101               	/* stack size = 1 */
+ 102               	.L__stack_usage = 1
+ 228:../usbn2mc/main/usbn960x.c ****   unsigned char event;
+ 103               		.loc 1 228 3 view .LVU27
+ 229:../usbn2mc/main/usbn960x.c ****   event = USBNRead(ALTEV);
+ 104               		.loc 1 229 3 view .LVU28
+ 105               		.loc 1 229 11 is_stmt 0 view .LVU29
+ 106 0038 88E0      		ldi r24,lo8(8)
+ 107 003a 0E94 0000 		call USBNRead
+ 108               	.LVL1:
+ 109 003e C82F      		mov r28,r24
+ 110               	.LVL2:
+ 230:../usbn2mc/main/usbn960x.c ****   //USBNDebug("alt event\r\n");
+ 231:../usbn2mc/main/usbn960x.c **** 
+ 232:../usbn2mc/main/usbn960x.c ****   if(event & ALT_RESET)
+ 111               		.loc 1 232 3 is_stmt 1 view .LVU30
+ 112               		.loc 1 232 5 is_stmt 0 view .LVU31
+ 113 0040 86FF      		sbrs r24,6
+ 114 0042 00C0      		rjmp .L4
+ 233:../usbn2mc/main/usbn960x.c ****   {
+ 234:../usbn2mc/main/usbn960x.c ****     USBNWrite(NFSR,RST_ST);                   // NFS = NodeReset
+ 115               		.loc 1 234 5 is_stmt 1 view .LVU32
+ 116 0044 60E0      		ldi r22,0
+ 117 0046 85E0      		ldi r24,lo8(5)
+ 118               	.LVL3:
+ 119               		.loc 1 234 5 is_stmt 0 view .LVU33
+ 120 0048 0E94 0000 		call USBNWrite
+ 121               	.LVL4:
+ 235:../usbn2mc/main/usbn960x.c ****     USBNWrite(FAR,AD_EN+0); 
+ 122               		.loc 1 235 5 is_stmt 1 view .LVU34
+ 123 004c 60E8      		ldi r22,lo8(-128)
+ 124 004e 84E0      		ldi r24,lo8(4)
+ 125 0050 0E94 0000 		call USBNWrite
+ 126               	.LVL5:
+ 236:../usbn2mc/main/usbn960x.c ****     USBNWrite(EPC0,0x00);
+ 127               		.loc 1 236 5 view .LVU35
+ 128 0054 60E0      		ldi r22,0
+ 129 0056 80E2      		ldi r24,lo8(32)
+ 130 0058 0E94 0000 		call USBNWrite
+ 131               	.LVL6:
+ 237:../usbn2mc/main/usbn960x.c ****     USBNWrite(TXC0,FLUSH);
+ 132               		.loc 1 237 5 view .LVU36
+ 133 005c 68E0      		ldi r22,lo8(8)
+ 134 005e 83E2      		ldi r24,lo8(35)
+ 135 0060 0E94 0000 		call USBNWrite
+ 136               	.LVL7:
+ 238:../usbn2mc/main/usbn960x.c ****     USBNWrite(RXC0,RX_EN);                    // allow reception
+ 137               		.loc 1 238 5 view .LVU37
+ 138 0064 61E0      		ldi r22,lo8(1)
+ 139 0066 87E2      		ldi r24,lo8(39)
+ 140 0068 0E94 0000 		call USBNWrite
+ 141               	.LVL8:
+ 239:../usbn2mc/main/usbn960x.c ****     USBNWrite(NFSR,OPR_ST);                   // NFS = NodeOperational
+ 142               		.loc 1 239 5 view .LVU38
+ 143 006c 62E0      		ldi r22,lo8(2)
+ 144 006e 85E0      		ldi r24,lo8(5)
+ 145 0070 0E94 0000 		call USBNWrite
+ 146               	.LVL9:
+ 147               	.L4:
+ 240:../usbn2mc/main/usbn960x.c ****   	//USBNDebug("reset\r\n");
+ 241:../usbn2mc/main/usbn960x.c ****   }
+ 242:../usbn2mc/main/usbn960x.c ****   if(event & ALT_SD3)
+ 148               		.loc 1 242 3 view .LVU39
+ 149               		.loc 1 242 5 is_stmt 0 view .LVU40
+ 150 0074 C4FF      		sbrs r28,4
+ 151 0076 00C0      		rjmp .L5
+ 243:../usbn2mc/main/usbn960x.c ****   {
+ 244:../usbn2mc/main/usbn960x.c ****     USBNWrite(ALTMSK,ALT_RESUME+ALT_RESET);   // adjust interrupts
+ 152               		.loc 1 244 5 is_stmt 1 view .LVU41
+ 153 0078 60EC      		ldi r22,lo8(-64)
+ 154 007a 89E0      		ldi r24,lo8(9)
+ 155 007c 0E94 0000 		call USBNWrite
+ 156               	.LVL10:
+ 157               	.L5:
+ 245:../usbn2mc/main/usbn960x.c ****   /*
+ 246:../usbn2mc/main/usbn960x.c ****     USBNWrite(NFSR,SUS_ST);                   // enter suspend state
+ 247:../usbn2mc/main/usbn960x.c ****   	USBNDebug("sd3\r\n");
+ 248:../usbn2mc/main/usbn960x.c ****   */
+ 249:../usbn2mc/main/usbn960x.c ****   }
+ 250:../usbn2mc/main/usbn960x.c ****   if(event & ALT_RESUME)
+ 158               		.loc 1 250 3 view .LVU42
+ 159               		.loc 1 250 5 is_stmt 0 view .LVU43
+ 160 0080 C7FF      		sbrs r28,7
+ 161 0082 00C0      		rjmp .L3
+ 251:../usbn2mc/main/usbn960x.c ****   {
+ 252:../usbn2mc/main/usbn960x.c ****     USBNWrite(ALTMSK,ALT_SD3+ALT_RESET+ALT_RESUME);
+ 162               		.loc 1 252 5 is_stmt 1 view .LVU44
+ 163 0084 60ED      		ldi r22,lo8(-48)
+ 164 0086 89E0      		ldi r24,lo8(9)
+ 165               	/* epilogue start */
+ 253:../usbn2mc/main/usbn960x.c ****   /*
+ 254:../usbn2mc/main/usbn960x.c ****     USBNWrite(EPC0,0x00);
+ 255:../usbn2mc/main/usbn960x.c ****     USBNWrite(RXC0,RX_EN);                    // allow reception
+ 256:../usbn2mc/main/usbn960x.c ****     USBNWrite(TXC0,FLUSH);
+ 257:../usbn2mc/main/usbn960x.c ****     USBNWrite(NFSR,OPR_ST);
+ 258:../usbn2mc/main/usbn960x.c ****   	USBNDebug("resume\r\n");
+ 259:../usbn2mc/main/usbn960x.c **** 	*/
+ 260:../usbn2mc/main/usbn960x.c ****   }
+ 261:../usbn2mc/main/usbn960x.c ****   if(event & ALT_EOP)
+ 262:../usbn2mc/main/usbn960x.c ****   {
+ 263:../usbn2mc/main/usbn960x.c ****   	//USBNDebug("eop\r\n");
+ 264:../usbn2mc/main/usbn960x.c ****   }
+ 265:../usbn2mc/main/usbn960x.c **** 
+ 266:../usbn2mc/main/usbn960x.c **** }
+ 166               		.loc 1 266 1 is_stmt 0 view .LVU45
+ 167 0088 CF91      		pop r28
+ 168               	.LVL11:
+ 252:../usbn2mc/main/usbn960x.c ****   /*
+ 169               		.loc 1 252 5 view .LVU46
+ 170 008a 0C94 0000 		jmp USBNWrite
+ 171               	.LVL12:
+ 172               	.L3:
+ 173               	/* epilogue start */
+ 174               		.loc 1 266 1 view .LVU47
+ 175 008e CF91      		pop r28
+ 176               	.LVL13:
+ 177               		.loc 1 266 1 view .LVU48
+ 178 0090 0895      		ret
+ 179               		.cfi_endproc
+ 180               	.LFE16:
+ 182               	.global	_USBNReceive
+ 184               	_USBNReceive:
+ 185               	.LFB29:
+ 186               		.cfi_startproc
+ 267:../usbn2mc/main/usbn960x.c **** 
+ 268:../usbn2mc/main/usbn960x.c **** 
+ 269:../usbn2mc/main/usbn960x.c **** // ********************************************************************
+ 270:../usbn2mc/main/usbn960x.c **** // Receive and Transmit functions for EPs          
+ 271:../usbn2mc/main/usbn960x.c **** // ********************************************************************
+ 272:../usbn2mc/main/usbn960x.c **** void _USBNReceiveFIFO0(void)
+ 273:../usbn2mc/main/usbn960x.c **** {
+ 274:../usbn2mc/main/usbn960x.c ****   unsigned char rxstatus;
+ 275:../usbn2mc/main/usbn960x.c ****   char Buf[8];
+ 276:../usbn2mc/main/usbn960x.c ****   DeviceRequest *req;
+ 277:../usbn2mc/main/usbn960x.c ****   int i;
+ 278:../usbn2mc/main/usbn960x.c **** 
+ 279:../usbn2mc/main/usbn960x.c ****   #if DEBUG
+ 280:../usbn2mc/main/usbn960x.c ****   USBNDebug("rx\r\n");
+ 281:../usbn2mc/main/usbn960x.c ****   #endif
+ 282:../usbn2mc/main/usbn960x.c ****   rxstatus = USBNRead(RXS0);
+ 283:../usbn2mc/main/usbn960x.c **** 
+ 284:../usbn2mc/main/usbn960x.c ****   if(rxstatus & SETUP_R)
+ 285:../usbn2mc/main/usbn960x.c ****   {
+ 286:../usbn2mc/main/usbn960x.c ****     for(i=0;i<8;i++){ 
+ 287:../usbn2mc/main/usbn960x.c ****       Buf[i] = USBNRead(EP0rx.usbnData);  
+ 288:../usbn2mc/main/usbn960x.c ****     }
+ 289:../usbn2mc/main/usbn960x.c ****     
+ 290:../usbn2mc/main/usbn960x.c ****     #if DEBUG
+ 291:../usbn2mc/main/usbn960x.c ****     for(i=0;i<8;i++)
+ 292:../usbn2mc/main/usbn960x.c ****       SendHex(Buf[i]); // type - get descr or set address
+ 293:../usbn2mc/main/usbn960x.c ****     USBNDebug("\r\n");
+ 294:../usbn2mc/main/usbn960x.c ****     #endif
+ 295:../usbn2mc/main/usbn960x.c **** 
+ 296:../usbn2mc/main/usbn960x.c ****     req = (DeviceRequest*)(Buf);
+ 297:../usbn2mc/main/usbn960x.c ****    
+ 298:../usbn2mc/main/usbn960x.c ****     USBNWrite(RXC0,FLUSH);		      // make sure the RX is off 
+ 299:../usbn2mc/main/usbn960x.c ****     USBNWrite(TXC0,FLUSH);		      // make sure the TX is off 
+ 300:../usbn2mc/main/usbn960x.c ****     USBNWrite(EPC0,USBNRead(EPC0)&0x7F);      // turn of stall
+ 301:../usbn2mc/main/usbn960x.c **** 
+ 302:../usbn2mc/main/usbn960x.c ****     switch (req->bmRequestType & 0x60)  // decode request type     
+ 303:../usbn2mc/main/usbn960x.c ****     {
+ 304:../usbn2mc/main/usbn960x.c ****       case DO_STANDARD:			      // standard request 
+ 305:../usbn2mc/main/usbn960x.c **** 	//USBNDebug("HALLO STANDARD ");	
+ 306:../usbn2mc/main/usbn960x.c **** 	//SendHex(req->bRequest);
+ 307:../usbn2mc/main/usbn960x.c **** 	//USBNDebug("\n\r");
+ 308:../usbn2mc/main/usbn960x.c ****         switch (req->bRequest)	      // decode request code     
+ 309:../usbn2mc/main/usbn960x.c ****         {
+ 310:../usbn2mc/main/usbn960x.c ****           case CLR_FEATURE:
+ 311:../usbn2mc/main/usbn960x.c **** 	  #if DEBUG 
+ 312:../usbn2mc/main/usbn960x.c **** 	    USBNDebug("CLR FEATURE\n\r");
+ 313:../usbn2mc/main/usbn960x.c **** 	  #endif
+ 314:../usbn2mc/main/usbn960x.c ****             //_USBNClearFeature(req);
+ 315:../usbn2mc/main/usbn960x.c ****           break;
+ 316:../usbn2mc/main/usbn960x.c ****           case GET_CONFIGURATION:
+ 317:../usbn2mc/main/usbn960x.c **** 	  #if DEBUG 
+ 318:../usbn2mc/main/usbn960x.c ****             //USBNDebug("GET CONFIG\n\r");
+ 319:../usbn2mc/main/usbn960x.c **** 	  #endif
+ 320:../usbn2mc/main/usbn960x.c ****             _USBNGetConfiguration(req);
+ 321:../usbn2mc/main/usbn960x.c ****           break;
+ 322:../usbn2mc/main/usbn960x.c ****           case GET_DESCRIPTOR:
+ 323:../usbn2mc/main/usbn960x.c **** 	  #if DEBUG 
+ 324:../usbn2mc/main/usbn960x.c ****             USBNDebug("GET DESCRIPTOR\n\r");
+ 325:../usbn2mc/main/usbn960x.c **** 	  #endif
+ 326:../usbn2mc/main/usbn960x.c ****             _USBNGetDescriptor(req);
+ 327:../usbn2mc/main/usbn960x.c ****           break;
+ 328:../usbn2mc/main/usbn960x.c ****           case GET_INTERFACE:
+ 329:../usbn2mc/main/usbn960x.c **** 	  #if DEBUG
+ 330:../usbn2mc/main/usbn960x.c ****             USBNDebug("GET INTERFACE\n\r");	
+ 331:../usbn2mc/main/usbn960x.c **** 	  #endif
+ 332:../usbn2mc/main/usbn960x.c ****           break;
+ 333:../usbn2mc/main/usbn960x.c ****           case GET_STATUS:
+ 334:../usbn2mc/main/usbn960x.c **** 	  #if DEBUG
+ 335:../usbn2mc/main/usbn960x.c **** 	  #endif
+ 336:../usbn2mc/main/usbn960x.c ****             //USBNDebug("GET STATUS\n\r");	
+ 337:../usbn2mc/main/usbn960x.c **** 	    //_USBNGetStatus(req);
+ 338:../usbn2mc/main/usbn960x.c **** 	    USBNWrite(TXC0,FLUSH);
+ 339:../usbn2mc/main/usbn960x.c **** 	    USBNWrite(TXD0,1);
+ 340:../usbn2mc/main/usbn960x.c **** 	    USBNWrite(TXD0,0);
+ 341:../usbn2mc/main/usbn960x.c **** 	    USBNWrite(TXC0,TX_TOGL+TX_EN);  //enable the TX (DATA1)
+ 342:../usbn2mc/main/usbn960x.c ****           break;
+ 343:../usbn2mc/main/usbn960x.c ****           case SET_ADDRESS:
+ 344:../usbn2mc/main/usbn960x.c **** 	  #if DEBUG
+ 345:../usbn2mc/main/usbn960x.c ****             USBNDebug("SET ADDRESS ");	
+ 346:../usbn2mc/main/usbn960x.c **** 	  #endif
+ 347:../usbn2mc/main/usbn960x.c ****             _USBNSetAddress(req); 
+ 348:../usbn2mc/main/usbn960x.c ****           break;
+ 349:../usbn2mc/main/usbn960x.c ****           case SET_CONFIGURATION:
+ 350:../usbn2mc/main/usbn960x.c **** 	  #if DEBUG
+ 351:../usbn2mc/main/usbn960x.c ****             USBNDebug("SET CONFIGURATION\n\r");	
+ 352:../usbn2mc/main/usbn960x.c **** 	  #endif
+ 353:../usbn2mc/main/usbn960x.c ****             _USBNSetConfiguration(req); 
+ 354:../usbn2mc/main/usbn960x.c ****           break;
+ 355:../usbn2mc/main/usbn960x.c ****           case SET_FEATURE:
+ 356:../usbn2mc/main/usbn960x.c **** 	  #if DEBUG
+ 357:../usbn2mc/main/usbn960x.c ****             USBNDebug("SET FEATURE\n\r");	
+ 358:../usbn2mc/main/usbn960x.c **** 	  #endif
+ 359:../usbn2mc/main/usbn960x.c **** 	  USBNWrite(TXC0,TX_TOGL+TX_EN);  //enable the TX (DATA1)
+ 360:../usbn2mc/main/usbn960x.c ****           break;
+ 361:../usbn2mc/main/usbn960x.c ****           case SET_INTERFACE:
+ 362:../usbn2mc/main/usbn960x.c **** 	  #if DEBUG
+ 363:../usbn2mc/main/usbn960x.c ****             USBNDebug("SET INTERFACE\n\r");	
+ 364:../usbn2mc/main/usbn960x.c **** 	  #endif
+ 365:../usbn2mc/main/usbn960x.c **** 	  USBNWrite(TXC0,TX_TOGL+TX_EN);  //enable the TX (DATA1)
+ 366:../usbn2mc/main/usbn960x.c ****           break;
+ 367:../usbn2mc/main/usbn960x.c ****           default:				// unsupported standard req
+ 368:../usbn2mc/main/usbn960x.c **** 	  #if DEBUG
+ 369:../usbn2mc/main/usbn960x.c ****             USBNDebug("unsupported standard req\n\r");
+ 370:../usbn2mc/main/usbn960x.c **** 	  #endif
+ 371:../usbn2mc/main/usbn960x.c ****             USBNWrite(EPC0,USBNRead(EPC0)+STALL);      // stall the endpoint
+ 372:../usbn2mc/main/usbn960x.c ****           break;
+ 373:../usbn2mc/main/usbn960x.c ****         }      
+ 374:../usbn2mc/main/usbn960x.c ****       break;
+ 375:../usbn2mc/main/usbn960x.c ****       case DO_CLASS:				// class request        
+ 376:../usbn2mc/main/usbn960x.c **** 	#if DEBUG
+ 377:../usbn2mc/main/usbn960x.c ****         USBNDebug("Class request\n\r");
+ 378:../usbn2mc/main/usbn960x.c **** 	#endif
+ 379:../usbn2mc/main/usbn960x.c **** 	//USBNDecodeClassRequest(req);
+ 380:../usbn2mc/main/usbn960x.c **** 	USBNWrite(TXC0,TX_TOGL+TX_EN);  //enable the TX (DATA1)
+ 381:../usbn2mc/main/usbn960x.c ****       break;
+ 382:../usbn2mc/main/usbn960x.c ****       case DO_VENDOR:				// vendor request        
+ 383:../usbn2mc/main/usbn960x.c **** 	#if DEBUG
+ 384:../usbn2mc/main/usbn960x.c ****         USBNDebug("Vendor request\n\r");
+ 385:../usbn2mc/main/usbn960x.c **** 	#endif
+ 386:../usbn2mc/main/usbn960x.c **** 	USBNDecodeVendorRequest(req);
+ 387:../usbn2mc/main/usbn960x.c **** 	USBNWrite(TXC0,TX_TOGL+TX_EN);  //enable the TX (DATA1)
+ 388:../usbn2mc/main/usbn960x.c ****       break;              
+ 389:../usbn2mc/main/usbn960x.c ****       default:					// unsupported req type    
+ 390:../usbn2mc/main/usbn960x.c **** 	#if DEBUG
+ 391:../usbn2mc/main/usbn960x.c **** 	USBNDebug("unsupported req type\r\n");
+ 392:../usbn2mc/main/usbn960x.c **** 	#endif
+ 393:../usbn2mc/main/usbn960x.c ****         USBNWrite(EPC0,USBNRead(EPC0)+STALL);      // stall the endpoint 
+ 394:../usbn2mc/main/usbn960x.c ****       break;
+ 395:../usbn2mc/main/usbn960x.c ****     }
+ 396:../usbn2mc/main/usbn960x.c **** 
+ 397:../usbn2mc/main/usbn960x.c ****       //the following is done for all setup packets.  Note that if
+ 398:../usbn2mc/main/usbn960x.c ****       //no data was stuffed into the FIFO, the result of the fol-
+ 399:../usbn2mc/main/usbn960x.c ****       //lowing will be a zero-length response.                   
+ 400:../usbn2mc/main/usbn960x.c ****       
+ 401:../usbn2mc/main/usbn960x.c ****       // only for stage 2 transfers
+ 402:../usbn2mc/main/usbn960x.c ****       if(req->bmRequestType == 0x00)
+ 403:../usbn2mc/main/usbn960x.c **** 	USBNWrite(TXC0,TX_TOGL+TX_EN);  //enable the TX (DATA1)
+ 404:../usbn2mc/main/usbn960x.c ****   }
+ 405:../usbn2mc/main/usbn960x.c ****   else                              // if not a setuppacket
+ 406:../usbn2mc/main/usbn960x.c ****   {
+ 407:../usbn2mc/main/usbn960x.c ****     //USBNDebug("error transmit\r\n");
+ 408:../usbn2mc/main/usbn960x.c ****     if (EP0tx.Size > EP0tx.usbnfifo)   // multi-pkt status stage? 
+ 409:../usbn2mc/main/usbn960x.c ****     {
+ 410:../usbn2mc/main/usbn960x.c ****       if ((rxstatus& 0x5F)!=0x10)   // length error??          
+ 411:../usbn2mc/main/usbn960x.c ****       {
+ 412:../usbn2mc/main/usbn960x.c **** 	#if DEBUG
+ 413:../usbn2mc/main/usbn960x.c **** 	USBNDebug("length error\r\n");
+ 414:../usbn2mc/main/usbn960x.c **** 	#endif
+ 415:../usbn2mc/main/usbn960x.c ****       }
+ 416:../usbn2mc/main/usbn960x.c ****       EP0tx.Size=0;                // exit multi-packet mode  
+ 417:../usbn2mc/main/usbn960x.c ****       USBNWrite(TXC0,FLUSH);       // flush TX0 and disable   
+ 418:../usbn2mc/main/usbn960x.c ****       USBNWrite(RXC0,RX_EN);          // re-enable the receiver  
+ 419:../usbn2mc/main/usbn960x.c ****     }
+ 420:../usbn2mc/main/usbn960x.c ****   } 
+ 421:../usbn2mc/main/usbn960x.c **** }
+ 422:../usbn2mc/main/usbn960x.c **** 
+ 423:../usbn2mc/main/usbn960x.c **** 
+ 424:../usbn2mc/main/usbn960x.c **** 
+ 425:../usbn2mc/main/usbn960x.c **** 
+ 426:../usbn2mc/main/usbn960x.c **** void _USBNTransmitFIFO0(void)
+ 427:../usbn2mc/main/usbn960x.c **** {
+ 428:../usbn2mc/main/usbn960x.c ****   unsigned char txstat;
+ 429:../usbn2mc/main/usbn960x.c **** 
+ 430:../usbn2mc/main/usbn960x.c ****   txstat = USBNRead(TXS0);                        // get transmitter status
+ 431:../usbn2mc/main/usbn960x.c ****     #if DEBUG
+ 432:../usbn2mc/main/usbn960x.c ****     USBNDebug("t");
+ 433:../usbn2mc/main/usbn960x.c ****     #endif
+ 434:../usbn2mc/main/usbn960x.c **** 
+ 435:../usbn2mc/main/usbn960x.c ****   if(txstat & TX_DONE)                            // if transmit completed
+ 436:../usbn2mc/main/usbn960x.c ****   {
+ 437:../usbn2mc/main/usbn960x.c ****     USBNWrite(TXC0,FLUSH);                        // flush TX0 and disable
+ 438:../usbn2mc/main/usbn960x.c ****     //USBNDebug("tx done ");
+ 439:../usbn2mc/main/usbn960x.c **** 
+ 440:../usbn2mc/main/usbn960x.c ****     if(txstat & ACK_STAT)                         // ACK received
+ 441:../usbn2mc/main/usbn960x.c ****     {
+ 442:../usbn2mc/main/usbn960x.c ****       //USBNDebug("tx ack ");
+ 443:../usbn2mc/main/usbn960x.c ****       if(EP0tx.Index < EP0tx.Size)
+ 444:../usbn2mc/main/usbn960x.c ****       {
+ 445:../usbn2mc/main/usbn960x.c **** 	//USBNDebug("next packets ");
+ 446:../usbn2mc/main/usbn960x.c ****         _USBNTransmit(&EP0tx);
+ 447:../usbn2mc/main/usbn960x.c ****       }
+ 448:../usbn2mc/main/usbn960x.c ****       else                                        // not in multi-packet mode
+ 449:../usbn2mc/main/usbn960x.c ****       {
+ 450:../usbn2mc/main/usbn960x.c ****         //USBNDebug("no multi packet ");
+ 451:../usbn2mc/main/usbn960x.c ****         //USBNWrite(RXC0,FLUSH);          // re-enable the receiver
+ 452:../usbn2mc/main/usbn960x.c ****         //USBNWrite(TXC0,TX_EN);          // re-enable the receiver
+ 453:../usbn2mc/main/usbn960x.c **** 	USBNWrite(RXC0,RX_EN);               // re-enable the receiver
+ 454:../usbn2mc/main/usbn960x.c ****       }
+ 455:../usbn2mc/main/usbn960x.c ****     }
+ 456:../usbn2mc/main/usbn960x.c ****     else                                              
+ 457:../usbn2mc/main/usbn960x.c ****     // this probably means we issued a stall handshake
+ 458:../usbn2mc/main/usbn960x.c ****     {
+ 459:../usbn2mc/main/usbn960x.c ****       //USBNDebug("stall handshake ");
+ 460:../usbn2mc/main/usbn960x.c ****       //USBNFunctionInfo.GetDesc=0;          // exit multi-packet mode
+ 461:../usbn2mc/main/usbn960x.c ****       USBNWrite(RXC0,RX_EN);               // re-enable the receiver
+ 462:../usbn2mc/main/usbn960x.c ****     }
+ 463:../usbn2mc/main/usbn960x.c ****   }
+ 464:../usbn2mc/main/usbn960x.c ****   // otherwise something must have gone wrong with the previous
+ 465:../usbn2mc/main/usbn960x.c ****   // transmission, or we got here somehow we shouldn't have
+ 466:../usbn2mc/main/usbn960x.c ****   else
+ 467:../usbn2mc/main/usbn960x.c ****   { 
+ 468:../usbn2mc/main/usbn960x.c ****     //USBNDebug("tx0 error\n");
+ 469:../usbn2mc/main/usbn960x.c ****   }
+ 470:../usbn2mc/main/usbn960x.c ****   // we do this stuff for all tx_0 events
+ 471:../usbn2mc/main/usbn960x.c **** }
+ 472:../usbn2mc/main/usbn960x.c **** 
+ 473:../usbn2mc/main/usbn960x.c **** 
+ 474:../usbn2mc/main/usbn960x.c **** // ********************************************************************
+ 475:../usbn2mc/main/usbn960x.c **** // Communicate with the FIFOs         
+ 476:../usbn2mc/main/usbn960x.c **** // ********************************************************************
+ 477:../usbn2mc/main/usbn960x.c **** 
+ 478:../usbn2mc/main/usbn960x.c **** 
+ 479:../usbn2mc/main/usbn960x.c **** void _USBNReceive(EPInfo* ep)
+ 187               		.loc 1 479 6 is_stmt 1 view .LVU49
+ 188               	/* prologue: function */
+ 189               	/* frame size = 0 */
+ 190               	/* stack size = 0 */
+ 191               	.L__stack_usage = 0
+ 192               	/* epilogue start */
+ 193 0092 0895      		ret
+ 194               		.cfi_endproc
+ 195               	.LFE29:
+ 197               	.global	_USBNTransmit
+ 199               	_USBNTransmit:
+ 200               	.LVL14:
+ 201               	.LFB20:
+ 480:../usbn2mc/main/usbn960x.c **** {
+ 481:../usbn2mc/main/usbn960x.c ****   /*
+ 482:../usbn2mc/main/usbn960x.c ****   int size=ep->FIFOSize;
+ 483:../usbn2mc/main/usbn960x.c ****   int i;
+ 484:../usbn2mc/main/usbn960x.c ****   for(i=0;i<size;i++){
+ 485:../usbn2mc/main/usbn960x.c ****     ep->Buf[i] = USBNRead(ep->usbnData);  
+ 486:../usbn2mc/main/usbn960x.c ****   }
+ 487:../usbn2mc/main/usbn960x.c ****   // cast to device request
+ 488:../usbn2mc/main/usbn960x.c ****   ep->req = (DeviceReq*)(ep->Buf);
+ 489:../usbn2mc/main/usbn960x.c ****   */ 
+ 490:../usbn2mc/main/usbn960x.c **** }
+ 491:../usbn2mc/main/usbn960x.c **** 
+ 492:../usbn2mc/main/usbn960x.c **** 
+ 493:../usbn2mc/main/usbn960x.c **** void _USBNTransmit(EPInfo* ep)
+ 494:../usbn2mc/main/usbn960x.c **** {
+ 202               		.loc 1 494 1 view -0
+ 203               		.cfi_startproc
+ 204               		.loc 1 494 1 is_stmt 0 view .LVU51
+ 205 0094 0F93      		push r16
+ 206               		.cfi_def_cfa_offset 3
+ 207               		.cfi_offset 16, -2
+ 208 0096 1F93      		push r17
+ 209               		.cfi_def_cfa_offset 4
+ 210               		.cfi_offset 17, -3
+ 211 0098 CF93      		push r28
+ 212               		.cfi_def_cfa_offset 5
+ 213               		.cfi_offset 28, -4
+ 214 009a DF93      		push r29
+ 215               		.cfi_def_cfa_offset 6
+ 216               		.cfi_offset 29, -5
+ 217               	/* prologue: function */
+ 218               	/* frame size = 0 */
+ 219               	/* stack size = 4 */
+ 220               	.L__stack_usage = 4
+ 221 009c EC01      		movw r28,r24
+ 495:../usbn2mc/main/usbn960x.c ****   int i;
+ 222               		.loc 1 495 3 is_stmt 1 view .LVU52
+ 496:../usbn2mc/main/usbn960x.c ****   if(ep->Size > 0)
+ 223               		.loc 1 496 3 view .LVU53
+ 224               		.loc 1 496 8 is_stmt 0 view .LVU54
+ 225 009e 8885      		ldd r24,Y+8
+ 226 00a0 9985      		ldd r25,Y+9
+ 227               	.LVL15:
+ 228               		.loc 1 496 5 view .LVU55
+ 229 00a2 1816      		cp __zero_reg__,r24
+ 230 00a4 1906      		cpc __zero_reg__,r25
+ 231 00a6 04F4      		brge .L14
+ 497:../usbn2mc/main/usbn960x.c ****   {
+ 498:../usbn2mc/main/usbn960x.c ****     if(ep->Index < ep->Size)
+ 232               		.loc 1 498 5 is_stmt 1 view .LVU56
+ 233               		.loc 1 498 7 is_stmt 0 view .LVU57
+ 234 00a8 2E81      		ldd r18,Y+6
+ 235 00aa 3F81      		ldd r19,Y+7
+ 236 00ac 2817      		cp r18,r24
+ 237 00ae 3907      		cpc r19,r25
+ 238 00b0 04F4      		brge .L16
+ 499:../usbn2mc/main/usbn960x.c ****     {
+ 500:../usbn2mc/main/usbn960x.c ****       
+ 501:../usbn2mc/main/usbn960x.c ****       USBNWrite(TXC0,FLUSH);       //send data to the FIFO
+ 239               		.loc 1 501 7 is_stmt 1 view .LVU58
+ 240 00b2 68E0      		ldi r22,lo8(8)
+ 241 00b4 83E2      		ldi r24,lo8(35)
+ 242 00b6 0E94 0000 		call USBNWrite
+ 243               	.LVL16:
+ 502:../usbn2mc/main/usbn960x.c ****       //USBNDebug(" ");
+ 503:../usbn2mc/main/usbn960x.c ****       for(i=0;((i < 8) && (ep->Index < ep->Size)); i++)
+ 244               		.loc 1 503 7 view .LVU59
+ 245               		.loc 1 503 24 discriminator 1 view .LVU60
+ 501:../usbn2mc/main/usbn960x.c ****       //USBNDebug(" ");
+ 246               		.loc 1 501 7 is_stmt 0 view .LVU61
+ 247 00ba 08E0      		ldi r16,lo8(8)
+ 248 00bc 10E0      		ldi r17,0
+ 249               	.LVL17:
+ 250               	.L17:
+ 251               		.loc 1 503 30 discriminator 3 view .LVU62
+ 252 00be 8E81      		ldd r24,Y+6
+ 253 00c0 9F81      		ldd r25,Y+7
+ 254               		.loc 1 503 24 discriminator 3 view .LVU63
+ 255 00c2 2885      		ldd r18,Y+8
+ 256 00c4 3985      		ldd r19,Y+9
+ 257 00c6 8217      		cp r24,r18
+ 258 00c8 9307      		cpc r25,r19
+ 259 00ca 04F0      		brlt .L19
+ 260               	.LVL18:
+ 261               	.L16:
+ 504:../usbn2mc/main/usbn960x.c ****       {
+ 505:../usbn2mc/main/usbn960x.c ****         USBNWrite(TXD0,ep->Buf[ep->Index]);
+ 506:../usbn2mc/main/usbn960x.c **** 	//USBNWrite(TXD0,fifo_get_nowait(EP0tx.fifo));
+ 507:../usbn2mc/main/usbn960x.c **** 	//SendHex(ep->Buf[ep->Index]); // type - get descr or set address
+ 508:../usbn2mc/main/usbn960x.c ****         ep->Index++;
+ 509:../usbn2mc/main/usbn960x.c ****       }
+ 510:../usbn2mc/main/usbn960x.c **** 
+ 511:../usbn2mc/main/usbn960x.c ****       // if end of multipaket
+ 512:../usbn2mc/main/usbn960x.c ****       if(ep->Size<=ep->Index)
+ 513:../usbn2mc/main/usbn960x.c **** 	USBNWrite(RXC0,RX_EN);
+ 262               		.loc 1 513 2 is_stmt 1 view .LVU64
+ 263 00cc 61E0      		ldi r22,lo8(1)
+ 264 00ce 87E2      		ldi r24,lo8(39)
+ 265 00d0 0E94 0000 		call USBNWrite
+ 266               	.LVL19:
+ 267 00d4 00C0      		rjmp .L20
+ 268               	.LVL20:
+ 269               	.L19:
+ 505:../usbn2mc/main/usbn960x.c **** 	//USBNWrite(TXD0,fifo_get_nowait(EP0tx.fifo));
+ 270               		.loc 1 505 9 view .LVU65
+ 271 00d6 EA85      		ldd r30,Y+10
+ 272 00d8 FB85      		ldd r31,Y+11
+ 273 00da E80F      		add r30,r24
+ 274 00dc F91F      		adc r31,r25
+ 275 00de 6081      		ld r22,Z
+ 276 00e0 81E2      		ldi r24,lo8(33)
+ 277 00e2 0E94 0000 		call USBNWrite
+ 278               	.LVL21:
+ 508:../usbn2mc/main/usbn960x.c ****       }
+ 279               		.loc 1 508 9 view .LVU66
+ 508:../usbn2mc/main/usbn960x.c ****       }
+ 280               		.loc 1 508 18 is_stmt 0 view .LVU67
+ 281 00e6 8E81      		ldd r24,Y+6
+ 282 00e8 9F81      		ldd r25,Y+7
+ 283 00ea 0196      		adiw r24,1
+ 284 00ec 9F83      		std Y+7,r25
+ 285 00ee 8E83      		std Y+6,r24
+ 503:../usbn2mc/main/usbn960x.c ****       {
+ 286               		.loc 1 503 53 is_stmt 1 discriminator 4 view .LVU68
+ 287               	.LVL22:
+ 503:../usbn2mc/main/usbn960x.c ****       {
+ 288               		.loc 1 503 24 discriminator 1 view .LVU69
+ 289 00f0 0150      		subi r16, 1
+ 290 00f2 1040      		sbci r17, 0
+ 291               	.LVL23:
+ 503:../usbn2mc/main/usbn960x.c ****       {
+ 292               		.loc 1 503 24 is_stmt 0 discriminator 1 view .LVU70
+ 293 00f4 01F4      		brne .L17
+ 512:../usbn2mc/main/usbn960x.c **** 	USBNWrite(RXC0,RX_EN);
+ 294               		.loc 1 512 7 is_stmt 1 view .LVU71
+ 512:../usbn2mc/main/usbn960x.c **** 	USBNWrite(RXC0,RX_EN);
+ 295               		.loc 1 512 9 is_stmt 0 view .LVU72
+ 296 00f6 2885      		ldd r18,Y+8
+ 297 00f8 3985      		ldd r19,Y+9
+ 298 00fa 8217      		cp r24,r18
+ 299 00fc 9307      		cpc r25,r19
+ 300 00fe 04F4      		brge .L16
+ 301               	.LVL24:
+ 302               	.L20:
+ 514:../usbn2mc/main/usbn960x.c ****     }
+ 515:../usbn2mc/main/usbn960x.c ****     else
+ 516:../usbn2mc/main/usbn960x.c ****     {
+ 517:../usbn2mc/main/usbn960x.c ****       USBNWrite(RXC0,RX_EN);
+ 518:../usbn2mc/main/usbn960x.c ****     }
+ 519:../usbn2mc/main/usbn960x.c **** 
+ 520:../usbn2mc/main/usbn960x.c ****     // toggle mechanism
+ 521:../usbn2mc/main/usbn960x.c ****     if(ep->DataPid == 1)
+ 303               		.loc 1 521 5 is_stmt 1 view .LVU73
+ 522:../usbn2mc/main/usbn960x.c ****     {
+ 523:../usbn2mc/main/usbn960x.c ****       USBNWrite(ep->usbnCommand,TX_TOGL+TX_EN);
+ 304               		.loc 1 523 7 is_stmt 0 view .LVU74
+ 305 0100 8981      		ldd r24,Y+1
+ 521:../usbn2mc/main/usbn960x.c ****     {
+ 306               		.loc 1 521 7 view .LVU75
+ 307 0102 9B81      		ldd r25,Y+3
+ 308 0104 9130      		cpi r25,lo8(1)
+ 309 0106 01F4      		brne .L21
+ 310               		.loc 1 523 7 is_stmt 1 view .LVU76
+ 311 0108 65E0      		ldi r22,lo8(5)
+ 312 010a 0E94 0000 		call USBNWrite
+ 313               	.LVL25:
+ 524:../usbn2mc/main/usbn960x.c ****       ep->DataPid=0;
+ 314               		.loc 1 524 7 view .LVU77
+ 315               		.loc 1 524 18 is_stmt 0 view .LVU78
+ 316 010e 1B82      		std Y+3,__zero_reg__
+ 317               	.L14:
+ 318               	/* epilogue start */
+ 525:../usbn2mc/main/usbn960x.c ****     }
+ 526:../usbn2mc/main/usbn960x.c ****     else
+ 527:../usbn2mc/main/usbn960x.c ****     {
+ 528:../usbn2mc/main/usbn960x.c ****       USBNWrite(ep->usbnCommand,TX_EN);
+ 529:../usbn2mc/main/usbn960x.c ****       ep->DataPid=1;
+ 530:../usbn2mc/main/usbn960x.c ****     }
+ 531:../usbn2mc/main/usbn960x.c ****   }
+ 532:../usbn2mc/main/usbn960x.c **** }
+ 319               		.loc 1 532 1 view .LVU79
+ 320 0110 DF91      		pop r29
+ 321 0112 CF91      		pop r28
+ 322               	.LVL26:
+ 323               		.loc 1 532 1 view .LVU80
+ 324 0114 1F91      		pop r17
+ 325 0116 0F91      		pop r16
+ 326 0118 0895      		ret
+ 327               	.LVL27:
+ 328               	.L21:
+ 528:../usbn2mc/main/usbn960x.c ****       ep->DataPid=1;
+ 329               		.loc 1 528 7 is_stmt 1 view .LVU81
+ 330 011a 61E0      		ldi r22,lo8(1)
+ 331 011c 0E94 0000 		call USBNWrite
+ 332               	.LVL28:
+ 529:../usbn2mc/main/usbn960x.c ****     }
+ 333               		.loc 1 529 7 view .LVU82
+ 529:../usbn2mc/main/usbn960x.c ****     }
+ 334               		.loc 1 529 18 is_stmt 0 view .LVU83
+ 335 0120 81E0      		ldi r24,lo8(1)
+ 336 0122 8B83      		std Y+3,r24
+ 337               		.loc 1 532 1 view .LVU84
+ 338 0124 00C0      		rjmp .L14
+ 339               		.cfi_endproc
+ 340               	.LFE20:
+ 342               	.global	_USBNTransmitFIFO0
+ 344               	_USBNTransmitFIFO0:
+ 345               	.LFB18:
+ 427:../usbn2mc/main/usbn960x.c ****   unsigned char txstat;
+ 346               		.loc 1 427 1 is_stmt 1 view -0
+ 347               		.cfi_startproc
+ 348 0126 CF93      		push r28
+ 349               		.cfi_def_cfa_offset 3
+ 350               		.cfi_offset 28, -2
+ 351               	/* prologue: function */
+ 352               	/* frame size = 0 */
+ 353               	/* stack size = 1 */
+ 354               	.L__stack_usage = 1
+ 428:../usbn2mc/main/usbn960x.c **** 
+ 355               		.loc 1 428 3 view .LVU86
+ 430:../usbn2mc/main/usbn960x.c ****     #if DEBUG
+ 356               		.loc 1 430 3 view .LVU87
+ 430:../usbn2mc/main/usbn960x.c ****     #if DEBUG
+ 357               		.loc 1 430 12 is_stmt 0 view .LVU88
+ 358 0128 82E2      		ldi r24,lo8(34)
+ 359 012a 0E94 0000 		call USBNRead
+ 360               	.LVL29:
+ 361 012e C82F      		mov r28,r24
+ 362               	.LVL30:
+ 435:../usbn2mc/main/usbn960x.c ****   {
+ 363               		.loc 1 435 3 is_stmt 1 view .LVU89
+ 435:../usbn2mc/main/usbn960x.c ****   {
+ 364               		.loc 1 435 5 is_stmt 0 view .LVU90
+ 365 0130 85FF      		sbrs r24,5
+ 366 0132 00C0      		rjmp .L22
+ 437:../usbn2mc/main/usbn960x.c ****     //USBNDebug("tx done ");
+ 367               		.loc 1 437 5 is_stmt 1 view .LVU91
+ 368 0134 68E0      		ldi r22,lo8(8)
+ 369 0136 83E2      		ldi r24,lo8(35)
+ 370               	.LVL31:
+ 437:../usbn2mc/main/usbn960x.c ****     //USBNDebug("tx done ");
+ 371               		.loc 1 437 5 is_stmt 0 view .LVU92
+ 372 0138 0E94 0000 		call USBNWrite
+ 373               	.LVL32:
+ 440:../usbn2mc/main/usbn960x.c ****     {
+ 374               		.loc 1 440 5 is_stmt 1 view .LVU93
+ 440:../usbn2mc/main/usbn960x.c ****     {
+ 375               		.loc 1 440 7 is_stmt 0 view .LVU94
+ 376 013c C6FF      		sbrs r28,6
+ 377 013e 00C0      		rjmp .L24
+ 443:../usbn2mc/main/usbn960x.c ****       {
+ 378               		.loc 1 443 7 is_stmt 1 view .LVU95
+ 443:../usbn2mc/main/usbn960x.c ****       {
+ 379               		.loc 1 443 9 is_stmt 0 view .LVU96
+ 380 0140 2091 0000 		lds r18,EP0tx+6
+ 381 0144 3091 0000 		lds r19,EP0tx+6+1
+ 382 0148 8091 0000 		lds r24,EP0tx+8
+ 383 014c 9091 0000 		lds r25,EP0tx+8+1
+ 384 0150 2817      		cp r18,r24
+ 385 0152 3907      		cpc r19,r25
+ 386 0154 04F4      		brge .L24
+ 446:../usbn2mc/main/usbn960x.c ****       }
+ 387               		.loc 1 446 9 is_stmt 1 view .LVU97
+ 388 0156 80E0      		ldi r24,lo8(EP0tx)
+ 389 0158 90E0      		ldi r25,hi8(EP0tx)
+ 390               	/* epilogue start */
+ 471:../usbn2mc/main/usbn960x.c **** 
+ 391               		.loc 1 471 1 is_stmt 0 view .LVU98
+ 392 015a CF91      		pop r28
+ 393               	.LVL33:
+ 446:../usbn2mc/main/usbn960x.c ****       }
+ 394               		.loc 1 446 9 view .LVU99
+ 395 015c 0C94 0000 		jmp _USBNTransmit
+ 396               	.LVL34:
+ 397               	.L24:
+ 453:../usbn2mc/main/usbn960x.c ****       }
+ 398               		.loc 1 453 2 is_stmt 1 view .LVU100
+ 399 0160 61E0      		ldi r22,lo8(1)
+ 400 0162 87E2      		ldi r24,lo8(39)
+ 401               	/* epilogue start */
+ 471:../usbn2mc/main/usbn960x.c **** 
+ 402               		.loc 1 471 1 is_stmt 0 view .LVU101
+ 403 0164 CF91      		pop r28
+ 404               	.LVL35:
+ 453:../usbn2mc/main/usbn960x.c ****       }
+ 405               		.loc 1 453 2 view .LVU102
+ 406 0166 0C94 0000 		jmp USBNWrite
+ 407               	.LVL36:
+ 408               	.L22:
+ 409               	/* epilogue start */
+ 471:../usbn2mc/main/usbn960x.c **** 
+ 410               		.loc 1 471 1 view .LVU103
+ 411 016a CF91      		pop r28
+ 412 016c 0895      		ret
+ 413               		.cfi_endproc
+ 414               	.LFE18:
+ 416               	.global	_USBNTransmitEvent
+ 418               	_USBNTransmitEvent:
+ 419               	.LFB15:
+ 197:../usbn2mc/main/usbn960x.c ****   unsigned char event;
+ 420               		.loc 1 197 1 is_stmt 1 view -0
+ 421               		.cfi_startproc
+ 422               	/* prologue: function */
+ 423               	/* frame size = 0 */
+ 424               	/* stack size = 0 */
+ 425               	.L__stack_usage = 0
+ 198:../usbn2mc/main/usbn960x.c ****   void (*ptr)(void) = (void *)NULL;
+ 426               		.loc 1 198 3 view .LVU105
+ 199:../usbn2mc/main/usbn960x.c ****   event = USBNRead(TXEV);
+ 427               		.loc 1 199 3 view .LVU106
+ 428               	.LVL37:
+ 200:../usbn2mc/main/usbn960x.c ****   //USBNDebug("tx event\r\n");
+ 429               		.loc 1 200 3 view .LVU107
+ 200:../usbn2mc/main/usbn960x.c ****   //USBNDebug("tx event\r\n");
+ 430               		.loc 1 200 11 is_stmt 0 view .LVU108
+ 431 016e 8AE0      		ldi r24,lo8(10)
+ 432 0170 0E94 0000 		call USBNRead
+ 433               	.LVL38:
+ 202:../usbn2mc/main/usbn960x.c ****   // dynamic function call
+ 434               		.loc 1 202 3 is_stmt 1 view .LVU109
+ 202:../usbn2mc/main/usbn960x.c ****   // dynamic function call
+ 435               		.loc 1 202 5 is_stmt 0 view .LVU110
+ 436 0174 80FD      		sbrc r24,0
+ 202:../usbn2mc/main/usbn960x.c ****   // dynamic function call
+ 437               		.loc 1 202 24 is_stmt 1 discriminator 1 view .LVU111
+ 438 0176 0C94 0000 		jmp _USBNTransmitFIFO0
+ 439               	.LVL39:
+ 440               	.L29:
+ 205:../usbn2mc/main/usbn960x.c ****   {
+ 441               		.loc 1 205 8 view .LVU112
+ 205:../usbn2mc/main/usbn960x.c ****   {
+ 442               		.loc 1 205 10 is_stmt 0 view .LVU113
+ 443 017a 81FF      		sbrs r24,1
+ 444 017c 00C0      		rjmp .L30
+ 207:../usbn2mc/main/usbn960x.c **** 
+ 445               		.loc 1 207 5 is_stmt 1 view .LVU114
+ 446 017e 8AE2      		ldi r24,lo8(42)
+ 447               	.LVL40:
+ 207:../usbn2mc/main/usbn960x.c **** 
+ 448               		.loc 1 207 5 is_stmt 0 view .LVU115
+ 449 0180 0E94 0000 		call USBNRead
+ 450               	.LVL41:
+ 209:../usbn2mc/main/usbn960x.c ****       ptr = txfifos.func1;
+ 451               		.loc 1 209 5 is_stmt 1 view .LVU116
+ 209:../usbn2mc/main/usbn960x.c ****       ptr = txfifos.func1;
+ 452               		.loc 1 209 7 is_stmt 0 view .LVU117
+ 453 0184 8091 0000 		lds r24,txfifos
+ 454 0188 8130      		cpi r24,lo8(1)
+ 455 018a 01F4      		brne .L28
+ 210:../usbn2mc/main/usbn960x.c ****       (*ptr)();
+ 456               		.loc 1 210 7 is_stmt 1 view .LVU118
+ 457               	.LVL42:
+ 211:../usbn2mc/main/usbn960x.c ****     }
+ 458               		.loc 1 211 7 view .LVU119
+ 211:../usbn2mc/main/usbn960x.c ****     }
+ 459               		.loc 1 211 8 is_stmt 0 view .LVU120
+ 460 018c E091 0000 		lds r30,txfifos+3
+ 461 0190 F091 0000 		lds r31,txfifos+3+1
+ 462 0194 0994      		ijmp
+ 463               	.LVL43:
+ 464               	.L30:
+ 221:../usbn2mc/main/usbn960x.c ****     USBNRead(TXS3);                        // get transmitter status
+ 465               		.loc 1 221 5 is_stmt 1 view .LVU121
+ 466 0196 82E3      		ldi r24,lo8(50)
+ 467               	.LVL44:
+ 221:../usbn2mc/main/usbn960x.c ****     USBNRead(TXS3);                        // get transmitter status
+ 468               		.loc 1 221 5 is_stmt 0 view .LVU122
+ 469 0198 0E94 0000 		call USBNRead
+ 470               	.LVL45:
+ 222:../usbn2mc/main/usbn960x.c ****   }
+ 471               		.loc 1 222 5 is_stmt 1 view .LVU123
+ 472 019c 8AE3      		ldi r24,lo8(58)
+ 473 019e 0C94 0000 		jmp USBNRead
+ 474               	.LVL46:
+ 475               	.L28:
+ 476               	/* epilogue start */
+ 224:../usbn2mc/main/usbn960x.c **** 
+ 477               		.loc 1 224 1 is_stmt 0 view .LVU124
+ 478 01a2 0895      		ret
+ 479               		.cfi_endproc
+ 480               	.LFE15:
+ 482               	.global	_USBNSetAddress
+ 484               	_USBNSetAddress:
+ 485               	.LVL47:
+ 486               	.LFB21:
+ 533:../usbn2mc/main/usbn960x.c **** 
+ 534:../usbn2mc/main/usbn960x.c **** 
+ 535:../usbn2mc/main/usbn960x.c **** 
+ 536:../usbn2mc/main/usbn960x.c **** // ********************************************************************
+ 537:../usbn2mc/main/usbn960x.c **** // standard request from EP0          
+ 538:../usbn2mc/main/usbn960x.c **** // ********************************************************************
+ 539:../usbn2mc/main/usbn960x.c **** 
+ 540:../usbn2mc/main/usbn960x.c **** /*
+ 541:../usbn2mc/main/usbn960x.c **** 
+ 542:../usbn2mc/main/usbn960x.c **** void _USBNClearFeature(void)
+ 543:../usbn2mc/main/usbn960x.c **** {
+ 544:../usbn2mc/main/usbn960x.c ****   switch(EP0rx.Buf[0]&0x03)
+ 545:../usbn2mc/main/usbn960x.c ****   {
+ 546:../usbn2mc/main/usbn960x.c ****     case 0: break; // Device
+ 547:../usbn2mc/main/usbn960x.c ****     case 1: break; // interface
+ 548:../usbn2mc/main/usbn960x.c ****     case 2:     // endpoint 
+ 549:../usbn2mc/main/usbn960x.c ****       switch(EP0rx.Buf[4]&0x0F)
+ 550:../usbn2mc/main/usbn960x.c ****       {
+ 551:../usbn2mc/main/usbn960x.c ****         case 0:
+ 552:../usbn2mc/main/usbn960x.c ****           USBNWrite(EPC0,USBNRead(EPC0)&0x7F);  // clear stall
+ 553:../usbn2mc/main/usbn960x.c ****         break;
+ 554:../usbn2mc/main/usbn960x.c ****         case 1:
+ 555:../usbn2mc/main/usbn960x.c ****           USBNWrite(EPC1,USBNRead(EPC1)&0x7F);  // clear stall
+ 556:../usbn2mc/main/usbn960x.c ****         break;
+ 557:../usbn2mc/main/usbn960x.c ****               case 2:
+ 558:../usbn2mc/main/usbn960x.c ****           USBNWrite(EPC2,USBNRead(EPC2)&0x7F);  // clear stall
+ 559:../usbn2mc/main/usbn960x.c ****         break;
+ 560:../usbn2mc/main/usbn960x.c ****               case 3:
+ 561:../usbn2mc/main/usbn960x.c ****           USBNWrite(EPC3,USBNRead(EPC3)&0x7F);  // clear stall
+ 562:../usbn2mc/main/usbn960x.c ****         break;
+ 563:../usbn2mc/main/usbn960x.c ****               case 4:
+ 564:../usbn2mc/main/usbn960x.c ****           USBNWrite(EPC4,USBNRead(EPC4)&0x7F);  // clear stall
+ 565:../usbn2mc/main/usbn960x.c ****         break;
+ 566:../usbn2mc/main/usbn960x.c ****               case 5:
+ 567:../usbn2mc/main/usbn960x.c ****           USBNWrite(EPC5,USBNRead(EPC5)&0x7F);  // clear stall
+ 568:../usbn2mc/main/usbn960x.c ****         break;
+ 569:../usbn2mc/main/usbn960x.c ****               case 6:
+ 570:../usbn2mc/main/usbn960x.c ****           USBNWrite(EPC6,USBNRead(EPC6)&0x7F);  // clear stall
+ 571:../usbn2mc/main/usbn960x.c ****         break;
+ 572:../usbn2mc/main/usbn960x.c ****         default:
+ 573:../usbn2mc/main/usbn960x.c ****         break;
+ 574:../usbn2mc/main/usbn960x.c ****       }
+ 575:../usbn2mc/main/usbn960x.c ****     break;
+ 576:../usbn2mc/main/usbn960x.c ****     default:    // undefined
+ 577:../usbn2mc/main/usbn960x.c ****     break;
+ 578:../usbn2mc/main/usbn960x.c ****   }
+ 579:../usbn2mc/main/usbn960x.c **** }
+ 580:../usbn2mc/main/usbn960x.c **** */
+ 581:../usbn2mc/main/usbn960x.c **** 
+ 582:../usbn2mc/main/usbn960x.c **** void _USBNSetAddress(DeviceRequest *req)
+ 583:../usbn2mc/main/usbn960x.c **** {
+ 487               		.loc 1 583 1 is_stmt 1 view -0
+ 488               		.cfi_startproc
+ 489               		.loc 1 583 1 is_stmt 0 view .LVU126
+ 490 01a4 CF93      		push r28
+ 491               		.cfi_def_cfa_offset 3
+ 492               		.cfi_offset 28, -2
+ 493 01a6 DF93      		push r29
+ 494               		.cfi_def_cfa_offset 4
+ 495               		.cfi_offset 29, -3
+ 496               	/* prologue: function */
+ 497               	/* frame size = 0 */
+ 498               	/* stack size = 2 */
+ 499               	.L__stack_usage = 2
+ 500 01a8 EC01      		movw r28,r24
+ 584:../usbn2mc/main/usbn960x.c ****  // set the address
+ 585:../usbn2mc/main/usbn960x.c ****   USBNWrite(EPC0,DEF);
+ 501               		.loc 1 585 3 is_stmt 1 view .LVU127
+ 502 01aa 60E4      		ldi r22,lo8(64)
+ 503 01ac 80E2      		ldi r24,lo8(32)
+ 504               	.LVL48:
+ 505               		.loc 1 585 3 is_stmt 0 view .LVU128
+ 506 01ae 0E94 0000 		call USBNWrite
+ 507               	.LVL49:
+ 586:../usbn2mc/main/usbn960x.c ****   USBNWrite(FAR,AD_EN+req->wValue);
+ 508               		.loc 1 586 3 is_stmt 1 view .LVU129
+ 509 01b2 6A81      		ldd r22,Y+2
+ 510 01b4 6058      		subi r22,lo8(-(-128))
+ 511 01b6 84E0      		ldi r24,lo8(4)
+ 512 01b8 0E94 0000 		call USBNWrite
+ 513               	.LVL50:
+ 587:../usbn2mc/main/usbn960x.c ****   USBNFunctionInfo.Address = req->wValue;
+ 514               		.loc 1 587 3 view .LVU130
+ 515               		.loc 1 587 28 is_stmt 0 view .LVU131
+ 516 01bc 8A81      		ldd r24,Y+2
+ 517 01be 8093 0000 		sts USBNFunctionInfo,r24
+ 518               	/* epilogue start */
+ 588:../usbn2mc/main/usbn960x.c **** }
+ 519               		.loc 1 588 1 view .LVU132
+ 520 01c2 DF91      		pop r29
+ 521 01c4 CF91      		pop r28
+ 522               	.LVL51:
+ 523               		.loc 1 588 1 view .LVU133
+ 524 01c6 0895      		ret
+ 525               		.cfi_endproc
+ 526               	.LFE21:
+ 528               	.global	_USBNGetDescriptor
+ 530               	_USBNGetDescriptor:
+ 531               	.LVL52:
+ 532               	.LFB22:
+ 589:../usbn2mc/main/usbn960x.c **** 
+ 590:../usbn2mc/main/usbn960x.c **** 
+ 591:../usbn2mc/main/usbn960x.c **** void _USBNGetDescriptor(DeviceRequest *req)
+ 592:../usbn2mc/main/usbn960x.c **** {
+ 533               		.loc 1 592 1 is_stmt 1 view -0
+ 534               		.cfi_startproc
+ 535               		.loc 1 592 1 is_stmt 0 view .LVU135
+ 536 01c8 CF93      		push r28
+ 537               		.cfi_def_cfa_offset 3
+ 538               		.cfi_offset 28, -2
+ 539 01ca DF93      		push r29
+ 540               		.cfi_def_cfa_offset 4
+ 541               		.cfi_offset 29, -3
+ 542 01cc 00D0      		rcall .
+ 543 01ce 00D0      		rcall .
+ 544               		.cfi_def_cfa_offset 8
+ 545 01d0 CDB7      		in r28,__SP_L__
+ 546 01d2 DEB7      		in r29,__SP_H__
+ 547               		.cfi_def_cfa_register 28
+ 548               	/* prologue: function */
+ 549               	/* frame size = 4 */
+ 550               	/* stack size = 6 */
+ 551               	.L__stack_usage = 6
+ 552 01d4 FC01      		movw r30,r24
+ 593:../usbn2mc/main/usbn960x.c ****   unsigned char index =  req->wValue;
+ 553               		.loc 1 593 3 is_stmt 1 view .LVU136
+ 554               		.loc 1 593 29 is_stmt 0 view .LVU137
+ 555 01d6 8281      		ldd r24,Z+2
+ 556 01d8 9381      		ldd r25,Z+3
+ 557               	.LVL53:
+ 594:../usbn2mc/main/usbn960x.c ****   unsigned char type = req->wValue >> 8;
+ 558               		.loc 1 594 3 is_stmt 1 view .LVU138
+ 559               		.loc 1 594 36 is_stmt 0 view .LVU139
+ 560 01da 292F      		mov r18,r25
+ 561 01dc 3327      		clr r19
+ 562               	.LVL54:
+ 595:../usbn2mc/main/usbn960x.c **** 
+ 596:../usbn2mc/main/usbn960x.c ****   EP0tx.Index = 0;
+ 563               		.loc 1 596 3 is_stmt 1 view .LVU140
+ 564               		.loc 1 596 15 is_stmt 0 view .LVU141
+ 565 01de 1092 0000 		sts EP0tx+6+1,__zero_reg__
+ 566 01e2 1092 0000 		sts EP0tx+6,__zero_reg__
+ 597:../usbn2mc/main/usbn960x.c ****   EP0tx.DataPid = 1;
+ 567               		.loc 1 597 3 is_stmt 1 view .LVU142
+ 568               		.loc 1 597 17 is_stmt 0 view .LVU143
+ 569 01e6 41E0      		ldi r20,lo8(1)
+ 570 01e8 4093 0000 		sts EP0tx+3,r20
+ 598:../usbn2mc/main/usbn960x.c ****   switch (type)
+ 571               		.loc 1 598 3 is_stmt 1 view .LVU144
+ 572 01ec 2230      		cpi r18,2
+ 573 01ee 3105      		cpc r19,__zero_reg__
+ 574 01f0 01F0      		breq .L34
+ 575 01f2 2330      		cpi r18,3
+ 576 01f4 3105      		cpc r19,__zero_reg__
+ 577 01f6 01F4      		brne .+2
+ 578 01f8 00C0      		rjmp .L35
+ 579 01fa 2130      		cpi r18,1
+ 580 01fc 3105      		cpc r19,__zero_reg__
+ 581 01fe 01F4      		brne .L36
+ 599:../usbn2mc/main/usbn960x.c ****   {
+ 600:../usbn2mc/main/usbn960x.c ****     case DEVICE:
+ 601:../usbn2mc/main/usbn960x.c ****       //#if DEBUG 
+ 602:../usbn2mc/main/usbn960x.c ****       //USBNDebug("DEVICE DESCRIPTOR\n\r");  
+ 603:../usbn2mc/main/usbn960x.c ****       //#endif
+ 604:../usbn2mc/main/usbn960x.c ****       EP0tx.Size = DeviceDescriptor.bLength;
+ 582               		.loc 1 604 7 view .LVU145
+ 583               		.loc 1 604 36 is_stmt 0 view .LVU146
+ 584 0200 8091 0000 		lds r24,DeviceDescriptor
+ 585               	.LVL55:
+ 586               		.loc 1 604 36 view .LVU147
+ 587 0204 90E0      		ldi r25,0
+ 588 0206 9093 0000 		sts EP0tx+8+1,r25
+ 589 020a 8093 0000 		sts EP0tx+8,r24
+ 605:../usbn2mc/main/usbn960x.c ****       EP0tx.Buf = (unsigned char*)(&DeviceDescriptor);
+ 590               		.loc 1 605 7 is_stmt 1 view .LVU148
+ 591               		.loc 1 605 17 is_stmt 0 view .LVU149
+ 592 020e 80E0      		ldi r24,lo8(DeviceDescriptor)
+ 593 0210 90E0      		ldi r25,hi8(DeviceDescriptor)
+ 594 0212 9093 0000 		sts EP0tx+10+1,r25
+ 595 0216 8093 0000 		sts EP0tx+10,r24
+ 606:../usbn2mc/main/usbn960x.c ****       
+ 607:../usbn2mc/main/usbn960x.c ****       // first get descriptor request is
+ 608:../usbn2mc/main/usbn960x.c ****       // always be answered with first 8 unsigned chars of dev descriptor
+ 609:../usbn2mc/main/usbn960x.c ****       //SendHex(req->wLength);
+ 610:../usbn2mc/main/usbn960x.c ****       
+ 611:../usbn2mc/main/usbn960x.c ****       if(req->wLength==0x08)
+ 596               		.loc 1 611 7 is_stmt 1 view .LVU150
+ 597               		.loc 1 611 13 is_stmt 0 view .LVU151
+ 598 021a 8681      		ldd r24,Z+6
+ 599 021c 9781      		ldd r25,Z+7
+ 600               		.loc 1 611 9 view .LVU152
+ 601 021e 8830      		cpi r24,8
+ 602 0220 9105      		cpc r25,__zero_reg__
+ 603 0222 01F4      		brne .L37
+ 612:../usbn2mc/main/usbn960x.c **** 	req->wLength=0x40;
+ 604               		.loc 1 612 2 is_stmt 1 view .LVU153
+ 605               		.loc 1 612 14 is_stmt 0 view .LVU154
+ 606 0224 80E4      		ldi r24,lo8(64)
+ 607 0226 90E0      		ldi r25,0
+ 608 0228 9783      		std Z+7,r25
+ 609 022a 8683      		std Z+6,r24
+ 613:../usbn2mc/main/usbn960x.c **** 
+ 614:../usbn2mc/main/usbn960x.c **** 
+ 615:../usbn2mc/main/usbn960x.c ****       if(req->wLength==0x40)
+ 610               		.loc 1 615 7 is_stmt 1 view .LVU155
+ 611               	.L38:
+ 616:../usbn2mc/main/usbn960x.c ****         EP0tx.Size = 8;
+ 612               		.loc 1 616 9 view .LVU156
+ 613               		.loc 1 616 20 is_stmt 0 view .LVU157
+ 614 022c 88E0      		ldi r24,lo8(8)
+ 615 022e 90E0      		ldi r25,0
+ 616               	.LVL56:
+ 617               	.L41:
+ 617:../usbn2mc/main/usbn960x.c ****     break;
+ 618:../usbn2mc/main/usbn960x.c ****     case CONFIGURATION:
+ 619:../usbn2mc/main/usbn960x.c ****       #if DEBUG 
+ 620:../usbn2mc/main/usbn960x.c ****       USBNDebug("CONFIGURATION DESCRIPTOR ");  
+ 621:../usbn2mc/main/usbn960x.c ****       #endif
+ 622:../usbn2mc/main/usbn960x.c **** 
+ 623:../usbn2mc/main/usbn960x.c ****       // send complete tree
+ 624:../usbn2mc/main/usbn960x.c ****       EP0tx.Size =req->wLength;
+ 625:../usbn2mc/main/usbn960x.c ****       EP0tx.Buf = (unsigned char*)&(FinalConfigurationArray[index][0]);
+ 626:../usbn2mc/main/usbn960x.c **** 
+ 627:../usbn2mc/main/usbn960x.c ****     break;
+ 628:../usbn2mc/main/usbn960x.c ****     case STRING:
+ 629:../usbn2mc/main/usbn960x.c ****       #if DEBUG 
+ 630:../usbn2mc/main/usbn960x.c **** 	USBNDebug("STRING DESCRIPTOR ");  
+ 631:../usbn2mc/main/usbn960x.c **** 	SendHex(index);
+ 632:../usbn2mc/main/usbn960x.c **** 	USBNDebug("\r\n");
+ 633:../usbn2mc/main/usbn960x.c ****       #endif
+ 634:../usbn2mc/main/usbn960x.c **** 
+ 635:../usbn2mc/main/usbn960x.c ****       if(index >0)
+ 636:../usbn2mc/main/usbn960x.c ****       {
+ 637:../usbn2mc/main/usbn960x.c **** 	EP0tx.Buf = (unsigned char*)&(FinalStringArray[index][0]);
+ 638:../usbn2mc/main/usbn960x.c **** 	EP0tx.Size = EP0tx.Buf[0];
+ 618               		.loc 1 638 24 view .LVU158
+ 619 0230 9093 0000 		sts EP0tx+8+1,r25
+ 620 0234 8093 0000 		sts EP0tx+8,r24
+ 621 0238 00C0      		rjmp .L36
+ 622               	.LVL57:
+ 623               	.L37:
+ 615:../usbn2mc/main/usbn960x.c ****         EP0tx.Size = 8;
+ 624               		.loc 1 615 7 is_stmt 1 view .LVU159
+ 615:../usbn2mc/main/usbn960x.c ****         EP0tx.Size = 8;
+ 625               		.loc 1 615 9 is_stmt 0 view .LVU160
+ 626 023a 8034      		cpi r24,64
+ 627 023c 9105      		cpc r25,__zero_reg__
+ 628 023e 01F0      		breq .L38
+ 629               	.LVL58:
+ 630               	.L36:
+ 639:../usbn2mc/main/usbn960x.c ****       }
+ 640:../usbn2mc/main/usbn960x.c ****       else { 
+ 641:../usbn2mc/main/usbn960x.c ****       #if DEBUG 
+ 642:../usbn2mc/main/usbn960x.c **** 	USBNDebug("language descriptor"); 
+ 643:../usbn2mc/main/usbn960x.c ****       #endif
+ 644:../usbn2mc/main/usbn960x.c **** 	char lang[]={0x04,0x03,0x09,0x04};
+ 645:../usbn2mc/main/usbn960x.c **** 	//EP0tx.Buf = &FinalStringArray[0][0];
+ 646:../usbn2mc/main/usbn960x.c **** 	//EP0tx.Size = EP0tx.Buf[0];
+ 647:../usbn2mc/main/usbn960x.c **** 	EP0tx.Size=4;
+ 648:../usbn2mc/main/usbn960x.c **** 	EP0tx.Buf = (unsigned char*)lang;
+ 649:../usbn2mc/main/usbn960x.c **** 
+ 650:../usbn2mc/main/usbn960x.c ****       }
+ 651:../usbn2mc/main/usbn960x.c ****     break;
+ 652:../usbn2mc/main/usbn960x.c ****   }
+ 653:../usbn2mc/main/usbn960x.c ****   //if (EP0rx.Buf[7]==0)                  //if less than 256 req'd  
+ 654:../usbn2mc/main/usbn960x.c ****   //  if (EP0tx.Size > EP0rx.Buf[6]) EP0tx.Size = EP0rx.Buf[6];
+ 655:../usbn2mc/main/usbn960x.c **** 
+ 656:../usbn2mc/main/usbn960x.c ****   _USBNTransmit(&EP0tx);
+ 631               		.loc 1 656 3 is_stmt 1 view .LVU161
+ 632 0240 80E0      		ldi r24,lo8(EP0tx)
+ 633 0242 90E0      		ldi r25,hi8(EP0tx)
+ 634               	/* epilogue start */
+ 657:../usbn2mc/main/usbn960x.c **** }
+ 635               		.loc 1 657 1 is_stmt 0 view .LVU162
+ 636 0244 0F90      		pop __tmp_reg__
+ 637 0246 0F90      		pop __tmp_reg__
+ 638 0248 0F90      		pop __tmp_reg__
+ 639 024a 0F90      		pop __tmp_reg__
+ 640 024c DF91      		pop r29
+ 641 024e CF91      		pop r28
+ 656:../usbn2mc/main/usbn960x.c **** }
+ 642               		.loc 1 656 3 view .LVU163
+ 643 0250 0C94 0000 		jmp _USBNTransmit
+ 644               	.LVL59:
+ 645               	.L34:
+ 624:../usbn2mc/main/usbn960x.c ****       EP0tx.Buf = (unsigned char*)&(FinalConfigurationArray[index][0]);
+ 646               		.loc 1 624 7 is_stmt 1 view .LVU164
+ 624:../usbn2mc/main/usbn960x.c ****       EP0tx.Buf = (unsigned char*)&(FinalConfigurationArray[index][0]);
+ 647               		.loc 1 624 18 is_stmt 0 view .LVU165
+ 648 0254 2681      		ldd r18,Z+6
+ 649 0256 3781      		ldd r19,Z+7
+ 650               	.LVL60:
+ 624:../usbn2mc/main/usbn960x.c ****       EP0tx.Buf = (unsigned char*)&(FinalConfigurationArray[index][0]);
+ 651               		.loc 1 624 18 view .LVU166
+ 652 0258 3093 0000 		sts EP0tx+8+1,r19
+ 653 025c 2093 0000 		sts EP0tx+8,r18
+ 625:../usbn2mc/main/usbn960x.c **** 
+ 654               		.loc 1 625 7 is_stmt 1 view .LVU167
+ 625:../usbn2mc/main/usbn960x.c **** 
+ 655               		.loc 1 625 60 is_stmt 0 view .LVU168
+ 656 0260 9927      		clr r25
+ 657               	.LVL61:
+ 625:../usbn2mc/main/usbn960x.c **** 
+ 658               		.loc 1 625 60 view .LVU169
+ 659 0262 880F      		lsl r24
+ 660 0264 991F      		rol r25
+ 661 0266 E091 0000 		lds r30,FinalConfigurationArray
+ 662 026a F091 0000 		lds r31,FinalConfigurationArray+1
+ 663               	.LVL62:
+ 625:../usbn2mc/main/usbn960x.c **** 
+ 664               		.loc 1 625 60 view .LVU170
+ 665 026e E80F      		add r30,r24
+ 666 0270 F91F      		adc r31,r25
+ 625:../usbn2mc/main/usbn960x.c **** 
+ 667               		.loc 1 625 17 view .LVU171
+ 668 0272 8081      		ld r24,Z
+ 669 0274 9181      		ldd r25,Z+1
+ 670               	.L40:
+ 671               	.LBB4:
+ 648:../usbn2mc/main/usbn960x.c **** 
+ 672               		.loc 1 648 12 view .LVU172
+ 673 0276 9093 0000 		sts EP0tx+10+1,r25
+ 674 027a 8093 0000 		sts EP0tx+10,r24
+ 675 027e 00C0      		rjmp .L36
+ 676               	.LVL63:
+ 677               	.L35:
+ 648:../usbn2mc/main/usbn960x.c **** 
+ 678               		.loc 1 648 12 view .LVU173
+ 679               	.LBE4:
+ 635:../usbn2mc/main/usbn960x.c ****       {
+ 680               		.loc 1 635 7 is_stmt 1 view .LVU174
+ 635:../usbn2mc/main/usbn960x.c ****       {
+ 681               		.loc 1 635 9 is_stmt 0 view .LVU175
+ 682 0280 8115      		cp r24, __zero_reg__
+ 683 0282 01F0      		breq .L39
+ 637:../usbn2mc/main/usbn960x.c **** 	EP0tx.Size = EP0tx.Buf[0];
+ 684               		.loc 1 637 2 is_stmt 1 view .LVU176
+ 637:../usbn2mc/main/usbn960x.c **** 	EP0tx.Size = EP0tx.Buf[0];
+ 685               		.loc 1 637 48 is_stmt 0 view .LVU177
+ 686 0284 9927      		clr r25
+ 687               	.LVL64:
+ 637:../usbn2mc/main/usbn960x.c **** 	EP0tx.Size = EP0tx.Buf[0];
+ 688               		.loc 1 637 48 view .LVU178
+ 689 0286 880F      		lsl r24
+ 690 0288 991F      		rol r25
+ 691               	.LVL65:
+ 637:../usbn2mc/main/usbn960x.c **** 	EP0tx.Size = EP0tx.Buf[0];
+ 692               		.loc 1 637 48 view .LVU179
+ 693 028a E091 0000 		lds r30,FinalStringArray
+ 694 028e F091 0000 		lds r31,FinalStringArray+1
+ 695               	.LVL66:
+ 637:../usbn2mc/main/usbn960x.c **** 	EP0tx.Size = EP0tx.Buf[0];
+ 696               		.loc 1 637 48 view .LVU180
+ 697 0292 E80F      		add r30,r24
+ 698 0294 F91F      		adc r31,r25
+ 699 0296 0190      		ld __tmp_reg__,Z+
+ 700 0298 F081      		ld r31,Z
+ 701 029a E02D      		mov r30,__tmp_reg__
+ 637:../usbn2mc/main/usbn960x.c **** 	EP0tx.Size = EP0tx.Buf[0];
+ 702               		.loc 1 637 12 view .LVU181
+ 703 029c F093 0000 		sts EP0tx+10+1,r31
+ 704 02a0 E093 0000 		sts EP0tx+10,r30
+ 638:../usbn2mc/main/usbn960x.c ****       }
+ 705               		.loc 1 638 2 is_stmt 1 view .LVU182
+ 638:../usbn2mc/main/usbn960x.c ****       }
+ 706               		.loc 1 638 24 is_stmt 0 view .LVU183
+ 707 02a4 8081      		ld r24,Z
+ 708 02a6 90E0      		ldi r25,0
+ 709 02a8 00C0      		rjmp .L41
+ 710               	.LVL67:
+ 711               	.L39:
+ 712               	.LBB5:
+ 644:../usbn2mc/main/usbn960x.c **** 	//EP0tx.Buf = &FinalStringArray[0][0];
+ 713               		.loc 1 644 2 is_stmt 1 view .LVU184
+ 647:../usbn2mc/main/usbn960x.c **** 	EP0tx.Buf = (unsigned char*)lang;
+ 714               		.loc 1 647 2 view .LVU185
+ 647:../usbn2mc/main/usbn960x.c **** 	EP0tx.Buf = (unsigned char*)lang;
+ 715               		.loc 1 647 12 is_stmt 0 view .LVU186
+ 716 02aa 84E0      		ldi r24,lo8(4)
+ 717 02ac 90E0      		ldi r25,0
+ 718               	.LVL68:
+ 647:../usbn2mc/main/usbn960x.c **** 	EP0tx.Buf = (unsigned char*)lang;
+ 719               		.loc 1 647 12 view .LVU187
+ 720 02ae 9093 0000 		sts EP0tx+8+1,r25
+ 721 02b2 8093 0000 		sts EP0tx+8,r24
+ 648:../usbn2mc/main/usbn960x.c **** 
+ 722               		.loc 1 648 2 is_stmt 1 view .LVU188
+ 648:../usbn2mc/main/usbn960x.c **** 
+ 723               		.loc 1 648 12 is_stmt 0 view .LVU189
+ 724 02b6 CE01      		movw r24,r28
+ 725 02b8 0196      		adiw r24,1
+ 726 02ba 00C0      		rjmp .L40
+ 727               	.LBE5:
+ 728               		.cfi_endproc
+ 729               	.LFE22:
+ 731               	.global	_USBNGetStatus
+ 733               	_USBNGetStatus:
+ 734               	.LVL69:
+ 735               	.LFB23:
+ 658:../usbn2mc/main/usbn960x.c **** 
+ 659:../usbn2mc/main/usbn960x.c **** void _USBNGetStatus(DeviceRequest *req)
+ 660:../usbn2mc/main/usbn960x.c **** {
+ 736               		.loc 1 660 1 is_stmt 1 view -0
+ 737               		.cfi_startproc
+ 738               	/* prologue: function */
+ 739               	/* frame size = 0 */
+ 740               	/* stack size = 0 */
+ 741               	.L__stack_usage = 0
+ 661:../usbn2mc/main/usbn960x.c **** /*
+ 662:../usbn2mc/main/usbn960x.c ****   char tmp[]={0x01,0x00};
+ 663:../usbn2mc/main/usbn960x.c ****   EP0tx.Size=4;
+ 664:../usbn2mc/main/usbn960x.c ****   EP0tx.Buf=tmp;
+ 665:../usbn2mc/main/usbn960x.c ****   _USBNTransmit(&EP0tx);
+ 666:../usbn2mc/main/usbn960x.c ****   */
+ 667:../usbn2mc/main/usbn960x.c **** }
+ 742               		.loc 1 667 1 view .LVU191
+ 743               	/* epilogue start */
+ 744 02bc 0895      		ret
+ 745               		.cfi_endproc
+ 746               	.LFE23:
+ 748               	.global	_USBNSetConfiguration
+ 750               	_USBNSetConfiguration:
+ 751               	.LVL70:
+ 752               	.LFB24:
+ 668:../usbn2mc/main/usbn960x.c **** 
+ 669:../usbn2mc/main/usbn960x.c **** void _USBNSetConfiguration(DeviceRequest *req)
+ 670:../usbn2mc/main/usbn960x.c **** {
+ 753               		.loc 1 670 1 view -0
+ 754               		.cfi_startproc
+ 755               	/* prologue: function */
+ 756               	/* frame size = 0 */
+ 757               	/* stack size = 0 */
+ 758               	.L__stack_usage = 0
+ 671:../usbn2mc/main/usbn960x.c ****   // configure firstly manually but fix it!
+ 672:../usbn2mc/main/usbn960x.c ****   // define EPaddresses
+ 673:../usbn2mc/main/usbn960x.c ****   // save the configuration index
+ 674:../usbn2mc/main/usbn960x.c ****   // load fct pointer list for out eps
+ 675:../usbn2mc/main/usbn960x.c ****   //
+ 676:../usbn2mc/main/usbn960x.c **** 
+ 677:../usbn2mc/main/usbn960x.c **** USBNWrite(TXC1,FLUSH);
+ 759               		.loc 1 677 1 view .LVU193
+ 760 02be 68E0      		ldi r22,lo8(8)
+ 761 02c0 8BE2      		ldi r24,lo8(43)
+ 762               	.LVL71:
+ 763               		.loc 1 677 1 is_stmt 0 view .LVU194
+ 764 02c2 0E94 0000 		call USBNWrite
+ 765               	.LVL72:
+ 678:../usbn2mc/main/usbn960x.c **** USBNWrite(EPC1,EP_EN+0x02);      // enable EP1 at adr 1
+ 766               		.loc 1 678 1 is_stmt 1 view .LVU195
+ 767 02c6 62E1      		ldi r22,lo8(18)
+ 768 02c8 88E2      		ldi r24,lo8(40)
+ 769 02ca 0E94 0000 		call USBNWrite
+ 770               	.LVL73:
+ 679:../usbn2mc/main/usbn960x.c **** 
+ 680:../usbn2mc/main/usbn960x.c **** 
+ 681:../usbn2mc/main/usbn960x.c **** USBNWrite(RXC1,FLUSH);
+ 771               		.loc 1 681 1 view .LVU196
+ 772 02ce 68E0      		ldi r22,lo8(8)
+ 773 02d0 8FE2      		ldi r24,lo8(47)
+ 774 02d2 0E94 0000 		call USBNWrite
+ 775               	.LVL74:
+ 682:../usbn2mc/main/usbn960x.c **** USBNWrite(EPC2,EP_EN+0x02); 
+ 776               		.loc 1 682 1 view .LVU197
+ 777 02d6 62E1      		ldi r22,lo8(18)
+ 778 02d8 8CE2      		ldi r24,lo8(44)
+ 779 02da 0E94 0000 		call USBNWrite
+ 780               	.LVL75:
+ 683:../usbn2mc/main/usbn960x.c **** USBNWrite(RXC1,RX_EN);
+ 781               		.loc 1 683 1 view .LVU198
+ 782 02de 61E0      		ldi r22,lo8(1)
+ 783 02e0 8FE2      		ldi r24,lo8(47)
+ 784 02e2 0E94 0000 		call USBNWrite
+ 785               	.LVL76:
+ 684:../usbn2mc/main/usbn960x.c **** 
+ 685:../usbn2mc/main/usbn960x.c **** //USBNWrite(NAKMSK,NAK_OUT0|NAK_OUT1);
+ 686:../usbn2mc/main/usbn960x.c **** 
+ 687:../usbn2mc/main/usbn960x.c **** 
+ 688:../usbn2mc/main/usbn960x.c **** 
+ 689:../usbn2mc/main/usbn960x.c **** //USBNWrite(TXC3,FLUSH);
+ 690:../usbn2mc/main/usbn960x.c **** //USBNWrite(EPC5,EP_EN+0x05); 
+ 691:../usbn2mc/main/usbn960x.c **** 
+ 692:../usbn2mc/main/usbn960x.c **** 
+ 693:../usbn2mc/main/usbn960x.c **** 	
+ 694:../usbn2mc/main/usbn960x.c **** /* 
+ 695:../usbn2mc/main/usbn960x.c ****   // in endpoints
+ 696:../usbn2mc/main/usbn960x.c ****   USBNWrite(EPC1,EP_EN+0x01);      // enable EP1 at adr 1
+ 697:../usbn2mc/main/usbn960x.c ****   USBNWrite(EPC3,EP_EN+0x03); 
+ 698:../usbn2mc/main/usbn960x.c ****   USBNWrite(EPC5,EP_EN+0x05); 
+ 699:../usbn2mc/main/usbn960x.c **** 
+ 700:../usbn2mc/main/usbn960x.c ****   // outendpoints
+ 701:../usbn2mc/main/usbn960x.c ****   USBNWrite(EPC2,EP_EN+0x02); 
+ 702:../usbn2mc/main/usbn960x.c ****   USBNWrite(EPC4,EP_EN+0x04); 
+ 703:../usbn2mc/main/usbn960x.c ****   USBNWrite(EPC6,EP_EN+0x06); 
+ 704:../usbn2mc/main/usbn960x.c **** 
+ 705:../usbn2mc/main/usbn960x.c ****   USBNWrite(TXC1,FLUSH);
+ 706:../usbn2mc/main/usbn960x.c ****   USBNWrite(TXC2,FLUSH);
+ 707:../usbn2mc/main/usbn960x.c ****   USBNWrite(TXC3,FLUSH);
+ 708:../usbn2mc/main/usbn960x.c **** 
+ 709:../usbn2mc/main/usbn960x.c ****   USBNWrite(RXC1,FLUSH);
+ 710:../usbn2mc/main/usbn960x.c ****   USBNWrite(RXC2,FLUSH);
+ 711:../usbn2mc/main/usbn960x.c ****   USBNWrite(RXC3,FLUSH);
+ 712:../usbn2mc/main/usbn960x.c ****   
+ 713:../usbn2mc/main/usbn960x.c ****   USBNWrite(RXC1,RX_EN);
+ 714:../usbn2mc/main/usbn960x.c ****   USBNWrite(RXC2,RX_EN);
+ 715:../usbn2mc/main/usbn960x.c ****   USBNWrite(RXC3,RX_EN);
+ 716:../usbn2mc/main/usbn960x.c **** */
+ 717:../usbn2mc/main/usbn960x.c ****   USBNWrite(TXC0,TX_TOGL+TX_EN);  //enable the TX (DATA1)
+ 786               		.loc 1 717 3 view .LVU199
+ 787 02e6 65E0      		ldi r22,lo8(5)
+ 788 02e8 83E2      		ldi r24,lo8(35)
+ 789 02ea 0C94 0000 		jmp USBNWrite
+ 790               	.LVL77:
+ 791               		.cfi_endproc
+ 792               	.LFE24:
+ 794               	.global	_USBNGetConfiguration
+ 796               	_USBNGetConfiguration:
+ 797               	.LVL78:
+ 798               	.LFB25:
+ 718:../usbn2mc/main/usbn960x.c ****   
+ 719:../usbn2mc/main/usbn960x.c **** }
+ 720:../usbn2mc/main/usbn960x.c **** 
+ 721:../usbn2mc/main/usbn960x.c **** void _USBNGetConfiguration(DeviceRequest *req)
+ 722:../usbn2mc/main/usbn960x.c **** {
+ 799               		.loc 1 722 1 view -0
+ 800               		.cfi_startproc
+ 801               	/* prologue: function */
+ 802               	/* frame size = 0 */
+ 803               	/* stack size = 0 */
+ 804               	.L__stack_usage = 0
+ 723:../usbn2mc/main/usbn960x.c ****   USBNWrite(TXD0,USBNFunctionInfo.ConfigurationIndex);
+ 805               		.loc 1 723 3 view .LVU201
+ 806 02ee 6091 0000 		lds r22,USBNFunctionInfo+1
+ 807 02f2 81E2      		ldi r24,lo8(33)
+ 808               	.LVL79:
+ 809               		.loc 1 723 3 is_stmt 0 view .LVU202
+ 810 02f4 0C94 0000 		jmp USBNWrite
+ 811               	.LVL80:
+ 812               		.cfi_endproc
+ 813               	.LFE25:
+ 815               	.global	_USBNReceiveFIFO0
+ 817               	_USBNReceiveFIFO0:
+ 818               	.LFB17:
+ 273:../usbn2mc/main/usbn960x.c ****   unsigned char rxstatus;
+ 819               		.loc 1 273 1 is_stmt 1 view -0
+ 820               		.cfi_startproc
+ 821 02f8 CF92      		push r12
+ 822               		.cfi_def_cfa_offset 3
+ 823               		.cfi_offset 12, -2
+ 824 02fa DF92      		push r13
+ 825               		.cfi_def_cfa_offset 4
+ 826               		.cfi_offset 13, -3
+ 827 02fc EF92      		push r14
+ 828               		.cfi_def_cfa_offset 5
+ 829               		.cfi_offset 14, -4
+ 830 02fe FF92      		push r15
+ 831               		.cfi_def_cfa_offset 6
+ 832               		.cfi_offset 15, -5
+ 833 0300 0F93      		push r16
+ 834               		.cfi_def_cfa_offset 7
+ 835               		.cfi_offset 16, -6
+ 836 0302 1F93      		push r17
+ 837               		.cfi_def_cfa_offset 8
+ 838               		.cfi_offset 17, -7
+ 839 0304 CF93      		push r28
+ 840               		.cfi_def_cfa_offset 9
+ 841               		.cfi_offset 28, -8
+ 842 0306 DF93      		push r29
+ 843               		.cfi_def_cfa_offset 10
+ 844               		.cfi_offset 29, -9
+ 845 0308 CDB7      		in r28,__SP_L__
+ 846 030a DEB7      		in r29,__SP_H__
+ 847               		.cfi_def_cfa_register 28
+ 848 030c 2897      		sbiw r28,8
+ 849               		.cfi_def_cfa_offset 18
+ 850 030e 0FB6      		in __tmp_reg__,__SREG__
+ 851 0310 F894      		cli
+ 852 0312 DEBF      		out __SP_H__,r29
+ 853 0314 0FBE      		out __SREG__,__tmp_reg__
+ 854 0316 CDBF      		out __SP_L__,r28
+ 855               	/* prologue: function */
+ 856               	/* frame size = 8 */
+ 857               	/* stack size = 16 */
+ 858               	.L__stack_usage = 16
+ 274:../usbn2mc/main/usbn960x.c ****   char Buf[8];
+ 859               		.loc 1 274 3 view .LVU204
+ 275:../usbn2mc/main/usbn960x.c ****   DeviceRequest *req;
+ 860               		.loc 1 275 3 view .LVU205
+ 276:../usbn2mc/main/usbn960x.c ****   int i;
+ 861               		.loc 1 276 3 view .LVU206
+ 277:../usbn2mc/main/usbn960x.c **** 
+ 862               		.loc 1 277 3 view .LVU207
+ 282:../usbn2mc/main/usbn960x.c **** 
+ 863               		.loc 1 282 3 view .LVU208
+ 282:../usbn2mc/main/usbn960x.c **** 
+ 864               		.loc 1 282 14 is_stmt 0 view .LVU209
+ 865 0318 86E2      		ldi r24,lo8(38)
+ 866 031a 0E94 0000 		call USBNRead
+ 867               	.LVL81:
+ 284:../usbn2mc/main/usbn960x.c ****   {
+ 868               		.loc 1 284 3 is_stmt 1 view .LVU210
+ 284:../usbn2mc/main/usbn960x.c ****   {
+ 869               		.loc 1 284 5 is_stmt 0 view .LVU211
+ 870 031e 86FF      		sbrs r24,6
+ 871 0320 00C0      		rjmp .L46
+ 872 0322 CE01      		movw r24,r28
+ 873               	.LVL82:
+ 284:../usbn2mc/main/usbn960x.c ****   {
+ 874               		.loc 1 284 5 view .LVU212
+ 875 0324 0196      		adiw r24,1
+ 876 0326 7C01      		movw r14,r24
+ 877 0328 6E01      		movw r12,r28
+ 878 032a 99E0      		ldi r25,9
+ 879 032c C90E      		add r12,r25
+ 880 032e D11C      		adc r13,__zero_reg__
+ 881 0330 8701      		movw r16,r14
+ 882               	.L47:
+ 883               	.LBB8:
+ 884               	.LBB9:
+ 287:../usbn2mc/main/usbn960x.c ****     }
+ 885               		.loc 1 287 7 is_stmt 1 view .LVU213
+ 287:../usbn2mc/main/usbn960x.c ****     }
+ 886               		.loc 1 287 16 is_stmt 0 view .LVU214
+ 887 0332 8091 0000 		lds r24,EP0rx
+ 888 0336 0E94 0000 		call USBNRead
+ 889               	.LVL83:
+ 287:../usbn2mc/main/usbn960x.c ****     }
+ 890               		.loc 1 287 14 discriminator 1 view .LVU215
+ 891 033a F701      		movw r30,r14
+ 892 033c 8193      		st Z+,r24
+ 893 033e 7F01      		movw r14,r30
+ 286:../usbn2mc/main/usbn960x.c ****       Buf[i] = USBNRead(EP0rx.usbnData);  
+ 894               		.loc 1 286 18 is_stmt 1 discriminator 3 view .LVU216
+ 286:../usbn2mc/main/usbn960x.c ****       Buf[i] = USBNRead(EP0rx.usbnData);  
+ 895               		.loc 1 286 14 discriminator 1 view .LVU217
+ 896 0340 EC15      		cp r30,r12
+ 897 0342 FD05      		cpc r31,r13
+ 898 0344 01F4      		brne .L47
+ 296:../usbn2mc/main/usbn960x.c ****    
+ 899               		.loc 1 296 5 view .LVU218
+ 900               	.LVL84:
+ 298:../usbn2mc/main/usbn960x.c ****     USBNWrite(TXC0,FLUSH);		      // make sure the TX is off 
+ 901               		.loc 1 298 5 view .LVU219
+ 902 0346 68E0      		ldi r22,lo8(8)
+ 903 0348 87E2      		ldi r24,lo8(39)
+ 904 034a 0E94 0000 		call USBNWrite
+ 905               	.LVL85:
+ 299:../usbn2mc/main/usbn960x.c ****     USBNWrite(EPC0,USBNRead(EPC0)&0x7F);      // turn of stall
+ 906               		.loc 1 299 5 view .LVU220
+ 907 034e 68E0      		ldi r22,lo8(8)
+ 908 0350 83E2      		ldi r24,lo8(35)
+ 909 0352 0E94 0000 		call USBNWrite
+ 910               	.LVL86:
+ 300:../usbn2mc/main/usbn960x.c **** 
+ 911               		.loc 1 300 5 view .LVU221
+ 300:../usbn2mc/main/usbn960x.c **** 
+ 912               		.loc 1 300 20 is_stmt 0 view .LVU222
+ 913 0356 80E2      		ldi r24,lo8(32)
+ 914 0358 0E94 0000 		call USBNRead
+ 915               	.LVL87:
+ 300:../usbn2mc/main/usbn960x.c **** 
+ 916               		.loc 1 300 5 discriminator 1 view .LVU223
+ 917 035c 682F      		mov r22,r24
+ 918 035e 6F77      		andi r22,lo8(127)
+ 919 0360 80E2      		ldi r24,lo8(32)
+ 920 0362 0E94 0000 		call USBNWrite
+ 921               	.LVL88:
+ 302:../usbn2mc/main/usbn960x.c ****     {
+ 922               		.loc 1 302 5 is_stmt 1 view .LVU224
+ 923 0366 8981      		ldd r24,Y+1
+ 924 0368 8076      		andi r24,lo8(96)
+ 925 036a 8032      		cpi r24,lo8(32)
+ 926 036c 01F0      		breq .L64
+ 927 036e 8034      		cpi r24,lo8(64)
+ 928 0370 01F4      		brne .+2
+ 929 0372 00C0      		rjmp .L49
+ 930 0374 8111      		cpse r24,__zero_reg__
+ 931 0376 00C0      		rjmp .L50
+ 308:../usbn2mc/main/usbn960x.c ****         {
+ 932               		.loc 1 308 9 view .LVU225
+ 933 0378 EA81      		ldd r30,Y+2
+ 934 037a EC30      		cpi r30,lo8(12)
+ 935 037c 00F4      		brsh .L50
+ 936 037e F0E0      		ldi r31,0
+ 937 0380 E050      		subi r30,lo8(-(gs(.L51)))
+ 938 0382 F040      		sbci r31,hi8(-(gs(.L51)))
+ 939 0384 0C94 0000 		jmp __tablejump2__
+ 940               		.section	.jumptables.gcc._USBNReceiveFIFO0,"a",@progbits
+ 941               		.p2align	1
+ 942               	.L51:
+ 943 0000 0000      		.word gs(.L57)
+ 944 0002 0000      		.word gs(.L52)
+ 945 0004 0000      		.word gs(.L50)
+ 946 0006 0000      		.word gs(.L64)
+ 947 0008 0000      		.word gs(.L50)
+ 948 000a 0000      		.word gs(.L56)
+ 949 000c 0000      		.word gs(.L55)
+ 950 000e 0000      		.word gs(.L50)
+ 951 0010 0000      		.word gs(.L54)
+ 952 0012 0000      		.word gs(.L53)
+ 953 0014 0000      		.word gs(.L52)
+ 954 0016 0000      		.word gs(.L64)
+ 955               		.text
+ 956               	.L54:
+ 320:../usbn2mc/main/usbn960x.c ****           break;
+ 957               		.loc 1 320 13 view .LVU226
+ 958 0388 C801      		movw r24,r16
+ 959 038a 0E94 0000 		call _USBNGetConfiguration
+ 960               	.LVL89:
+ 321:../usbn2mc/main/usbn960x.c ****           case GET_DESCRIPTOR:
+ 961               		.loc 1 321 11 view .LVU227
+ 962               	.L52:
+ 402:../usbn2mc/main/usbn960x.c **** 	USBNWrite(TXC0,TX_TOGL+TX_EN);  //enable the TX (DATA1)
+ 963               		.loc 1 402 7 view .LVU228
+ 402:../usbn2mc/main/usbn960x.c **** 	USBNWrite(TXC0,TX_TOGL+TX_EN);  //enable the TX (DATA1)
+ 964               		.loc 1 402 9 is_stmt 0 view .LVU229
+ 965 038e 8981      		ldd r24,Y+1
+ 966 0390 8111      		cpse r24,__zero_reg__
+ 967 0392 00C0      		rjmp .L45
+ 403:../usbn2mc/main/usbn960x.c ****   }
+ 968               		.loc 1 403 2 is_stmt 1 view .LVU230
+ 969 0394 65E0      		ldi r22,lo8(5)
+ 970 0396 83E2      		ldi r24,lo8(35)
+ 971 0398 0E94 0000 		call USBNWrite
+ 972               	.LVL90:
+ 973               	.L45:
+ 974               	/* epilogue start */
+ 403:../usbn2mc/main/usbn960x.c ****   }
+ 975               		.loc 1 403 2 is_stmt 0 view .LVU231
+ 976               	.LBE9:
+ 977               	.LBE8:
+ 421:../usbn2mc/main/usbn960x.c **** 
+ 978               		.loc 1 421 1 view .LVU232
+ 979 039c 2896      		adiw r28,8
+ 980 039e 0FB6      		in __tmp_reg__,__SREG__
+ 981 03a0 F894      		cli
+ 982 03a2 DEBF      		out __SP_H__,r29
+ 983 03a4 0FBE      		out __SREG__,__tmp_reg__
+ 984 03a6 CDBF      		out __SP_L__,r28
+ 985 03a8 DF91      		pop r29
+ 986 03aa CF91      		pop r28
+ 987 03ac 1F91      		pop r17
+ 988 03ae 0F91      		pop r16
+ 989 03b0 FF90      		pop r15
+ 990 03b2 EF90      		pop r14
+ 991 03b4 DF90      		pop r13
+ 992 03b6 CF90      		pop r12
+ 993 03b8 0895      		ret
+ 994               	.LVL91:
+ 995               	.L55:
+ 996               	.LBB11:
+ 997               	.LBB10:
+ 326:../usbn2mc/main/usbn960x.c ****           break;
+ 998               		.loc 1 326 13 is_stmt 1 view .LVU233
+ 999 03ba C801      		movw r24,r16
+ 1000 03bc 0E94 0000 		call _USBNGetDescriptor
+ 1001               	.LVL92:
+ 327:../usbn2mc/main/usbn960x.c ****           case GET_INTERFACE:
+ 1002               		.loc 1 327 11 view .LVU234
+ 1003 03c0 00C0      		rjmp .L52
+ 1004               	.L57:
+ 338:../usbn2mc/main/usbn960x.c **** 	    USBNWrite(TXD0,1);
+ 1005               		.loc 1 338 6 view .LVU235
+ 1006 03c2 68E0      		ldi r22,lo8(8)
+ 1007 03c4 83E2      		ldi r24,lo8(35)
+ 1008 03c6 0E94 0000 		call USBNWrite
+ 1009               	.LVL93:
+ 339:../usbn2mc/main/usbn960x.c **** 	    USBNWrite(TXD0,0);
+ 1010               		.loc 1 339 6 view .LVU236
+ 1011 03ca 61E0      		ldi r22,lo8(1)
+ 1012 03cc 81E2      		ldi r24,lo8(33)
+ 1013 03ce 0E94 0000 		call USBNWrite
+ 1014               	.LVL94:
+ 340:../usbn2mc/main/usbn960x.c **** 	    USBNWrite(TXC0,TX_TOGL+TX_EN);  //enable the TX (DATA1)
+ 1015               		.loc 1 340 6 view .LVU237
+ 1016 03d2 60E0      		ldi r22,0
+ 1017 03d4 81E2      		ldi r24,lo8(33)
+ 1018 03d6 0E94 0000 		call USBNWrite
+ 1019               	.LVL95:
+ 341:../usbn2mc/main/usbn960x.c ****           break;
+ 1020               		.loc 1 341 6 view .LVU238
+ 1021               	.L64:
+ 387:../usbn2mc/main/usbn960x.c ****       break;              
+ 1022               		.loc 1 387 2 view .LVU239
+ 1023 03da 65E0      		ldi r22,lo8(5)
+ 1024 03dc 83E2      		ldi r24,lo8(35)
+ 1025 03de 00C0      		rjmp .L65
+ 1026               	.L56:
+ 347:../usbn2mc/main/usbn960x.c ****           break;
+ 1027               		.loc 1 347 13 view .LVU240
+ 1028 03e0 C801      		movw r24,r16
+ 1029 03e2 0E94 0000 		call _USBNSetAddress
+ 1030               	.LVL96:
+ 348:../usbn2mc/main/usbn960x.c ****           case SET_CONFIGURATION:
+ 1031               		.loc 1 348 11 view .LVU241
+ 1032 03e6 00C0      		rjmp .L52
+ 1033               	.L53:
+ 353:../usbn2mc/main/usbn960x.c ****           break;
+ 1034               		.loc 1 353 13 view .LVU242
+ 1035 03e8 C801      		movw r24,r16
+ 1036 03ea 0E94 0000 		call _USBNSetConfiguration
+ 1037               	.LVL97:
+ 354:../usbn2mc/main/usbn960x.c ****           case SET_FEATURE:
+ 1038               		.loc 1 354 11 view .LVU243
+ 1039 03ee 00C0      		rjmp .L52
+ 1040               	.L50:
+ 371:../usbn2mc/main/usbn960x.c ****           break;
+ 1041               		.loc 1 371 13 view .LVU244
+ 371:../usbn2mc/main/usbn960x.c ****           break;
+ 1042               		.loc 1 371 28 is_stmt 0 view .LVU245
+ 1043 03f0 80E2      		ldi r24,lo8(32)
+ 1044 03f2 0E94 0000 		call USBNRead
+ 1045               	.LVL98:
+ 371:../usbn2mc/main/usbn960x.c ****           break;
+ 1046               		.loc 1 371 13 discriminator 1 view .LVU246
+ 1047 03f6 60E8      		ldi r22,lo8(-128)
+ 1048 03f8 680F      		add r22,r24
+ 1049 03fa 80E2      		ldi r24,lo8(32)
+ 1050               	.L65:
+ 387:../usbn2mc/main/usbn960x.c ****       break;              
+ 1051               		.loc 1 387 2 view .LVU247
+ 1052 03fc 0E94 0000 		call USBNWrite
+ 1053               	.LVL99:
+ 388:../usbn2mc/main/usbn960x.c ****       default:					// unsupported req type    
+ 1054               		.loc 1 388 7 is_stmt 1 view .LVU248
+ 1055 0400 00C0      		rjmp .L52
+ 1056               	.L49:
+ 386:../usbn2mc/main/usbn960x.c **** 	USBNWrite(TXC0,TX_TOGL+TX_EN);  //enable the TX (DATA1)
+ 1057               		.loc 1 386 2 view .LVU249
+ 1058 0402 C801      		movw r24,r16
+ 1059 0404 0E94 0000 		call USBNDecodeVendorRequest
+ 1060               	.LVL100:
+ 1061 0408 00C0      		rjmp .L64
+ 1062               	.LVL101:
+ 1063               	.L46:
+ 386:../usbn2mc/main/usbn960x.c **** 	USBNWrite(TXC0,TX_TOGL+TX_EN);  //enable the TX (DATA1)
+ 1064               		.loc 1 386 2 is_stmt 0 view .LVU250
+ 1065               	.LBE10:
+ 1066               	.LBE11:
+ 408:../usbn2mc/main/usbn960x.c ****     {
+ 1067               		.loc 1 408 5 is_stmt 1 view .LVU251
+ 408:../usbn2mc/main/usbn960x.c ****     {
+ 1068               		.loc 1 408 8 is_stmt 0 view .LVU252
+ 1069 040a 8091 0000 		lds r24,EP0tx+8
+ 1070 040e 9091 0000 		lds r25,EP0tx+8+1
+ 1071               	.LVL102:
+ 408:../usbn2mc/main/usbn960x.c ****     {
+ 1072               		.loc 1 408 8 view .LVU253
+ 1073 0412 2091 0000 		lds r18,EP0tx+4
+ 1074 0416 3091 0000 		lds r19,EP0tx+4+1
+ 1075 041a 2817      		cp r18,r24
+ 1076 041c 3907      		cpc r19,r25
+ 1077 041e 04F0      		brlt .+2
+ 1078 0420 00C0      		rjmp .L45
+ 410:../usbn2mc/main/usbn960x.c ****       {
+ 1079               		.loc 1 410 7 is_stmt 1 view .LVU254
+ 415:../usbn2mc/main/usbn960x.c ****       EP0tx.Size=0;                // exit multi-packet mode  
+ 1080               		.loc 1 415 7 view .LVU255
+ 416:../usbn2mc/main/usbn960x.c ****       USBNWrite(TXC0,FLUSH);       // flush TX0 and disable   
+ 1081               		.loc 1 416 7 view .LVU256
+ 416:../usbn2mc/main/usbn960x.c ****       USBNWrite(TXC0,FLUSH);       // flush TX0 and disable   
+ 1082               		.loc 1 416 17 is_stmt 0 view .LVU257
+ 1083 0422 1092 0000 		sts EP0tx+8+1,__zero_reg__
+ 1084 0426 1092 0000 		sts EP0tx+8,__zero_reg__
+ 417:../usbn2mc/main/usbn960x.c ****       USBNWrite(RXC0,RX_EN);          // re-enable the receiver  
+ 1085               		.loc 1 417 7 is_stmt 1 view .LVU258
+ 1086 042a 68E0      		ldi r22,lo8(8)
+ 1087 042c 83E2      		ldi r24,lo8(35)
+ 1088 042e 0E94 0000 		call USBNWrite
+ 1089               	.LVL103:
+ 418:../usbn2mc/main/usbn960x.c ****     }
+ 1090               		.loc 1 418 7 view .LVU259
+ 1091 0432 61E0      		ldi r22,lo8(1)
+ 1092 0434 87E2      		ldi r24,lo8(39)
+ 1093               	/* epilogue start */
+ 421:../usbn2mc/main/usbn960x.c **** 
+ 1094               		.loc 1 421 1 is_stmt 0 view .LVU260
+ 1095 0436 2896      		adiw r28,8
+ 1096 0438 0FB6      		in __tmp_reg__,__SREG__
+ 1097 043a F894      		cli
+ 1098 043c DEBF      		out __SP_H__,r29
+ 1099 043e 0FBE      		out __SREG__,__tmp_reg__
+ 1100 0440 CDBF      		out __SP_L__,r28
+ 1101 0442 DF91      		pop r29
+ 1102 0444 CF91      		pop r28
+ 1103 0446 1F91      		pop r17
+ 1104 0448 0F91      		pop r16
+ 1105 044a FF90      		pop r15
+ 1106 044c EF90      		pop r14
+ 1107 044e DF90      		pop r13
+ 1108 0450 CF90      		pop r12
+ 418:../usbn2mc/main/usbn960x.c ****     }
+ 1109               		.loc 1 418 7 view .LVU261
+ 1110 0452 0C94 0000 		jmp USBNWrite
+ 1111               	.LVL104:
+ 1112               		.cfi_endproc
+ 1113               	.LFE17:
+ 1115               	.global	_USBNReceiveEvent
+ 1117               	_USBNReceiveEvent:
+ 1118               	.LFB14:
+ 132:../usbn2mc/main/usbn960x.c ****   unsigned char event;
+ 1119               		.loc 1 132 1 is_stmt 1 view -0
+ 1120               		.cfi_startproc
+ 1121 0456 CF92      		push r12
+ 1122               		.cfi_def_cfa_offset 3
+ 1123               		.cfi_offset 12, -2
+ 1124 0458 DF92      		push r13
+ 1125               		.cfi_def_cfa_offset 4
+ 1126               		.cfi_offset 13, -3
+ 1127 045a EF92      		push r14
+ 1128               		.cfi_def_cfa_offset 5
+ 1129               		.cfi_offset 14, -4
+ 1130 045c FF92      		push r15
+ 1131               		.cfi_def_cfa_offset 6
+ 1132               		.cfi_offset 15, -5
+ 1133 045e 0F93      		push r16
+ 1134               		.cfi_def_cfa_offset 7
+ 1135               		.cfi_offset 16, -6
+ 1136 0460 1F93      		push r17
+ 1137               		.cfi_def_cfa_offset 8
+ 1138               		.cfi_offset 17, -7
+ 1139 0462 CF93      		push r28
+ 1140               		.cfi_def_cfa_offset 9
+ 1141               		.cfi_offset 28, -8
+ 1142 0464 DF93      		push r29
+ 1143               		.cfi_def_cfa_offset 10
+ 1144               		.cfi_offset 29, -9
+ 1145 0466 CDB7      		in r28,__SP_L__
+ 1146 0468 DEB7      		in r29,__SP_H__
+ 1147               		.cfi_def_cfa_register 28
+ 1148 046a C054      		subi r28,64
+ 1149 046c D109      		sbc r29,__zero_reg__
+ 1150               		.cfi_def_cfa_offset 74
+ 1151 046e 0FB6      		in __tmp_reg__,__SREG__
+ 1152 0470 F894      		cli
+ 1153 0472 DEBF      		out __SP_H__,r29
+ 1154 0474 0FBE      		out __SREG__,__tmp_reg__
+ 1155 0476 CDBF      		out __SP_L__,r28
+ 1156               	/* prologue: function */
+ 1157               	/* frame size = 64 */
+ 1158               	/* stack size = 72 */
+ 1159               	.L__stack_usage = 72
+ 133:../usbn2mc/main/usbn960x.c ****   void (*ptr)(void *) = (void*)NULL;
+ 1160               		.loc 1 133 3 view .LVU263
+ 134:../usbn2mc/main/usbn960x.c ****   char buf[64];
+ 1161               		.loc 1 134 3 view .LVU264
+ 1162               	.LVL105:
+ 135:../usbn2mc/main/usbn960x.c ****   char *bufp=&buf[0];
+ 1163               		.loc 1 135 3 view .LVU265
+ 136:../usbn2mc/main/usbn960x.c ****   event = USBNRead(RXEV);
+ 1164               		.loc 1 136 3 view .LVU266
+ 137:../usbn2mc/main/usbn960x.c ****   //char tmp;
+ 1165               		.loc 1 137 3 view .LVU267
+ 137:../usbn2mc/main/usbn960x.c ****   //char tmp;
+ 1166               		.loc 1 137 11 is_stmt 0 view .LVU268
+ 1167 0478 8CE0      		ldi r24,lo8(12)
+ 1168 047a 0E94 0000 		call USBNRead
+ 1169               	.LVL106:
+ 139:../usbn2mc/main/usbn960x.c ****   
+ 1170               		.loc 1 139 3 is_stmt 1 view .LVU269
+ 142:../usbn2mc/main/usbn960x.c ****   
+ 1171               		.loc 1 142 3 view .LVU270
+ 142:../usbn2mc/main/usbn960x.c ****   
+ 1172               		.loc 1 142 5 is_stmt 0 view .LVU271
+ 1173 047e 80FF      		sbrs r24,0
+ 1174 0480 00C0      		rjmp .L67
+ 142:../usbn2mc/main/usbn960x.c ****   
+ 1175               		.loc 1 142 24 is_stmt 1 discriminator 1 view .LVU272
+ 1176               	/* epilogue start */
+ 193:../usbn2mc/main/usbn960x.c **** 
+ 1177               		.loc 1 193 1 is_stmt 0 view .LVU273
+ 1178 0482 C05C      		subi r28,-64
+ 1179 0484 DF4F      		sbci r29,-1
+ 1180 0486 0FB6      		in __tmp_reg__,__SREG__
+ 1181 0488 F894      		cli
+ 1182 048a DEBF      		out __SP_H__,r29
+ 1183 048c 0FBE      		out __SREG__,__tmp_reg__
+ 1184 048e CDBF      		out __SP_L__,r28
+ 1185 0490 DF91      		pop r29
+ 1186 0492 CF91      		pop r28
+ 1187 0494 1F91      		pop r17
+ 1188 0496 0F91      		pop r16
+ 1189 0498 FF90      		pop r15
+ 1190 049a EF90      		pop r14
+ 1191 049c DF90      		pop r13
+ 1192 049e CF90      		pop r12
+ 142:../usbn2mc/main/usbn960x.c ****   
+ 1193               		.loc 1 142 24 discriminator 1 view .LVU274
+ 1194 04a0 0C94 0000 		jmp _USBNReceiveFIFO0
+ 1195               	.LVL107:
+ 1196               	.L67:
+ 145:../usbn2mc/main/usbn960x.c ****   {
+ 1197               		.loc 1 145 8 is_stmt 1 view .LVU275
+ 145:../usbn2mc/main/usbn960x.c ****   {
+ 1198               		.loc 1 145 10 is_stmt 0 view .LVU276
+ 1199 04a4 81FF      		sbrs r24,1
+ 1200 04a6 00C0      		rjmp .L68
+ 147:../usbn2mc/main/usbn960x.c **** 
+ 1201               		.loc 1 147 5 is_stmt 1 view .LVU277
+ 1202 04a8 8EE2      		ldi r24,lo8(46)
+ 1203               	.LVL108:
+ 147:../usbn2mc/main/usbn960x.c **** 
+ 1204               		.loc 1 147 5 is_stmt 0 view .LVU278
+ 1205 04aa 0E94 0000 		call USBNRead
+ 1206               	.LVL109:
+ 149:../usbn2mc/main/usbn960x.c ****     for(i=0;i<63;i++) 
+ 1207               		.loc 1 149 5 is_stmt 1 view .LVU279
+ 149:../usbn2mc/main/usbn960x.c ****     for(i=0;i<63;i++) 
+ 1208               		.loc 1 149 13 is_stmt 0 view .LVU280
+ 1209 04ae 8DE2      		ldi r24,lo8(45)
+ 1210 04b0 0E94 0000 		call USBNRead
+ 1211               	.LVL110:
+ 149:../usbn2mc/main/usbn960x.c ****     for(i=0;i<63;i++) 
+ 1212               		.loc 1 149 11 discriminator 1 view .LVU281
+ 1213 04b4 8983      		std Y+1,r24
+ 150:../usbn2mc/main/usbn960x.c ****       *(++bufp)=USBNBurstRead(); 
+ 1214               		.loc 1 150 5 is_stmt 1 view .LVU282
+ 1215               	.LVL111:
+ 150:../usbn2mc/main/usbn960x.c ****       *(++bufp)=USBNBurstRead(); 
+ 1216               		.loc 1 150 14 discriminator 1 view .LVU283
+ 136:../usbn2mc/main/usbn960x.c ****   event = USBNRead(RXEV);
+ 1217               		.loc 1 136 9 is_stmt 0 view .LVU284
+ 1218 04b6 8E01      		movw r16,r28
+ 1219 04b8 0F5F      		subi r16,-1
+ 1220 04ba 1F4F      		sbci r17,-1
+ 1221 04bc 7801      		movw r14,r16
+ 150:../usbn2mc/main/usbn960x.c ****       *(++bufp)=USBNBurstRead(); 
+ 1222               		.loc 1 150 14 discriminator 1 view .LVU285
+ 1223 04be 6E01      		movw r12,r28
+ 1224 04c0 80E4      		ldi r24,64
+ 1225 04c2 C80E      		add r12,r24
+ 1226 04c4 D11C      		adc r13,__zero_reg__
+ 1227               	.LVL112:
+ 1228               	.L69:
+ 151:../usbn2mc/main/usbn960x.c ****     
+ 1229               		.loc 1 151 7 is_stmt 1 view .LVU286
+ 151:../usbn2mc/main/usbn960x.c ****     
+ 1230               		.loc 1 151 16 is_stmt 0 view .LVU287
+ 1231 04c6 0F5F      		subi r16,-1
+ 1232 04c8 1F4F      		sbci r17,-1
+ 1233               	.LVL113:
+ 151:../usbn2mc/main/usbn960x.c ****     
+ 1234               		.loc 1 151 17 view .LVU288
+ 1235 04ca 0E94 0000 		call USBNBurstRead
+ 1236               	.LVL114:
+ 151:../usbn2mc/main/usbn960x.c ****     
+ 1237               		.loc 1 151 16 discriminator 1 view .LVU289
+ 1238 04ce F801      		movw r30,r16
+ 1239 04d0 8083      		st Z,r24
+ 150:../usbn2mc/main/usbn960x.c ****       *(++bufp)=USBNBurstRead(); 
+ 1240               		.loc 1 150 19 is_stmt 1 discriminator 3 view .LVU290
+ 150:../usbn2mc/main/usbn960x.c ****       *(++bufp)=USBNBurstRead(); 
+ 1241               		.loc 1 150 14 discriminator 1 view .LVU291
+ 1242 04d2 0C15      		cp r16,r12
+ 1243 04d4 1D05      		cpc r17,r13
+ 1244 04d6 01F4      		brne .L69
+ 153:../usbn2mc/main/usbn960x.c ****       ptr = rxfifos.func1;
+ 1245               		.loc 1 153 5 view .LVU292
+ 153:../usbn2mc/main/usbn960x.c ****       ptr = rxfifos.func1;
+ 1246               		.loc 1 153 7 is_stmt 0 view .LVU293
+ 1247 04d8 8091 0000 		lds r24,rxfifos
+ 1248 04dc 8130      		cpi r24,lo8(1)
+ 1249 04de 01F4      		brne .L70
+ 154:../usbn2mc/main/usbn960x.c ****       (*ptr)(&buf);
+ 1250               		.loc 1 154 7 is_stmt 1 view .LVU294
+ 1251               	.LVL115:
+ 155:../usbn2mc/main/usbn960x.c ****     }
+ 1252               		.loc 1 155 7 view .LVU295
+ 155:../usbn2mc/main/usbn960x.c ****     }
+ 1253               		.loc 1 155 8 is_stmt 0 view .LVU296
+ 1254 04e0 E091 0000 		lds r30,rxfifos+3
+ 1255 04e4 F091 0000 		lds r31,rxfifos+3+1
+ 1256 04e8 C701      		movw r24,r14
+ 1257 04ea 0995      		icall
+ 1258               	.LVL116:
+ 1259               	.L70:
+ 157:../usbn2mc/main/usbn960x.c ****     USBNWrite(RXC1,RX_EN);    
+ 1260               		.loc 1 157 5 is_stmt 1 view .LVU297
+ 1261 04ec 68E0      		ldi r22,lo8(8)
+ 1262 04ee 8FE2      		ldi r24,lo8(47)
+ 1263 04f0 0E94 0000 		call USBNWrite
+ 1264               	.LVL117:
+ 158:../usbn2mc/main/usbn960x.c ****     return;
+ 1265               		.loc 1 158 5 view .LVU298
+ 1266 04f4 61E0      		ldi r22,lo8(1)
+ 1267 04f6 8FE2      		ldi r24,lo8(47)
+ 1268               	.L81:
+ 176:../usbn2mc/main/usbn960x.c ****     return;
+ 1269               		.loc 1 176 5 is_stmt 0 view .LVU299
+ 1270 04f8 0E94 0000 		call USBNWrite
+ 1271               	.LVL118:
+ 177:../usbn2mc/main/usbn960x.c ****   }
+ 1272               		.loc 1 177 5 is_stmt 1 view .LVU300
+ 1273               	.L66:
+ 1274               	/* epilogue start */
+ 193:../usbn2mc/main/usbn960x.c **** 
+ 1275               		.loc 1 193 1 is_stmt 0 view .LVU301
+ 1276 04fc C05C      		subi r28,-64
+ 1277 04fe DF4F      		sbci r29,-1
+ 1278 0500 0FB6      		in __tmp_reg__,__SREG__
+ 1279 0502 F894      		cli
+ 1280 0504 DEBF      		out __SP_H__,r29
+ 1281 0506 0FBE      		out __SREG__,__tmp_reg__
+ 1282 0508 CDBF      		out __SP_L__,r28
+ 1283 050a DF91      		pop r29
+ 1284 050c CF91      		pop r28
+ 1285 050e 1F91      		pop r17
+ 1286 0510 0F91      		pop r16
+ 1287 0512 FF90      		pop r15
+ 1288 0514 EF90      		pop r14
+ 1289 0516 DF90      		pop r13
+ 1290 0518 CF90      		pop r12
+ 1291 051a 0895      		ret
+ 1292               	.LVL119:
+ 1293               	.L68:
+ 163:../usbn2mc/main/usbn960x.c ****   {
+ 1294               		.loc 1 163 8 is_stmt 1 view .LVU302
+ 163:../usbn2mc/main/usbn960x.c ****   {
+ 1295               		.loc 1 163 10 is_stmt 0 view .LVU303
+ 1296 051c 82FF      		sbrs r24,2
+ 1297 051e 00C0      		rjmp .L72
+ 165:../usbn2mc/main/usbn960x.c **** 
+ 1298               		.loc 1 165 5 is_stmt 1 view .LVU304
+ 1299 0520 86E3      		ldi r24,lo8(54)
+ 1300               	.LVL120:
+ 165:../usbn2mc/main/usbn960x.c **** 
+ 1301               		.loc 1 165 5 is_stmt 0 view .LVU305
+ 1302 0522 0E94 0000 		call USBNRead
+ 1303               	.LVL121:
+ 167:../usbn2mc/main/usbn960x.c ****     for(i=0;i<63;i++) 
+ 1304               		.loc 1 167 5 is_stmt 1 view .LVU306
+ 167:../usbn2mc/main/usbn960x.c ****     for(i=0;i<63;i++) 
+ 1305               		.loc 1 167 13 is_stmt 0 view .LVU307
+ 1306 0526 85E3      		ldi r24,lo8(53)
+ 1307 0528 0E94 0000 		call USBNRead
+ 1308               	.LVL122:
+ 167:../usbn2mc/main/usbn960x.c ****     for(i=0;i<63;i++) 
+ 1309               		.loc 1 167 11 discriminator 1 view .LVU308
+ 1310 052c 8983      		std Y+1,r24
+ 168:../usbn2mc/main/usbn960x.c ****       *(++bufp)=USBNBurstRead(); 
+ 1311               		.loc 1 168 5 is_stmt 1 view .LVU309
+ 1312               	.LVL123:
+ 168:../usbn2mc/main/usbn960x.c ****       *(++bufp)=USBNBurstRead(); 
+ 1313               		.loc 1 168 14 discriminator 1 view .LVU310
+ 136:../usbn2mc/main/usbn960x.c ****   event = USBNRead(RXEV);
+ 1314               		.loc 1 136 9 is_stmt 0 view .LVU311
+ 1315 052e 8E01      		movw r16,r28
+ 1316 0530 0F5F      		subi r16,-1
+ 1317 0532 1F4F      		sbci r17,-1
+ 1318 0534 7801      		movw r14,r16
+ 168:../usbn2mc/main/usbn960x.c ****       *(++bufp)=USBNBurstRead(); 
+ 1319               		.loc 1 168 14 discriminator 1 view .LVU312
+ 1320 0536 6E01      		movw r12,r28
+ 1321 0538 F0E4      		ldi r31,64
+ 1322 053a CF0E      		add r12,r31
+ 1323 053c D11C      		adc r13,__zero_reg__
+ 1324               	.LVL124:
+ 1325               	.L73:
+ 169:../usbn2mc/main/usbn960x.c ****     
+ 1326               		.loc 1 169 7 is_stmt 1 view .LVU313
+ 169:../usbn2mc/main/usbn960x.c ****     
+ 1327               		.loc 1 169 16 is_stmt 0 view .LVU314
+ 1328 053e 0F5F      		subi r16,-1
+ 1329 0540 1F4F      		sbci r17,-1
+ 1330               	.LVL125:
+ 169:../usbn2mc/main/usbn960x.c ****     
+ 1331               		.loc 1 169 17 view .LVU315
+ 1332 0542 0E94 0000 		call USBNBurstRead
+ 1333               	.LVL126:
+ 169:../usbn2mc/main/usbn960x.c ****     
+ 1334               		.loc 1 169 16 discriminator 1 view .LVU316
+ 1335 0546 F801      		movw r30,r16
+ 1336 0548 8083      		st Z,r24
+ 168:../usbn2mc/main/usbn960x.c ****       *(++bufp)=USBNBurstRead(); 
+ 1337               		.loc 1 168 19 is_stmt 1 discriminator 3 view .LVU317
+ 168:../usbn2mc/main/usbn960x.c ****       *(++bufp)=USBNBurstRead(); 
+ 1338               		.loc 1 168 14 discriminator 1 view .LVU318
+ 1339 054a 0C15      		cp r16,r12
+ 1340 054c 1D05      		cpc r17,r13
+ 1341 054e 01F4      		brne .L73
+ 171:../usbn2mc/main/usbn960x.c ****       ptr = rxfifos.func2;
+ 1342               		.loc 1 171 5 view .LVU319
+ 171:../usbn2mc/main/usbn960x.c ****       ptr = rxfifos.func2;
+ 1343               		.loc 1 171 7 is_stmt 0 view .LVU320
+ 1344 0550 8091 0000 		lds r24,rxfifos+1
+ 1345 0554 8130      		cpi r24,lo8(1)
+ 1346 0556 01F4      		brne .L74
+ 172:../usbn2mc/main/usbn960x.c ****       (*ptr)(&buf);
+ 1347               		.loc 1 172 7 is_stmt 1 view .LVU321
+ 1348               	.LVL127:
+ 173:../usbn2mc/main/usbn960x.c ****     }
+ 1349               		.loc 1 173 7 view .LVU322
+ 173:../usbn2mc/main/usbn960x.c ****     }
+ 1350               		.loc 1 173 8 is_stmt 0 view .LVU323
+ 1351 0558 E091 0000 		lds r30,rxfifos+5
+ 1352 055c F091 0000 		lds r31,rxfifos+5+1
+ 1353 0560 C701      		movw r24,r14
+ 1354 0562 0995      		icall
+ 1355               	.LVL128:
+ 1356               	.L74:
+ 175:../usbn2mc/main/usbn960x.c ****     USBNWrite(RXC2,RX_EN);    
+ 1357               		.loc 1 175 5 is_stmt 1 view .LVU324
+ 1358 0564 68E0      		ldi r22,lo8(8)
+ 1359 0566 87E3      		ldi r24,lo8(55)
+ 1360 0568 0E94 0000 		call USBNWrite
+ 1361               	.LVL129:
+ 176:../usbn2mc/main/usbn960x.c ****     return;
+ 1362               		.loc 1 176 5 view .LVU325
+ 1363 056c 61E0      		ldi r22,lo8(1)
+ 1364 056e 87E3      		ldi r24,lo8(55)
+ 1365 0570 00C0      		rjmp .L81
+ 1366               	.LVL130:
+ 1367               	.L72:
+ 181:../usbn2mc/main/usbn960x.c ****   {
+ 1368               		.loc 1 181 8 view .LVU326
+ 181:../usbn2mc/main/usbn960x.c ****   {
+ 1369               		.loc 1 181 10 is_stmt 0 view .LVU327
+ 1370 0572 83FF      		sbrs r24,3
+ 1371 0574 00C0      		rjmp .L66
+ 183:../usbn2mc/main/usbn960x.c ****     for(i=0;i<64;i++) 
+ 1372               		.loc 1 183 5 is_stmt 1 view .LVU328
+ 1373 0576 8EE3      		ldi r24,lo8(62)
+ 1374               	.LVL131:
+ 183:../usbn2mc/main/usbn960x.c ****     for(i=0;i<64;i++) 
+ 1375               		.loc 1 183 5 is_stmt 0 view .LVU329
+ 1376 0578 0E94 0000 		call USBNRead
+ 1377               	.LVL132:
+ 184:../usbn2mc/main/usbn960x.c ****       buf[i]=USBNRead(RXD3); 
+ 1378               		.loc 1 184 5 is_stmt 1 view .LVU330
+ 184:../usbn2mc/main/usbn960x.c ****       buf[i]=USBNRead(RXD3); 
+ 1379               		.loc 1 184 14 discriminator 1 view .LVU331
+ 1380 057c 8E01      		movw r16,r28
+ 1381 057e 0F5F      		subi r16,-1
+ 1382 0580 1F4F      		sbci r17,-1
+ 1383 0582 6E01      		movw r12,r28
+ 1384 0584 F1E4      		ldi r31,65
+ 1385 0586 CF0E      		add r12,r31
+ 1386 0588 D11C      		adc r13,__zero_reg__
+ 1387 058a 7801      		movw r14,r16
+ 1388               	.LVL133:
+ 1389               	.L76:
+ 185:../usbn2mc/main/usbn960x.c **** 
+ 1390               		.loc 1 185 7 view .LVU332
+ 185:../usbn2mc/main/usbn960x.c **** 
+ 1391               		.loc 1 185 14 is_stmt 0 view .LVU333
+ 1392 058c 8DE3      		ldi r24,lo8(61)
+ 1393 058e 0E94 0000 		call USBNRead
+ 1394               	.LVL134:
+ 185:../usbn2mc/main/usbn960x.c **** 
+ 1395               		.loc 1 185 13 discriminator 1 view .LVU334
+ 1396 0592 F801      		movw r30,r16
+ 1397 0594 8193      		st Z+,r24
+ 1398 0596 8F01      		movw r16,r30
+ 184:../usbn2mc/main/usbn960x.c ****       buf[i]=USBNRead(RXD3); 
+ 1399               		.loc 1 184 19 is_stmt 1 discriminator 3 view .LVU335
+ 184:../usbn2mc/main/usbn960x.c ****       buf[i]=USBNRead(RXD3); 
+ 1400               		.loc 1 184 14 discriminator 1 view .LVU336
+ 1401 0598 EC15      		cp r30,r12
+ 1402 059a FD05      		cpc r31,r13
+ 1403 059c 01F4      		brne .L76
+ 187:../usbn2mc/main/usbn960x.c ****       ptr = rxfifos.func1;
+ 1404               		.loc 1 187 5 view .LVU337
+ 187:../usbn2mc/main/usbn960x.c ****       ptr = rxfifos.func1;
+ 1405               		.loc 1 187 7 is_stmt 0 view .LVU338
+ 1406 059e 8091 0000 		lds r24,rxfifos+2
+ 1407 05a2 8130      		cpi r24,lo8(1)
+ 1408 05a4 01F0      		breq .+2
+ 1409 05a6 00C0      		rjmp .L66
+ 188:../usbn2mc/main/usbn960x.c ****       (*ptr)(&buf);
+ 1410               		.loc 1 188 7 is_stmt 1 view .LVU339
+ 1411               	.LVL135:
+ 189:../usbn2mc/main/usbn960x.c ****     }
+ 1412               		.loc 1 189 7 view .LVU340
+ 189:../usbn2mc/main/usbn960x.c ****     }
+ 1413               		.loc 1 189 8 is_stmt 0 view .LVU341
+ 1414 05a8 E091 0000 		lds r30,rxfifos+3
+ 1415 05ac F091 0000 		lds r31,rxfifos+3+1
+ 1416 05b0 C701      		movw r24,r14
+ 1417 05b2 0995      		icall
+ 1418               	.LVL136:
+ 192:../usbn2mc/main/usbn960x.c **** }
+ 1419               		.loc 1 192 9 is_stmt 1 view .LVU342
+ 1420 05b4 00C0      		rjmp .L66
+ 1421               		.cfi_endproc
+ 1422               	.LFE14:
+ 1424               	.global	USBNFunctionInfo
+ 1425               		.section .bss
+ 1428               	USBNFunctionInfo:
+ 1429 0000 0000      		.zero	2
+ 1430               	.global	StringList
+ 1433               	StringList:
+ 1434 0002 0000      		.zero	2
+ 1435               	.global	DescriptorList
+ 1438               	DescriptorList:
+ 1439 0004 0000      		.zero	2
+ 1440               	.global	FinalStringArray
+ 1443               	FinalStringArray:
+ 1444 0006 0000      		.zero	2
+ 1445               	.global	FinalConfigurationArray
+ 1448               	FinalConfigurationArray:
+ 1449 0008 0000      		.zero	2
+ 1450               	.global	DeviceDescriptor
+ 1453               	DeviceDescriptor:
+ 1454 000a 0000 0000 		.zero	18
+ 1454      0000 0000 
+ 1454      0000 0000 
+ 1454      0000 0000 
+ 1454      0000 
+ 1455               	.global	rxfifos
+ 1458               	rxfifos:
+ 1459 001c 0000 0000 		.zero	11
+ 1459      0000 0000 
+ 1459      0000 00
+ 1460               	.global	txfifos
+ 1463               	txfifos:
+ 1464 0027 0000 0000 		.zero	9
+ 1464      0000 0000 
+ 1464      00
+ 1465               	.global	EP0tx
+ 1468               	EP0tx:
+ 1469 0030 0000 0000 		.zero	12
+ 1469      0000 0000 
+ 1469      0000 0000 
+ 1470               	.global	EP0rx
+ 1473               	EP0rx:
+ 1474 003c 0000 0000 		.zero	12
+ 1474      0000 0000 
+ 1474      0000 0000 
+ 1475               		.text
+ 1476               	.Letext0:
+ 1477               		.file 2 "../usbn2mc/main/../usb11spec.h"
+ 1478               		.file 3 "../usbn2mc/main/usbn960x.h"
+ 1479               		.file 4 "/opt/local/avr/include/stdint.h"
+ 1480               		.file 5 "./../jtagicemk2klon/usbn2mc.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 usbn960x.c
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:2      *ABS*:0000003e __SP_H__
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:3      *ABS*:0000003d __SP_L__
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:4      *ABS*:0000003f __SREG__
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:5      *ABS*:00000000 __tmp_reg__
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:6      *ABS*:00000001 __zero_reg__
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:13     .text:00000000 _USBNInitEP0
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:16     .text:00000000 .Loc.0
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:17     .text:00000000 L0
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:22     .text:00000000 .Loc.1
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:23     .text:00000000 .Loc.2
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1473   .bss:0000003c EP0rx
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:28     .text:00000008 .Loc.3
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:29     .text:00000008 .Loc.4
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:32     .text:0000000c .Loc.5
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:33     .text:0000000c .Loc.6
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:36     .text:00000010 .Loc.7
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:37     .text:00000010 .Loc.8
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:39     .text:00000012 .Loc.9
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:40     .text:00000012 .Loc.10
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:45     .text:0000001a .Loc.11
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:46     .text:0000001a .Loc.12
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1468   .bss:00000030 EP0tx
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:51     .text:00000022 .Loc.13
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:52     .text:00000022 .Loc.14
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:55     .text:00000026 .Loc.15
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:56     .text:00000026 .Loc.16
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:58     .text:00000028 .Loc.17
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:59     .text:00000028 .Loc.18
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:61     .text:0000002a .Loc.19
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:62     .text:0000002a .Loc.20
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:66     .text:0000002e .Loc.21
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:68     .text:00000030 L0
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:73     .text:00000030 _USBNNackEvent
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:75     .text:00000030 .Loc.22
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:76     .text:00000030 L0
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:81     .text:00000030 .Loc.23
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:82     .text:00000030 .Loc.24
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:83     .text:00000030 .Loc.25
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:87     .text:00000036 L0
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:92     .text:00000036 _USBNAlternateEvent
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:94     .text:00000036 .Loc.26
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:95     .text:00000036 L0
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:103    .text:00000038 .Loc.27
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:104    .text:00000038 .Loc.28
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:105    .text:00000038 .Loc.29
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:111    .text:00000040 .Loc.30
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:112    .text:00000040 .Loc.31
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:115    .text:00000044 .Loc.32
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:119    .text:00000048 .Loc.33
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:122    .text:0000004c .Loc.34
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:127    .text:00000054 .Loc.35
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:132    .text:0000005c .Loc.36
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:137    .text:00000064 .Loc.37
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:142    .text:0000006c .Loc.38
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:148    .text:00000074 .Loc.39
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:149    .text:00000074 .Loc.40
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:152    .text:00000078 .Loc.41
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:158    .text:00000080 .Loc.42
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:159    .text:00000080 .Loc.43
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:162    .text:00000084 .Loc.44
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:166    .text:00000088 .Loc.45
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:169    .text:0000008a .Loc.46
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:174    .text:0000008e .Loc.47
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:177    .text:00000090 .Loc.48
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:179    .text:00000092 L0
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:184    .text:00000092 _USBNReceive
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:186    .text:00000092 L0
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:187    .text:00000092 .Loc.49
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:194    .text:00000094 L0
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:199    .text:00000094 _USBNTransmit
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:202    .text:00000094 .Loc.50
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:203    .text:00000094 L0
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:204    .text:00000094 .Loc.51
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:222    .text:0000009e .Loc.52
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:223    .text:0000009e .Loc.53
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:224    .text:0000009e .Loc.54
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:228    .text:000000a2 .Loc.55
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:232    .text:000000a8 .Loc.56
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:233    .text:000000a8 .Loc.57
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:239    .text:000000b2 .Loc.58
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:244    .text:000000ba .Loc.59
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:245    .text:000000ba .Loc.60
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:246    .text:000000ba .Loc.61
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:251    .text:000000be .Loc.62
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:254    .text:000000c2 .Loc.63
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:262    .text:000000cc .Loc.64
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:270    .text:000000d6 .Loc.65
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:279    .text:000000e6 .Loc.66
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:280    .text:000000e6 .Loc.67
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:286    .text:000000f0 .Loc.68
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:288    .text:000000f0 .Loc.69
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:292    .text:000000f4 .Loc.70
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:294    .text:000000f6 .Loc.71
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:295    .text:000000f6 .Loc.72
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:303    .text:00000100 .Loc.73
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:304    .text:00000100 .Loc.74
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:306    .text:00000102 .Loc.75
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:310    .text:00000108 .Loc.76
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:314    .text:0000010e .Loc.77
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:315    .text:0000010e .Loc.78
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:319    .text:00000110 .Loc.79
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:323    .text:00000114 .Loc.80
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:329    .text:0000011a .Loc.81
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:333    .text:00000120 .Loc.82
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:334    .text:00000120 .Loc.83
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:337    .text:00000124 .Loc.84
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:339    .text:00000126 L0
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:344    .text:00000126 _USBNTransmitFIFO0
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:346    .text:00000126 .Loc.85
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:347    .text:00000126 L0
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:355    .text:00000128 .Loc.86
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:356    .text:00000128 .Loc.87
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:357    .text:00000128 .Loc.88
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:363    .text:00000130 .Loc.89
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:364    .text:00000130 .Loc.90
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:367    .text:00000134 .Loc.91
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:371    .text:00000138 .Loc.92
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:374    .text:0000013c .Loc.93
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:375    .text:0000013c .Loc.94
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:378    .text:00000140 .Loc.95
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:379    .text:00000140 .Loc.96
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:387    .text:00000156 .Loc.97
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:391    .text:0000015a .Loc.98
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:394    .text:0000015c .Loc.99
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:398    .text:00000160 .Loc.100
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:402    .text:00000164 .Loc.101
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:405    .text:00000166 .Loc.102
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:410    .text:0000016a .Loc.103
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:413    .text:0000016e L0
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:418    .text:0000016e _USBNTransmitEvent
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:420    .text:0000016e .Loc.104
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:421    .text:0000016e L0
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:426    .text:0000016e .Loc.105
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:427    .text:0000016e .Loc.106
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:429    .text:0000016e .Loc.107
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:430    .text:0000016e .Loc.108
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:434    .text:00000174 .Loc.109
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:435    .text:00000174 .Loc.110
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:437    .text:00000176 .Loc.111
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:441    .text:0000017a .Loc.112
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:442    .text:0000017a .Loc.113
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:445    .text:0000017e .Loc.114
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:448    .text:00000180 .Loc.115
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:451    .text:00000184 .Loc.116
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:452    .text:00000184 .Loc.117
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1463   .bss:00000027 txfifos
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:456    .text:0000018c .Loc.118
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:458    .text:0000018c .Loc.119
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:459    .text:0000018c .Loc.120
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:465    .text:00000196 .Loc.121
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:468    .text:00000198 .Loc.122
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:471    .text:0000019c .Loc.123
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:477    .text:000001a2 .Loc.124
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:479    .text:000001a4 L0
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:484    .text:000001a4 _USBNSetAddress
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:487    .text:000001a4 .Loc.125
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:488    .text:000001a4 L0
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:489    .text:000001a4 .Loc.126
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:501    .text:000001aa .Loc.127
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:505    .text:000001ae .Loc.128
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:508    .text:000001b2 .Loc.129
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:514    .text:000001bc .Loc.130
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:515    .text:000001bc .Loc.131
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1428   .bss:00000000 USBNFunctionInfo
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:519    .text:000001c2 .Loc.132
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:523    .text:000001c6 .Loc.133
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:525    .text:000001c8 L0
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:530    .text:000001c8 _USBNGetDescriptor
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:533    .text:000001c8 .Loc.134
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:534    .text:000001c8 L0
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:535    .text:000001c8 .Loc.135
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:542    .text:000001ce L0
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:543    .text:000001d0 L0
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:553    .text:000001d6 .Loc.136
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:554    .text:000001d6 .Loc.137
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:558    .text:000001da .Loc.138
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:559    .text:000001da .Loc.139
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:563    .text:000001de .Loc.140
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:564    .text:000001de .Loc.141
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:567    .text:000001e6 .Loc.142
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:568    .text:000001e6 .Loc.143
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:571    .text:000001ec .Loc.144
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:577    .text:000001f8 L0
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:582    .text:00000200 .Loc.145
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:583    .text:00000200 .Loc.146
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1453   .bss:0000000a DeviceDescriptor
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:586    .text:00000204 .Loc.147
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:590    .text:0000020e .Loc.148
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:591    .text:0000020e .Loc.149
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:596    .text:0000021a .Loc.150
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:597    .text:0000021a .Loc.151
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:600    .text:0000021e .Loc.152
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:604    .text:00000224 .Loc.153
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:605    .text:00000224 .Loc.154
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:610    .text:0000022c .Loc.155
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:612    .text:0000022c .Loc.156
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:613    .text:0000022c .Loc.157
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:618    .text:00000230 .Loc.158
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:624    .text:0000023a .Loc.159
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:625    .text:0000023a .Loc.160
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:631    .text:00000240 .Loc.161
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:635    .text:00000244 .Loc.162
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:642    .text:00000250 .Loc.163
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:646    .text:00000254 .Loc.164
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:647    .text:00000254 .Loc.165
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:651    .text:00000258 .Loc.166
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:654    .text:00000260 .Loc.167
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:655    .text:00000260 .Loc.168
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:658    .text:00000262 .Loc.169
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1448   .bss:00000008 FinalConfigurationArray
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:664    .text:0000026e .Loc.170
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:667    .text:00000272 .Loc.171
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:672    .text:00000276 .Loc.172
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:678    .text:00000280 .Loc.173
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:680    .text:00000280 .Loc.174
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:681    .text:00000280 .Loc.175
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:684    .text:00000284 .Loc.176
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:685    .text:00000284 .Loc.177
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:688    .text:00000286 .Loc.178
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:692    .text:0000028a .Loc.179
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1443   .bss:00000006 FinalStringArray
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:696    .text:00000292 .Loc.180
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:702    .text:0000029c .Loc.181
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:705    .text:000002a4 .Loc.182
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:706    .text:000002a4 .Loc.183
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:713    .text:000002aa .Loc.184
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:714    .text:000002aa .Loc.185
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:715    .text:000002aa .Loc.186
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:719    .text:000002ae .Loc.187
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:722    .text:000002b6 .Loc.188
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:723    .text:000002b6 .Loc.189
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:728    .text:000002bc L0
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:733    .text:000002bc _USBNGetStatus
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:736    .text:000002bc .Loc.190
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:737    .text:000002bc L0
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:742    .text:000002bc .Loc.191
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:745    .text:000002be L0
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:750    .text:000002be _USBNSetConfiguration
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:753    .text:000002be .Loc.192
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:754    .text:000002be L0
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:759    .text:000002be .Loc.193
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:763    .text:000002c2 .Loc.194
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:766    .text:000002c6 .Loc.195
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:771    .text:000002ce .Loc.196
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:776    .text:000002d6 .Loc.197
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:781    .text:000002de .Loc.198
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:786    .text:000002e6 .Loc.199
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:791    .text:000002ee L0
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:796    .text:000002ee _USBNGetConfiguration
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:799    .text:000002ee .Loc.200
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:800    .text:000002ee L0
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:805    .text:000002ee .Loc.201
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:809    .text:000002f4 .Loc.202
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:812    .text:000002f8 L0
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:817    .text:000002f8 _USBNReceiveFIFO0
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:819    .text:000002f8 .Loc.203
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:820    .text:000002f8 L0
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:859    .text:00000318 .Loc.204
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:860    .text:00000318 .Loc.205
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:861    .text:00000318 .Loc.206
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:862    .text:00000318 .Loc.207
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:863    .text:00000318 .Loc.208
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:864    .text:00000318 .Loc.209
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:868    .text:0000031e .Loc.210
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:869    .text:0000031e .Loc.211
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:874    .text:00000324 .Loc.212
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:885    .text:00000332 .Loc.213
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:886    .text:00000332 .Loc.214
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:890    .text:0000033a .Loc.215
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:894    .text:00000340 .Loc.216
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:895    .text:00000340 .Loc.217
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:899    .text:00000346 .Loc.218
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:901    .text:00000346 .Loc.219
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:906    .text:0000034e .Loc.220
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:911    .text:00000356 .Loc.221
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:912    .text:00000356 .Loc.222
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:916    .text:0000035c .Loc.223
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:922    .text:00000366 .Loc.224
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:928    .text:00000372 L0
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:932    .text:00000378 .Loc.225
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:957    .text:00000388 .Loc.226
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:961    .text:0000038e .Loc.227
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:963    .text:0000038e .Loc.228
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:964    .text:0000038e .Loc.229
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:968    .text:00000394 .Loc.230
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:975    .text:0000039c .Loc.231
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:978    .text:0000039c .Loc.232
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:998    .text:000003ba .Loc.233
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1002   .text:000003c0 .Loc.234
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1005   .text:000003c2 .Loc.235
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1010   .text:000003ca .Loc.236
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1015   .text:000003d2 .Loc.237
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1020   .text:000003da .Loc.238
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1022   .text:000003da .Loc.239
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1027   .text:000003e0 .Loc.240
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1031   .text:000003e6 .Loc.241
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1034   .text:000003e8 .Loc.242
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1038   .text:000003ee .Loc.243
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1041   .text:000003f0 .Loc.244
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1042   .text:000003f0 .Loc.245
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1046   .text:000003f6 .Loc.246
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1051   .text:000003fc .Loc.247
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1054   .text:00000400 .Loc.248
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1057   .text:00000402 .Loc.249
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1064   .text:0000040a .Loc.250
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1067   .text:0000040a .Loc.251
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1068   .text:0000040a .Loc.252
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1072   .text:00000412 .Loc.253
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1077   .text:00000420 L0
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1079   .text:00000422 .Loc.254
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1080   .text:00000422 .Loc.255
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1081   .text:00000422 .Loc.256
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1082   .text:00000422 .Loc.257
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1085   .text:0000042a .Loc.258
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1090   .text:00000432 .Loc.259
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1094   .text:00000436 .Loc.260
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1109   .text:00000452 .Loc.261
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1112   .text:00000456 L0
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1117   .text:00000456 _USBNReceiveEvent
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1119   .text:00000456 .Loc.262
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1120   .text:00000456 L0
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1160   .text:00000478 .Loc.263
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1161   .text:00000478 .Loc.264
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1163   .text:00000478 .Loc.265
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1164   .text:00000478 .Loc.266
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1165   .text:00000478 .Loc.267
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1166   .text:00000478 .Loc.268
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1170   .text:0000047e .Loc.269
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1171   .text:0000047e .Loc.270
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1172   .text:0000047e .Loc.271
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1175   .text:00000482 .Loc.272
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1177   .text:00000482 .Loc.273
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1193   .text:000004a0 .Loc.274
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1197   .text:000004a4 .Loc.275
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1198   .text:000004a4 .Loc.276
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1201   .text:000004a8 .Loc.277
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1204   .text:000004aa .Loc.278
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1207   .text:000004ae .Loc.279
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1208   .text:000004ae .Loc.280
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1212   .text:000004b4 .Loc.281
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1214   .text:000004b6 .Loc.282
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1216   .text:000004b6 .Loc.283
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1217   .text:000004b6 .Loc.284
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1222   .text:000004be .Loc.285
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1229   .text:000004c6 .Loc.286
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1230   .text:000004c6 .Loc.287
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1234   .text:000004ca .Loc.288
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1237   .text:000004ce .Loc.289
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1240   .text:000004d2 .Loc.290
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1241   .text:000004d2 .Loc.291
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1245   .text:000004d8 .Loc.292
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1246   .text:000004d8 .Loc.293
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1458   .bss:0000001c rxfifos
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1250   .text:000004e0 .Loc.294
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1252   .text:000004e0 .Loc.295
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1253   .text:000004e0 .Loc.296
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1260   .text:000004ec .Loc.297
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1265   .text:000004f4 .Loc.298
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1269   .text:000004f8 .Loc.299
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1272   .text:000004fc .Loc.300
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1275   .text:000004fc .Loc.301
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1294   .text:0000051c .Loc.302
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1295   .text:0000051c .Loc.303
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1298   .text:00000520 .Loc.304
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1301   .text:00000522 .Loc.305
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1304   .text:00000526 .Loc.306
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1305   .text:00000526 .Loc.307
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1309   .text:0000052c .Loc.308
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1311   .text:0000052e .Loc.309
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1313   .text:0000052e .Loc.310
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1314   .text:0000052e .Loc.311
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1319   .text:00000536 .Loc.312
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1326   .text:0000053e .Loc.313
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1327   .text:0000053e .Loc.314
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1331   .text:00000542 .Loc.315
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1334   .text:00000546 .Loc.316
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1337   .text:0000054a .Loc.317
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1338   .text:0000054a .Loc.318
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1342   .text:00000550 .Loc.319
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1343   .text:00000550 .Loc.320
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1347   .text:00000558 .Loc.321
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1349   .text:00000558 .Loc.322
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1350   .text:00000558 .Loc.323
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1357   .text:00000564 .Loc.324
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1362   .text:0000056c .Loc.325
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1368   .text:00000572 .Loc.326
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1369   .text:00000572 .Loc.327
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1372   .text:00000576 .Loc.328
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1375   .text:00000578 .Loc.329
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1378   .text:0000057c .Loc.330
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1379   .text:0000057c .Loc.331
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1390   .text:0000058c .Loc.332
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1391   .text:0000058c .Loc.333
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1395   .text:00000592 .Loc.334
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1399   .text:00000598 .Loc.335
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1400   .text:00000598 .Loc.336
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1404   .text:0000059e .Loc.337
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1405   .text:0000059e .Loc.338
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1408   .text:000005a6 L0
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1410   .text:000005a8 .Loc.339
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1412   .text:000005a8 .Loc.340
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1413   .text:000005a8 .Loc.341
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1419   .text:000005b4 .Loc.342
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1421   .text:000005b6 L0
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1433   .bss:00000002 StringList
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1438   .bss:00000004 DescriptorList
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1481   .text:000005b6 L0
+                     .debug_frame:00000000 L0
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:147    .text:00000074 .L4
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:157    .text:00000080 .L5
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:172    .text:0000008e .L3
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:317    .text:00000110 .L14
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:261    .text:000000cc .L16
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:269    .text:000000d6 .L19
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:302    .text:00000100 .L20
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:250    .text:000000be .L17
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:328    .text:0000011a .L21
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:408    .text:0000016a .L22
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:397    .text:00000160 .L24
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:464    .text:00000196 .L30
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:475    .text:000001a2 .L28
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:645    .text:00000254 .L34
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:677    .text:00000280 .L35
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:630    .text:00000240 .L36
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:623    .text:0000023a .L37
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:611    .text:0000022c .L38
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:711    .text:000002aa .L39
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:617    .text:00000230 .L41
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:670    .text:00000276 .L40
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1063   .text:0000040a .L46
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:882    .text:00000332 .L47
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1021   .text:000003da .L64
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1056   .text:00000402 .L49
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1040   .text:000003f0 .L50
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:942    .jumptables.gcc._USBNReceiveFIFO0:00000000 .L51
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:973    .text:0000039c .L45
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:962    .text:0000038e .L52
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1050   .text:000003fc .L65
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1196   .text:000004a4 .L67
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1293   .text:0000051c .L68
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1228   .text:000004c6 .L69
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1259   .text:000004ec .L70
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1367   .text:00000572 .L72
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1325   .text:0000053e .L73
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1356   .text:00000564 .L74
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1268   .text:000004f8 .L81
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1273   .text:000004fc .L66
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1389   .text:0000058c .L76
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1004   .text:000003c2 .L57
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1026   .text:000003e0 .L56
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:995    .text:000003ba .L55
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:956    .text:00000388 .L54
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1033   .text:000003e8 .L53
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:3381   .debug_abbrev:00000000 .Ldebug_abbrev0
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:8      .text:00000000 .Ltext0
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1476   .text:000005b6 .Letext0
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:4994   .debug_line:00000000 .Ldebug_line0
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:798    .text:000002ee .LFB25
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:813    .text:000002f8 .LFE25
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:4232   .debug_loclists:00000010 .LLST12
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:4227   .debug_loclists:0000000c .LVUS12
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:811    .text:000002f8 .LVL80
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:752    .text:000002be .LFB24
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:792    .text:000002ee .LFE24
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:4263   .debug_loclists:00000031 .LLST11
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:4258   .debug_loclists:0000002d .LVUS11
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:765    .text:000002c6 .LVL72
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:770    .text:000002ce .LVL73
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:775    .text:000002d6 .LVL74
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:780    .text:000002de .LVL75
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:785    .text:000002e6 .LVL76
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:790    .text:000002ee .LVL77
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:735    .text:000002bc .LFB23
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:746    .text:000002be .LFE23
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:532    .text:000001c8 .LFB22
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:729    .text:000002bc .LFE22
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:4310   .debug_loclists:00000062 .LLST7
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:4289   .debug_loclists:0000004e .LVUS7
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:4437   .debug_loclists:000000f3 .LLST8
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:4428   .debug_loclists:000000eb .LVUS8
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:4472   .debug_loclists:0000011c .LLST9
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:4459   .debug_loclists:00000110 .LVUS9
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:4976   .debug_rnglists:0000000c .LLRL10
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:644    .text:00000254 .LVL59
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:486    .text:000001a4 .LFB21
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:526    .text:000001c8 .LFE21
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:4511   .debug_loclists:0000014d .LLST6
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:4504   .debug_loclists:00000147 .LVUS6
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:507    .text:000001b2 .LVL49
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:513    .text:000001bc .LVL50
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:201    .text:00000094 .LFB20
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:340    .text:00000126 .LFE20
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:4556   .debug_loclists:0000017e .LLST1
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:4547   .debug_loclists:00000176 .LVUS1
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:4613   .debug_loclists:000001bd .LLST2
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:4602   .debug_loclists:000001b3 .LVUS2
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:243    .text:000000ba .LVL16
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:266    .text:000000d4 .LVL19
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:278    .text:000000e6 .LVL21
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:313    .text:0000010e .LVL25
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:332    .text:00000120 .LVL28
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:93     .text:00000036 .LFB16
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:180    .text:00000092 .LFE16
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:4664   .debug_loclists:000001f8 .LLST0
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:4657   .debug_loclists:000001f2 .LVUS0
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:108    .text:0000003e .LVL1
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:121    .text:0000004c .LVL4
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:126    .text:00000054 .LVL5
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:131    .text:0000005c .LVL6
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:136    .text:00000064 .LVL7
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:141    .text:0000006c .LVL8
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:146    .text:00000074 .LVL9
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:156    .text:00000080 .LVL10
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:171    .text:0000008e .LVL12
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:419    .text:0000016e .LFB15
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:480    .text:000001a4 .LFE15
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:4688   .debug_loclists:00000211 .LLST4
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:4681   .debug_loclists:0000020b .LVUS4
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:4712   .debug_loclists:0000022d .LLST5
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:4705   .debug_loclists:00000227 .LVUS5
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:433    .text:00000174 .LVL38
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:439    .text:0000017a .LVL39
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:450    .text:00000184 .LVL41
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:470    .text:0000019c .LVL45
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:474    .text:000001a2 .LVL46
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1118   .text:00000456 .LFB14
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1422   .text:000005b6 .LFE14
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:4741   .debug_loclists:00000251 .LLST16
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:4732   .debug_loclists:00000249 .LVUS16
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:4776   .debug_loclists:0000027a .LLST17
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:4763   .debug_loclists:0000026e .LVUS17
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:4823   .debug_loclists:000002bc .LLST18
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:4814   .debug_loclists:000002b4 .LVUS18
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:4866   .debug_loclists:000002ef .LLST19
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:4859   .debug_loclists:000002e9 .LVUS19
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1169   .text:0000047e .LVL106
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1195   .text:000004a4 .LVL107
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1206   .text:000004ae .LVL109
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1211   .text:000004b4 .LVL110
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1236   .text:000004ce .LVL114
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1258   .text:000004ec .LVL116
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1264   .text:000004f4 .LVL117
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1271   .text:000004fc .LVL118
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1303   .text:00000526 .LVL121
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1308   .text:0000052c .LVL122
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1333   .text:00000546 .LVL126
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1355   .text:00000564 .LVL128
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1361   .text:0000056c .LVL129
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1377   .text:0000057c .LVL132
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1394   .text:00000592 .LVL134
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1418   .text:000005b4 .LVL136
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:74     .text:00000030 .LFB13
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:88     .text:00000036 .LFE13
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:86     .text:00000036 .LVL0
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:14     .text:00000000 .LFB12
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:69     .text:00000030 .LFE12
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:345    .text:00000126 .LFB18
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:414    .text:0000016e .LFE18
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:4895   .debug_loclists:00000310 .LLST3
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:4886   .debug_loclists:00000308 .LVUS3
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:360    .text:0000012e .LVL29
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:373    .text:0000013c .LVL32
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:396    .text:00000160 .LVL34
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:407    .text:0000016a .LVL36
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:818    .text:000002f8 .LFB17
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1113   .text:00000456 .LFE17
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:4922   .debug_loclists:00000331 .LLST13
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:4917   .debug_loclists:0000032d .LVUS13
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:4984   .debug_rnglists:00000017 .LLRL14
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:4939   .debug_loclists:00000344 .LLST15
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:4934   .debug_loclists:00000340 .LVUS15
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:889    .text:0000033a .LVL83
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:905    .text:0000034e .LVL85
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:910    .text:00000356 .LVL86
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:915    .text:0000035c .LVL87
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:921    .text:00000366 .LVL88
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:960    .text:0000038e .LVL89
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:972    .text:0000039c .LVL90
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1001   .text:000003c0 .LVL92
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1009   .text:000003ca .LVL93
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1014   .text:000003d2 .LVL94
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1019   .text:000003da .LVL95
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1030   .text:000003e6 .LVL96
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1037   .text:000003ee .LVL97
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1045   .text:000003f6 .LVL98
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1053   .text:00000400 .LVL99
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1060   .text:00000408 .LVL100
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:867    .text:0000031e .LVL81
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1089   .text:00000432 .LVL103
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1111   .text:00000456 .LVL104
+/var/folders/95/f4gft48n7mqb1dd6rghl87p00000gn/T//ccfkxqLs.s:1482   .debug_info:00000000 .Ldebug_info0
+
+UNDEFINED SYMBOLS
+USBNRead
+USBNWrite
+__tablejump2__
+USBNDecodeVendorRequest
+USBNBurstRead
+__do_clear_bss

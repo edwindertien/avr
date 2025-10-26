@@ -1,0 +1,639 @@
+Archive member included because of file (symbol)
+
+d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/avr5\libgcc.a(_exit.o)
+                              d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr5/crtm328p.o (exit)
+d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/avr5\libgcc.a(_copy_data.o)
+                              xboot.o (__do_copy_data)
+d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/avr5\libgcc.a(_clear_bss.o)
+                              xboot.o (__do_clear_bss)
+d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr5\libc.a(eerd_block.o)
+                              xboot.o (__eerd_block)
+d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr5\libc.a(eewr_block.o)
+                              xboot.o (__eewr_block)
+d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/avr5\libgcc.a(_prologue.o)
+                              d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr5\libc.a(eerd_block.o) (__prologue_saves__)
+d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/avr5\libgcc.a(_epilogue.o)
+                              d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr5\libc.a(eerd_block.o) (__epilogue_restores__)
+
+Allocating common symbols
+Common symbol       size              file
+
+comm_mode           0x1               xboot.o
+buffer              0x80              xboot.o
+
+Discarded input sections
+
+ .data          0x00000000        0x0 d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr5/crtm328p.o
+ .bss           0x00000000        0x0 d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr5/crtm328p.o
+ .text          0x00000000        0x0 xboot.o
+ .data          0x00000000        0x0 xboot.o
+ .bss           0x00000000        0x0 xboot.o
+ .text.clear_buffer
+                0x00000000        0x0 xboot.o
+ .text          0x00000000        0x0 flash.o
+ .data          0x00000000        0x0 flash.o
+ .bss           0x00000000        0x0 flash.o
+ .text.Flash_EraseWriteApplicationPage
+                0x00000000        0x0 flash.o
+ .text.Flash_LoadFlashPage
+                0x00000000        0x0 flash.o
+ .text          0x00000000        0x0 eeprom_driver.o
+ .data          0x00000000        0x0 eeprom_driver.o
+ .bss           0x00000000        0x0 eeprom_driver.o
+ .text          0x00000000        0x0 uart.o
+ .data          0x00000000        0x0 uart.o
+ .bss           0x00000000        0x0 uart.o
+ .text          0x00000000        0x0 i2c.o
+ .data          0x00000000        0x0 i2c.o
+ .bss           0x00000000        0x0 i2c.o
+ .text.i2c_init
+                0x00000000        0x0 i2c.o
+ .text.i2c_deinit
+                0x00000000        0x0 i2c.o
+ .text          0x00000000        0x0 fifo.o
+ .data          0x00000000        0x0 fifo.o
+ .bss           0x00000000        0x0 fifo.o
+ .text.fifo_init
+                0x00000000        0x0 fifo.o
+ .text.fifo_deinit
+                0x00000000        0x0 fifo.o
+ .text.fifo_cur_char
+                0x00000000        0x0 fifo.o
+ .text.fifo_send_char
+                0x00000000        0x0 fifo.o
+ .text.fifo_send_char_blocking
+                0x00000000        0x0 fifo.o
+ .text          0x00000000        0x0 watchdog.o
+ .data          0x00000000        0x0 watchdog.o
+ .bss           0x00000000        0x0 watchdog.o
+ .text          0x00000000        0x0 api.o
+ .data          0x00000000        0x0 api.o
+ .bss           0x00000000        0x0 api.o
+ .text          0x00000000        0x0 d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/avr5\libgcc.a(_exit.o)
+ .data          0x00000000        0x0 d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/avr5\libgcc.a(_exit.o)
+ .bss           0x00000000        0x0 d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/avr5\libgcc.a(_exit.o)
+ .text.libgcc   0x00000000        0x0 d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/avr5\libgcc.a(_exit.o)
+ .text          0x00000000        0x0 d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/avr5\libgcc.a(_copy_data.o)
+ .data          0x00000000        0x0 d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/avr5\libgcc.a(_copy_data.o)
+ .bss           0x00000000        0x0 d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/avr5\libgcc.a(_copy_data.o)
+ .text.libgcc   0x00000000        0x0 d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/avr5\libgcc.a(_copy_data.o)
+ .text          0x00000000        0x0 d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/avr5\libgcc.a(_clear_bss.o)
+ .data          0x00000000        0x0 d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/avr5\libgcc.a(_clear_bss.o)
+ .bss           0x00000000        0x0 d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/avr5\libgcc.a(_clear_bss.o)
+ .text.libgcc   0x00000000        0x0 d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/avr5\libgcc.a(_clear_bss.o)
+ .data          0x00000000        0x0 d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr5\libc.a(eerd_block.o)
+ .bss           0x00000000        0x0 d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr5\libc.a(eerd_block.o)
+ .data          0x00000000        0x0 d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr5\libc.a(eewr_block.o)
+ .bss           0x00000000        0x0 d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr5\libc.a(eewr_block.o)
+ .text          0x00000000        0x0 d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/avr5\libgcc.a(_prologue.o)
+ .data          0x00000000        0x0 d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/avr5\libgcc.a(_prologue.o)
+ .bss           0x00000000        0x0 d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/avr5\libgcc.a(_prologue.o)
+ .text          0x00000000        0x0 d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/avr5\libgcc.a(_epilogue.o)
+ .data          0x00000000        0x0 d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/avr5\libgcc.a(_epilogue.o)
+ .bss           0x00000000        0x0 d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/avr5\libgcc.a(_epilogue.o)
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+text             0x00000000         0x00020000         xr
+data             0x00800060         0x0000ffa0         rw !x
+eeprom           0x00810000         0x00010000         rw !x
+fuse             0x00820000         0x00000400         rw !x
+lock             0x00830000         0x00000400         rw !x
+signature        0x00840000         0x00000400         rw !x
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+Address of section .data set to 0x800100
+LOAD d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr5/crtm328p.o
+LOAD xboot.o
+LOAD flash.o
+LOAD eeprom_driver.o
+LOAD uart.o
+LOAD i2c.o
+LOAD fifo.o
+LOAD watchdog.o
+LOAD api.o
+LOAD d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr5\libm.a
+Address of section .text set to 0x7000
+LOAD d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/avr5\libgcc.a
+LOAD d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr5\libc.a
+LOAD d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/avr5\libgcc.a
+
+.hash
+ *(.hash)
+
+.dynsym
+ *(.dynsym)
+
+.dynstr
+ *(.dynstr)
+
+.gnu.version
+ *(.gnu.version)
+
+.gnu.version_d
+ *(.gnu.version_d)
+
+.gnu.version_r
+ *(.gnu.version_r)
+
+.rel.init
+ *(.rel.init)
+
+.rela.init
+ *(.rela.init)
+
+.rel.text
+ *(.rel.text)
+ *(.rel.text.*)
+ *(.rel.gnu.linkonce.t*)
+
+.rela.text
+ *(.rela.text)
+ *(.rela.text.*)
+ *(.rela.gnu.linkonce.t*)
+
+.rel.fini
+ *(.rel.fini)
+
+.rela.fini
+ *(.rela.fini)
+
+.rel.rodata
+ *(.rel.rodata)
+ *(.rel.rodata.*)
+ *(.rel.gnu.linkonce.r*)
+
+.rela.rodata
+ *(.rela.rodata)
+ *(.rela.rodata.*)
+ *(.rela.gnu.linkonce.r*)
+
+.rel.data
+ *(.rel.data)
+ *(.rel.data.*)
+ *(.rel.gnu.linkonce.d*)
+
+.rela.data
+ *(.rela.data)
+ *(.rela.data.*)
+ *(.rela.gnu.linkonce.d*)
+
+.rel.ctors
+ *(.rel.ctors)
+
+.rela.ctors
+ *(.rela.ctors)
+
+.rel.dtors
+ *(.rel.dtors)
+
+.rela.dtors
+ *(.rela.dtors)
+
+.rel.got
+ *(.rel.got)
+
+.rela.got
+ *(.rela.got)
+
+.rel.bss
+ *(.rel.bss)
+
+.rela.bss
+ *(.rela.bss)
+
+.rel.plt
+ *(.rel.plt)
+
+.rela.plt
+ *(.rela.plt)
+
+.text           0x00007000      0xc02
+ *(.vectors)
+ .vectors       0x00007000       0x68 d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr5/crtm328p.o
+                0x00007000                __vectors
+                0x00007000                __vector_default
+ .vectors       0x00007068       0x12 api.o
+                0x00007068                api_jump_table
+ *(.vectors)
+ *(.progmem.gcc*)
+ *(.progmem*)
+                0x0000707a                . = ALIGN (0x2)
+                0x0000707a                __trampolines_start = .
+ *(.trampolines)
+ .trampolines   0x0000707a        0x0 linker stubs
+ *(.trampolines*)
+                0x0000707a                __trampolines_end = .
+ *(.jumptables)
+ *(.jumptables*)
+ *(.lowtext)
+ *(.lowtext*)
+                0x0000707a                __ctors_start = .
+ *(.ctors)
+                0x0000707a                __ctors_end = .
+                0x0000707a                __dtors_start = .
+ *(.dtors)
+                0x0000707a                __dtors_end = .
+ SORT(*)(.ctors)
+ SORT(*)(.dtors)
+ *(.init0)
+ .init0         0x0000707a        0x0 d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr5/crtm328p.o
+                0x0000707a                __init
+ *(.init0)
+ *(.init1)
+ *(.init1)
+ *(.init2)
+ .init2         0x0000707a        0xc d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr5/crtm328p.o
+ *(.init2)
+ *(.init3)
+ *(.init3)
+ *(.init4)
+ .init4         0x00007086       0x16 d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/avr5\libgcc.a(_copy_data.o)
+                0x00007086                __do_copy_data
+ .init4         0x0000709c       0x10 d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/avr5\libgcc.a(_clear_bss.o)
+                0x0000709c                __do_clear_bss
+ *(.init4)
+ *(.init5)
+ *(.init5)
+ *(.init6)
+ *(.init6)
+ *(.init7)
+ *(.init7)
+ *(.init8)
+ *(.init8)
+ *(.init9)
+ .init9         0x000070ac        0x8 d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr5/crtm328p.o
+ *(.init9)
+ *(.text)
+ .text          0x000070b4        0x4 d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr5/crtm328p.o
+                0x000070b4                __vector_22
+                0x000070b4                __vector_1
+                0x000070b4                __vector_24
+                0x000070b4                __vector_12
+                0x000070b4                __bad_interrupt
+                0x000070b4                __vector_6
+                0x000070b4                __vector_3
+                0x000070b4                __vector_23
+                0x000070b4                __vector_25
+                0x000070b4                __vector_11
+                0x000070b4                __vector_13
+                0x000070b4                __vector_17
+                0x000070b4                __vector_19
+                0x000070b4                __vector_7
+                0x000070b4                __vector_5
+                0x000070b4                __vector_4
+                0x000070b4                __vector_9
+                0x000070b4                __vector_2
+                0x000070b4                __vector_21
+                0x000070b4                __vector_15
+                0x000070b4                __vector_8
+                0x000070b4                __vector_14
+                0x000070b4                __vector_10
+                0x000070b4                __vector_16
+                0x000070b4                __vector_18
+                0x000070b4                __vector_20
+ .text          0x000070b8       0x38 d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr5\libc.a(eerd_block.o)
+                0x000070b8                __eerd_block
+ .text          0x000070f0       0x38 d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr5\libc.a(eewr_block.o)
+                0x000070f0                __eewr_block
+                0x00007128                . = ALIGN (0x2)
+ *(.text.*)
+ .text.eeprom_read_byte
+                0x00007128       0x10 xboot.o
+ .text.eeprom_write_byte
+                0x00007138       0x1a xboot.o
+ .text.get_char
+                0x00007152       0x1e xboot.o
+                0x00007152                get_char
+ .text.send_char
+                0x00007170       0x26 xboot.o
+                0x00007170                send_char
+ .text.get_2bytes
+                0x00007196       0x10 xboot.o
+                0x00007196                get_2bytes
+ .text.crc16_block
+                0x000071a6       0xb4 xboot.o
+                0x000071a6                crc16_block
+ .text.install_firmware
+                0x0000725a      0x21c xboot.o
+                0x0000725a                install_firmware
+ .text.BlockRead
+                0x00007476       0xc6 xboot.o
+                0x00007476                BlockRead
+ .text.BlockLoad
+                0x0000753c       0xc4 xboot.o
+                0x0000753c                BlockLoad
+ .text.main     0x00007600      0x39a xboot.o
+                0x00007600                main
+ .text.Flash_EraseApplicationSection
+                0x0000799a       0x28 flash.o
+                0x0000799a                Flash_EraseApplicationSection
+ .text.Flash_ReadFlashPage
+                0x000079c2       0x3a flash.o
+                0x000079c2                Flash_ReadFlashPage
+ .text.Flash_ProgramPage
+                0x000079fc       0x84 flash.o
+                0x000079fc                Flash_ProgramPage
+ .text.EEPROM_erase_all
+                0x00007a80       0x28 eeprom_driver.o
+                0x00007a80                EEPROM_erase_all
+ .text.uart_init
+                0x00007aa8       0x20 uart.o
+                0x00007aa8                uart_init
+ .text.uart_deinit
+                0x00007ac8       0x18 uart.o
+                0x00007ac8                uart_deinit
+ .text.xboot_get_version
+                0x00007ae0        0xe api.o
+                0x00007ae0                xboot_get_version
+ .text.xboot_spm_wrapper
+                0x00007aee        0x4 api.o
+                0x00007aee                xboot_spm_wrapper
+ .text.xboot_erase_application_page
+                0x00007af2       0x3a api.o
+                0x00007af2                xboot_erase_application_page
+ .text.xboot_app_temp_erase
+                0x00007b2c       0x30 api.o
+                0x00007b2c                xboot_app_temp_erase
+ .text.xboot_write_application_page
+                0x00007b5c       0x26 api.o
+                0x00007b5c                xboot_write_application_page
+ .text.xboot_app_temp_write_page
+                0x00007b82        0xe api.o
+                0x00007b82                xboot_app_temp_write_page
+ .text.libgcc   0x00007b90       0x38 d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/avr5\libgcc.a(_prologue.o)
+                0x00007b90                __prologue_saves__
+ .text.libgcc   0x00007bc8       0x36 d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/avr5\libgcc.a(_epilogue.o)
+                0x00007bc8                __epilogue_restores__
+                0x00007bfe                . = ALIGN (0x2)
+ *(.fini9)
+ .fini9         0x00007bfe        0x0 d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/avr5\libgcc.a(_exit.o)
+                0x00007bfe                exit
+                0x00007bfe                _exit
+ *(.fini9)
+ *(.fini8)
+ *(.fini8)
+ *(.fini7)
+ *(.fini7)
+ *(.fini6)
+ *(.fini6)
+ *(.fini5)
+ *(.fini5)
+ *(.fini4)
+ *(.fini4)
+ *(.fini3)
+ *(.fini3)
+ *(.fini2)
+ *(.fini2)
+ *(.fini1)
+ *(.fini1)
+ *(.fini0)
+ .fini0         0x00007bfe        0x4 d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/avr5\libgcc.a(_exit.o)
+ *(.fini0)
+                0x00007c02                _etext = .
+
+.data           0x00800100        0x0 load address 0x00007c02
+                0x00800100                PROVIDE (__data_start, .)
+ *(.data)
+ *(.data*)
+ *(.rodata)
+ *(.rodata*)
+ *(.gnu.linkonce.d*)
+                0x00800100                . = ALIGN (0x2)
+                0x00800100                _edata = .
+                0x00800100                PROVIDE (__data_end, .)
+
+.bss            0x00800100       0x81
+                0x00800100                PROVIDE (__bss_start, .)
+ *(.bss)
+ *(.bss*)
+ *(COMMON)
+ COMMON         0x00800100       0x81 xboot.o
+                0x00800100                comm_mode
+                0x00800101                buffer
+                0x00800181                PROVIDE (__bss_end, .)
+                0x00007c02                __data_load_start = LOADADDR (.data)
+                0x00007c02                __data_load_end = (__data_load_start + SIZEOF (.data))
+
+.noinit         0x00800181        0x0
+                0x00800181                PROVIDE (__noinit_start, .)
+ *(.noinit*)
+                0x00800181                PROVIDE (__noinit_end, .)
+                0x00800181                _end = .
+                0x00800181                PROVIDE (__heap_start, .)
+
+.eeprom         0x00810000        0x0
+ *(.eeprom*)
+                0x00810000                __eeprom_end = .
+
+.fuse
+ *(.fuse)
+ *(.lfuse)
+ *(.hfuse)
+ *(.efuse)
+
+.lock
+ *(.lock*)
+
+.signature
+ *(.signature*)
+
+.stab           0x00000000     0x216c
+ *(.stab)
+ .stab          0x00000000     0x11ac xboot.o
+                               0x1218 (size before relaxing)
+ .stab          0x000011ac      0x318 flash.o
+                                0x714 (size before relaxing)
+ .stab          0x000014c4      0x204 eeprom_driver.o
+                                0x4bc (size before relaxing)
+ .stab          0x000016c8      0x228 uart.o
+                                0x4f8 (size before relaxing)
+ .stab          0x000018f0      0x174 i2c.o
+                                0x498 (size before relaxing)
+ .stab          0x00001a64      0x174 fifo.o
+                                0x69c (size before relaxing)
+ .stab          0x00001bd8      0x180 watchdog.o
+                                0x450 (size before relaxing)
+ .stab          0x00001d58      0x414 api.o
+                                0x6e4 (size before relaxing)
+
+.stabstr        0x00000000     0x108a
+ *(.stabstr)
+ .stabstr       0x00000000     0x108a xboot.o
+
+.stab.excl
+ *(.stab.excl)
+
+.stab.exclstr
+ *(.stab.exclstr)
+
+.stab.index
+ *(.stab.index)
+
+.stab.indexstr
+ *(.stab.indexstr)
+
+.comment
+ *(.comment)
+
+.debug
+ *(.debug)
+
+.line
+ *(.line)
+
+.debug_srcinfo
+ *(.debug_srcinfo)
+
+.debug_sfnames
+ *(.debug_sfnames)
+
+.debug_aranges
+ *(.debug_aranges)
+
+.debug_pubnames
+ *(.debug_pubnames)
+
+.debug_info
+ *(.debug_info)
+ *(.gnu.linkonce.wi.*)
+
+.debug_abbrev
+ *(.debug_abbrev)
+
+.debug_line
+ *(.debug_line)
+
+.debug_frame
+ *(.debug_frame)
+
+.debug_str
+ *(.debug_str)
+
+.debug_loc
+ *(.debug_loc)
+
+.debug_macinfo
+ *(.debug_macinfo)
+OUTPUT(xboot.elf elf32-avr)
+LOAD linker stubs
+
+Cross Reference Table
+
+Symbol                                            File
+BlockLoad                                         xboot.o
+BlockRead                                         xboot.o
+EEPROM_erase_all                                  eeprom_driver.o
+                                                  xboot.o
+Flash_EraseApplicationSection                     flash.o
+                                                  xboot.o
+Flash_EraseWriteApplicationPage                   flash.o
+Flash_LoadFlashPage                               flash.o
+Flash_ProgramPage                                 flash.o
+                                                  api.o
+                                                  xboot.o
+Flash_ReadFlashPage                               flash.o
+                                                  xboot.o
+__bad_interrupt                                   d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr5/crtm328p.o
+__bss_end                                         d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/avr5\libgcc.a(_clear_bss.o)
+__bss_start                                       d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/avr5\libgcc.a(_clear_bss.o)
+__data_end                                        d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/avr5\libgcc.a(_copy_data.o)
+__data_load_start                                 d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/avr5\libgcc.a(_copy_data.o)
+__data_start                                      d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/avr5\libgcc.a(_copy_data.o)
+__do_clear_bss                                    d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/avr5\libgcc.a(_clear_bss.o)
+                                                  d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr5\libc.a(eewr_block.o)
+                                                  d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr5\libc.a(eerd_block.o)
+                                                  api.o
+                                                  watchdog.o
+                                                  fifo.o
+                                                  i2c.o
+                                                  uart.o
+                                                  eeprom_driver.o
+                                                  flash.o
+                                                  xboot.o
+__do_copy_data                                    d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/avr5\libgcc.a(_copy_data.o)
+                                                  d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr5\libc.a(eewr_block.o)
+                                                  d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr5\libc.a(eerd_block.o)
+                                                  api.o
+                                                  watchdog.o
+                                                  fifo.o
+                                                  i2c.o
+                                                  uart.o
+                                                  eeprom_driver.o
+                                                  flash.o
+                                                  xboot.o
+__eerd_block                                      d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr5\libc.a(eerd_block.o)
+                                                  xboot.o
+__eewr_block                                      d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr5\libc.a(eewr_block.o)
+                                                  xboot.o
+__epilogue_restores__                             d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/avr5\libgcc.a(_epilogue.o)
+                                                  d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr5\libc.a(eewr_block.o)
+                                                  d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr5\libc.a(eerd_block.o)
+__heap_end                                        d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr5/crtm328p.o
+__init                                            d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr5/crtm328p.o
+__prologue_saves__                                d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/avr5\libgcc.a(_prologue.o)
+                                                  d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr5\libc.a(eewr_block.o)
+                                                  d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr5\libc.a(eerd_block.o)
+__stack                                           d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr5/crtm328p.o
+__vector_1                                        d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr5/crtm328p.o
+__vector_10                                       d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr5/crtm328p.o
+__vector_11                                       d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr5/crtm328p.o
+__vector_12                                       d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr5/crtm328p.o
+__vector_13                                       d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr5/crtm328p.o
+__vector_14                                       d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr5/crtm328p.o
+__vector_15                                       d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr5/crtm328p.o
+__vector_16                                       d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr5/crtm328p.o
+__vector_17                                       d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr5/crtm328p.o
+__vector_18                                       d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr5/crtm328p.o
+__vector_19                                       d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr5/crtm328p.o
+__vector_2                                        d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr5/crtm328p.o
+__vector_20                                       d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr5/crtm328p.o
+__vector_21                                       d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr5/crtm328p.o
+__vector_22                                       d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr5/crtm328p.o
+__vector_23                                       d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr5/crtm328p.o
+__vector_24                                       d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr5/crtm328p.o
+__vector_25                                       d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr5/crtm328p.o
+__vector_3                                        d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr5/crtm328p.o
+__vector_4                                        d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr5/crtm328p.o
+__vector_5                                        d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr5/crtm328p.o
+__vector_6                                        d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr5/crtm328p.o
+__vector_7                                        d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr5/crtm328p.o
+__vector_8                                        d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr5/crtm328p.o
+__vector_9                                        d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr5/crtm328p.o
+__vector_default                                  d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr5/crtm328p.o
+__vectors                                         d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr5/crtm328p.o
+_exit                                             d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/avr5\libgcc.a(_exit.o)
+api_jump_table                                    api.o
+buffer                                            xboot.o
+clear_buffer                                      xboot.o
+comm_mode                                         xboot.o
+crc16_block                                       xboot.o
+exit                                              d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/avr5\libgcc.a(_exit.o)
+                                                  d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr5/crtm328p.o
+fifo_cur_char                                     fifo.o
+fifo_deinit                                       fifo.o
+fifo_init                                         fifo.o
+fifo_send_char                                    fifo.o
+fifo_send_char_blocking                           fifo.o
+get_2bytes                                        xboot.o
+get_char                                          xboot.o
+i2c_deinit                                        i2c.o
+i2c_init                                          i2c.o
+install_firmware                                  xboot.o
+main                                              xboot.o
+                                                  d:/program files/arduino/hardware/tools/avr/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr5/crtm328p.o
+send_char                                         xboot.o
+uart_deinit                                       uart.o
+                                                  xboot.o
+uart_init                                         uart.o
+                                                  xboot.o
+xboot_app_temp_erase                              api.o
+                                                  xboot.o
+xboot_app_temp_write_page                         api.o
+xboot_erase_application_page                      api.o
+xboot_get_version                                 api.o
+xboot_spm_wrapper                                 api.o
+xboot_write_application_page                      api.o
