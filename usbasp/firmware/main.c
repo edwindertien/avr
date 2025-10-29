@@ -303,7 +303,6 @@ uchar usbFunctionWrite(uchar *data, uchar len) {
 
 int main(void) {
 	uchar i, j;
-
 	/* no pullups on USB and ISP pins */
 	PORTD = 0;
 	PORTB = 0;

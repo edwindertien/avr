@@ -20,7 +20,11 @@
 #endif
 
 /* set prescaler to 64 */
-#define clockInit()  TCCR0B = (1 << CS01) | (1 << CS00);
+#if defined(TCCR0B)
+#  define clockInit()  TCCR0B = (1 << CS01) | (1 << CS00);
+#else
+#  define clockInit()  TCCR0 = (1 << CS01) | (1 << CS00);
+#endif
 
 /* wait time * 320 us */
 void clockWait(uint8_t time);

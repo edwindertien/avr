@@ -11,6 +11,11 @@ TARGET=atmega88
 HFUSE=0xDF
 LFUSE=0xFF
 EFUSE=0xF9
+# the following (for USBprog/ATmega32) was not succesful
+# TARGET = atmega32
+# HFUSE  = 0xC8
+# LFUSE  = 0xEF
+# F_CPU  = 12000000
 
 # ISP=bsd      PORT=/dev/parport0
 # ISP=ponyser  PORT=/dev/ttyS1

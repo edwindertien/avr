@@ -6,7 +6,7 @@ Of course, it is 2025, so there are more, cheaper and better controllers around,
 
 The usbasp programmer sources can be found on [the usbasp project site](https://fischl.de/usbasp/). Many 'clones' and derivatives exist. Typically with an ATmega8, 48, 88. Hardware might differ with switches and jumpers for updating firmware (typically with tweezers holding a reset pin) and/or jumpers to put power supply (5V) through. 
 
-The source of one of the latest
+The source of one of the latest version can be obtained from aforementioned website. Hardware is found in many different versions. 
 
 ### zhifengsoft
 
@@ -23,43 +23,45 @@ three options exists:
 
 [source](https://irq5.io/2017/07/25/making-usbasp-chinese-clones-usable/)
 
-```
+```c
 /* all outputs except PD2 = INT0 */
 DDRD = ~(1 << 2);
 ```
 
 will be replaced with
 
-```	
+```c
 DDRD &= ~((1<<2) | (1<<3));
 ```
 
-Furthermore, the sources need to be adapted to work with modern version of avr-gcc. This means that every variable in ```PROGMEM``` also has to be declared ```const``` and a clear separation between header file (declare a variable ```extern```) and c-file (initialise the variable) in order to make variables link well. 
+Furthermore, the sources need to be adapted to work with modern version of avr-gcc. This means that every variable in `PROGMEM` also has to be declared `const` and a clear separation between header file (declare a variable `extern`) and c-file (initialise the variable) in order to make variables link well. 
 
 Apart from that, the makefile needs to include the right settings for the used uC (atmega8, 88, etc) and right clockspeed (12 MHz to work with USB)
 
 The invocation (for this controller, using atmega88) for programming would be: 
 
-``` 
+```bash 
 avrdude -c usbasp -p m88 -U flash:w:main.hex 
 ```
 
 and the right invocation to set the fusebits: 
 
-```
+```bash
 avrdude -c usbasp -p m88 \                   
   -U lfuse:w:0xFF:m -U hfuse:w:0xDF:m -U efuse:w:0xF9:m
 ```
 
-The check to see a registered usb device (```lsusb```) on mac would be ```system_profiler SPUSBDataType```
+The check to see a registered usb device (`lsusb`) on mac would be `system_profiler SPUSBDataType`
 
 ## programmer: usbprog
 
 Similar to adapting the sources for the usbasp, also for usbprog the avrgcc compiler has become more restrictive. Again: 
-- add ```const``` with every ```PROGMEN```
-- make declarations in headers ```extern``` and make sure there is one initialisation in the accompanying *.c file
+- add `const` with every `PROGMEN`
+- make declarations in headers `extern` and make sure there is one initialisation in the accompanying *.c file
 
 For now I only reworked the avrispmkII clone software, in the original project (not longer original, but a copy is found on github [usbprog-tools](https://github.com/bwalle/usbprog-tools)  and [usbprog](https://github.com/ykhalyavin/usbprog))
+
+Although the code compiles and the programmer registers as avrisp, it will not work on MacOS (to do with HID/device registration)
 
 ## board: rtavr
 ### bootloader: optiboot for Atmega32
@@ -95,7 +97,7 @@ upload_port = /dev/tty.usbserial-21320
 upload_speed = 57600
 ```
 
-Optiboot (with serial connection) is initialised by pressing the reset button, causing a 1 second check on the serial port. 
+Optiboot (with serial connection) is initialised by pressing the reset button, causing a 1 second check on the serial port. It also fires (only when DTR is connected) through a 100nF capacitor as implemented with the ottantotto board.
 
 ### settings
 
@@ -117,7 +119,7 @@ Besides swapping out the crystal (8MHz vs 16MHz) on the current boards (in order
 
 ## board: ottantotto
 
-The ottantotto (and also LED dimmer boards) have been using ATmega88p (which were at the time a bit more price efficient than ATmega168 or ATmega328)
+The ottantotto (and also LED dimmer boards) have been using ATmega88 (which were at the time a bit more price efficient than ATmega168 or ATmega328)
 
 They are typically used without bootloader (to save the sparse 8k flash) and programmed using ISP
 
