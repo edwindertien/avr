@@ -21,13 +21,6 @@ the newest features and options.
 */
 
 /* ---------------------------- Hardware Config ---------------------------- */
-// for ATmega32 on USBprog
-// #define USB_CFG_IOPORTNAME      D
-// #define USB_CFG_DMINUS_BIT      4
-// #define USB_CFG_DPLUS_BIT       2
-// #define USB_CFG_CLOCK_KHZ       12000
-// #define USB_CFG_PULLUP_IOPORTNAME D
-// #define USB_CFG_PULLUP_BIT        3
 
 // For USBASP (clone) on Atmega88
 

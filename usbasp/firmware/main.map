@@ -1,12 +1,10 @@
 Archive member included to satisfy reference by file (symbol)
 
-/opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_exit.o)
-                              /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/crtatmega32.o (exit)
-/opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_tablejump2.o)
-                              main.o (__tablejump2__)
-/opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_copy_data.o)
+/opt/local/lib/gcc/avr/14.2.0/avr4/libgcc.a(_exit.o)
+                              /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr4/crtatmega88.o (exit)
+/opt/local/lib/gcc/avr/14.2.0/avr4/libgcc.a(_copy_data.o)
                               usbdrv/usbdrv.o (__do_copy_data)
-/opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_clear_bss.o)
+/opt/local/lib/gcc/avr/14.2.0/avr4/libgcc.a(_clear_bss.o)
                               usbdrv/usbdrv.o (__do_clear_bss)
 
 Allocating common symbols
@@ -19,10 +17,10 @@ There are no discarded input sections
 Memory Configuration
 
 Name             Origin             Length             Attributes
-text             0x00000000         0x00008000         xr
-data             0x00800060         0x00000800         rw!x
-eeprom           0x00810000         0x00000400         rw!x
-fuse             0x00820000         0x00000002         rw!x
+text             0x00000000         0x00002000         xr
+data             0x00800100         0x00000400         rw!x
+eeprom           0x00810000         0x00000200         rw!x
+fuse             0x00820000         0x00000003         rw!x
 lock             0x00830000         0x00000400         rw!x
 signature        0x00840000         0x00000400         rw!x
 user_signatures  0x00850000         0x00000400         rw!x
@@ -30,7 +28,8 @@ user_signatures  0x00850000         0x00000400         rw!x
 
 Linker script and memory map
 
-LOAD /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/crtatmega32.o
+Address of section .data set to 0x800100
+LOAD /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr4/crtatmega88.o
 LOAD usbdrv/usbdrv.o
 LOAD usbdrv/usbdrvasm.o
 LOAD usbdrv/oddebug.o
@@ -39,16 +38,16 @@ LOAD clock.o
 LOAD tpi.o
 LOAD main.o
 START GROUP
-LOAD /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a
-LOAD /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/libm.a
-LOAD /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/libc.a
-LOAD /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/libatmega32.a
+LOAD /opt/local/lib/gcc/avr/14.2.0/avr4/libgcc.a
+LOAD /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr4/libm.a
+LOAD /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr4/libc.a
+LOAD /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr4/libatmega88.a
 END GROUP
-                [0x00008000]                      __TEXT_REGION_LENGTH__ = DEFINED (__TEXT_REGION_LENGTH__)?__TEXT_REGION_LENGTH__:0x20000
-                [0x00800060]                      __DATA_REGION_ORIGIN__ = DEFINED (__DATA_REGION_ORIGIN__)?__DATA_REGION_ORIGIN__:0x800060
-                [0x00000800]                      __DATA_REGION_LENGTH__ = DEFINED (__DATA_REGION_LENGTH__)?__DATA_REGION_LENGTH__:0xffa0
-                [0x00000400]                      __EEPROM_REGION_LENGTH__ = DEFINED (__EEPROM_REGION_LENGTH__)?__EEPROM_REGION_LENGTH__:0x10000
-                [0x00000002]                      __FUSE_REGION_LENGTH__ = DEFINED (__FUSE_REGION_LENGTH__)?__FUSE_REGION_LENGTH__:0x400
+                [0x00002000]                      __TEXT_REGION_LENGTH__ = DEFINED (__TEXT_REGION_LENGTH__)?__TEXT_REGION_LENGTH__:0x2000
+                [0x00800100]                      __DATA_REGION_ORIGIN__ = DEFINED (__DATA_REGION_ORIGIN__)?__DATA_REGION_ORIGIN__:0x800060
+                [0x00000400]                      __DATA_REGION_LENGTH__ = DEFINED (__DATA_REGION_LENGTH__)?__DATA_REGION_LENGTH__:0xffa0
+                [0x00000200]                      __EEPROM_REGION_LENGTH__ = DEFINED (__EEPROM_REGION_LENGTH__)?__EEPROM_REGION_LENGTH__:0x10000
+                [0x00000003]                      __FUSE_REGION_LENGTH__ = DEFINED (__FUSE_REGION_LENGTH__)?__FUSE_REGION_LENGTH__:0x400
                 0x00000400                        __LOCK_REGION_LENGTH__ = DEFINED (__LOCK_REGION_LENGTH__)?__LOCK_REGION_LENGTH__:0x400
                 0x00000400                        __SIGNATURE_REGION_LENGTH__ = DEFINED (__SIGNATURE_REGION_LENGTH__)?__SIGNATURE_REGION_LENGTH__:0x400
                 0x00000400                        __USER_SIGNATURE_REGION_LENGTH__ = DEFINED (__USER_SIGNATURE_REGION_LENGTH__)?__USER_SIGNATURE_REGION_LENGTH__:0x400
@@ -143,55 +142,55 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000     0x124a
+.text           0x00000000     0x11cc
  *(.vectors)
- .vectors       0x00000000       0x54 /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/crtatmega32.o
+ .vectors       0x00000000       0x34 /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr4/crtatmega88.o
                 0x00000000                __vectors
                 0x00000000                __vector_default
  *(.vectors)
  *(.progmem.gcc*)
-                0x00000054                        . = ALIGN (0x2)
-                0x00000054                        __trampolines_start = .
+                0x00000034                        . = ALIGN (0x2)
+                0x00000034                        __trampolines_start = .
  *(.trampolines)
- .trampolines   0x00000054        0x0 linker stubs
+ .trampolines   0x00000034        0x0 linker stubs
  *(.trampolines*)
-                0x00000054                        __trampolines_end = .
+                0x00000034                        __trampolines_end = .
  *libprintf_flt.a:*(.progmem.data)
  *libc.a:*(.progmem.data)
  *(.progmem.*)
- .progmem.data  0x00000054       0x52 usbdrv/usbdrv.o
-                0x00000054                usbDescriptorConfiguration
-                0x00000066                usbDescriptorDevice
-                0x00000078                usbDescriptorStringDevice
-                0x00000086                usbDescriptorStringVendor
-                0x000000a2                usbDescriptorString0
-                0x000000a6                        . = ALIGN (0x2)
+ .progmem.data  0x00000034       0x52 usbdrv/usbdrv.o
+                0x00000034                usbDescriptorConfiguration
+                0x00000046                usbDescriptorDevice
+                0x00000058                usbDescriptorStringDevice
+                0x00000066                usbDescriptorStringVendor
+                0x00000082                usbDescriptorString0
+                0x00000086                        . = ALIGN (0x2)
  *(.lowtext)
  *(.lowtext*)
-                0x000000a6                        __ctors_start = .
+                0x00000086                        __ctors_start = .
  *(.ctors)
-                0x000000a6                        __ctors_end = .
-                0x000000a6                        __dtors_start = .
+                0x00000086                        __ctors_end = .
+                0x00000086                        __dtors_start = .
  *(.dtors)
-                0x000000a6                        __dtors_end = .
+                0x00000086                        __dtors_end = .
  SORT_BY_NAME(*)(.ctors)
  SORT_BY_NAME(*)(.dtors)
  *(.init0)
- .init0         0x000000a6        0x0 /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/crtatmega32.o
-                0x000000a6                __init
+ .init0         0x00000086        0x0 /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr4/crtatmega88.o
+                0x00000086                __init
  *(.init0)
  *(.init1)
  *(.init1)
  *(.init2)
- .init2         0x000000a6        0xc /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/crtatmega32.o
+ .init2         0x00000086        0xc /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr4/crtatmega88.o
  *(.init2)
  *(.init3)
  *(.init3)
  *(.init4)
- .init4         0x000000b2       0x16 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_copy_data.o)
-                0x000000b2                __do_copy_data
- .init4         0x000000c8       0x10 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_clear_bss.o)
-                0x000000c8                __do_clear_bss
+ .init4         0x00000092       0x16 /opt/local/lib/gcc/avr/14.2.0/avr4/libgcc.a(_copy_data.o)
+                0x00000092                __do_copy_data
+ .init4         0x000000a8       0x10 /opt/local/lib/gcc/avr/14.2.0/avr4/libgcc.a(_clear_bss.o)
+                0x000000a8                __do_clear_bss
  *(.init4)
  *(.init5)
  *(.init5)
@@ -202,130 +201,120 @@ END GROUP
  *(.init8)
  *(.init8)
  *(.init9)
- .init9         0x000000d8        0x8 /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/crtatmega32.o
+ .init9         0x000000b8        0x4 /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr4/crtatmega88.o
  *(.init9)
  *(.text)
- .text          0x000000e0        0x4 /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/crtatmega32.o
-                0x000000e0                __vector_20
-                0x000000e0                __bad_interrupt
-                0x000000e0                __vector_6
-                0x000000e0                __vector_3
-                0x000000e0                __vector_11
-                0x000000e0                __vector_13
-                0x000000e0                __vector_17
-                0x000000e0                __vector_19
-                0x000000e0                __vector_7
-                0x000000e0                __vector_5
-                0x000000e0                __vector_4
-                0x000000e0                __vector_9
-                0x000000e0                __vector_2
-                0x000000e0                __vector_15
-                0x000000e0                __vector_8
-                0x000000e0                __vector_14
-                0x000000e0                __vector_10
-                0x000000e0                __vector_16
-                0x000000e0                __vector_18
-                0x000000e0                __vector_12
- .text          0x000000e4      0x27e usbdrv/usbdrv.o
-                0x000000e4                usbPoll
-                0x00000354                usbInit
- .text          0x00000362      0x28c usbdrv/usbdrvasm.o
-                0x00000362                usbCrc16
-                0x0000038c                usbCrc16Append
-                0x00000394                __vector_1
- .text          0x000005ee        0x0 usbdrv/oddebug.o
- .text          0x000005ee      0x4ca isp.o
-                0x000005ee                ispTransmit_sw
-                0x0000062c                ispTransmit_hw
-                0x00000688                spiHWenable
-                0x00000696                ispSetSCKOption
-                0x00000756                ispDelay
-                0x00000766                ispConnect
-                0x000007b6                ispDisconnect
-                0x000007c6                ispEnterProgrammingMode
-                0x00000862                ispReadFlash
-                0x000008ce                ispWriteFlash
-                0x00000986                ispFlushPage
-                0x00000a32                ispReadEEPROM
-                0x00000a6c                ispWriteEEPROM
- .text          0x00000ab8       0x18 clock.o
-                0x00000ab8                clockWait
- .text          0x00000ad0       0xd2 tpi.o
-                0x00000ad0                tpi_init
-                0x00000af0                tpi_send_byte
-                0x00000b36                tpi_recv_byte
-                0x00000b68                tpi_read_block
-                0x00000b7c                tpi_write_block
- .text          0x00000ba2      0x574 main.o
-                0x00000ba2                usbFunctionSetup
-                0x00000e76                usbFunctionRead
-                0x00000f50                usbFunctionWrite
- .text          0x00001116        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_exit.o)
- .text          0x00001116        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_tablejump2.o)
- .text          0x00001116        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_copy_data.o)
- .text          0x00001116        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_clear_bss.o)
-                0x00001116                        . = ALIGN (0x2)
+ .text          0x000000bc        0x2 /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr4/crtatmega88.o
+                0x000000bc                __vector_20
+                0x000000bc                __vector_24
+                0x000000bc                __vector_12
+                0x000000bc                __bad_interrupt
+                0x000000bc                __vector_6
+                0x000000bc                __vector_3
+                0x000000bc                __vector_23
+                0x000000bc                __vector_25
+                0x000000bc                __vector_11
+                0x000000bc                __vector_13
+                0x000000bc                __vector_17
+                0x000000bc                __vector_19
+                0x000000bc                __vector_7
+                0x000000bc                __vector_5
+                0x000000bc                __vector_4
+                0x000000bc                __vector_9
+                0x000000bc                __vector_2
+                0x000000bc                __vector_21
+                0x000000bc                __vector_15
+                0x000000bc                __vector_8
+                0x000000bc                __vector_14
+                0x000000bc                __vector_10
+                0x000000bc                __vector_16
+                0x000000bc                __vector_18
+                0x000000bc                __vector_22
+ .text          0x000000be      0x274 usbdrv/usbdrv.o
+                0x000000be                usbPoll
+                0x00000324                usbInit
+ .text          0x00000332      0x28c usbdrv/usbdrvasm.o
+                0x00000332                usbCrc16
+                0x0000035c                usbCrc16Append
+                0x00000364                __vector_1
+ .text          0x000005be        0x0 usbdrv/oddebug.o
+ .text          0x000005be      0x4bc isp.o
+                0x000005be                ispTransmit_sw
+                0x000005fc                ispTransmit_hw
+                0x0000065a                spiHWenable
+                0x00000668                ispSetSCKOption
+                0x00000728                ispDelay
+                0x00000738                ispConnect
+                0x00000788                ispDisconnect
+                0x00000798                ispEnterProgrammingMode
+                0x00000834                ispReadFlash
+                0x0000089e                ispWriteFlash
+                0x00000950                ispFlushPage
+                0x000009f6                ispReadEEPROM
+                0x00000a30                ispWriteEEPROM
+ .text          0x00000a7a       0x18 clock.o
+                0x00000a7a                clockWait
+ .text          0x00000a92       0xd2 tpi.o
+                0x00000a92                tpi_init
+                0x00000ab2                tpi_send_byte
+                0x00000af8                tpi_recv_byte
+                0x00000b2a                tpi_read_block
+                0x00000b3e                tpi_write_block
+ .text          0x00000b64      0x542 main.o
+                0x00000b64                usbFunctionSetup
+                0x00000e18                usbFunctionRead
+                0x00000eec                usbFunctionWrite
+ .text          0x000010a6        0x0 /opt/local/lib/gcc/avr/14.2.0/avr4/libgcc.a(_exit.o)
+ .text          0x000010a6        0x0 /opt/local/lib/gcc/avr/14.2.0/avr4/libgcc.a(_copy_data.o)
+ .text          0x000010a6        0x0 /opt/local/lib/gcc/avr/14.2.0/avr4/libgcc.a(_clear_bss.o)
+                0x000010a6                        . = ALIGN (0x2)
  *(.text.*)
- .text.startup  0x00001116       0x26 main.o
-                0x00001116                main
+ .text.startup  0x000010a6       0x24 main.o
+                0x000010a6                main
  .text.libgcc.mul
-                0x0000113c        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_exit.o)
+                0x000010ca        0x0 /opt/local/lib/gcc/avr/14.2.0/avr4/libgcc.a(_exit.o)
  .text.libgcc.div
-                0x0000113c        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_exit.o)
- .text.libgcc   0x0000113c        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_exit.o)
+                0x000010ca        0x0 /opt/local/lib/gcc/avr/14.2.0/avr4/libgcc.a(_exit.o)
+ .text.libgcc   0x000010ca        0x0 /opt/local/lib/gcc/avr/14.2.0/avr4/libgcc.a(_exit.o)
  .text.libgcc.prologue
-                0x0000113c        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_exit.o)
+                0x000010ca        0x0 /opt/local/lib/gcc/avr/14.2.0/avr4/libgcc.a(_exit.o)
  .text.libgcc.builtins
-                0x0000113c        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_exit.o)
+                0x000010ca        0x0 /opt/local/lib/gcc/avr/14.2.0/avr4/libgcc.a(_exit.o)
  .text.libgcc.fmul
-                0x0000113c        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_exit.o)
+                0x000010ca        0x0 /opt/local/lib/gcc/avr/14.2.0/avr4/libgcc.a(_exit.o)
  .text.libgcc.fixed
-                0x0000113c        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_exit.o)
+                0x000010ca        0x0 /opt/local/lib/gcc/avr/14.2.0/avr4/libgcc.a(_exit.o)
  .text.libgcc.mul
-                0x0000113c        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_tablejump2.o)
+                0x000010ca        0x0 /opt/local/lib/gcc/avr/14.2.0/avr4/libgcc.a(_copy_data.o)
  .text.libgcc.div
-                0x0000113c        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_tablejump2.o)
- .text.libgcc   0x0000113c        0xc /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_tablejump2.o)
-                0x0000113c                __tablejump2__
+                0x000010ca        0x0 /opt/local/lib/gcc/avr/14.2.0/avr4/libgcc.a(_copy_data.o)
+ .text.libgcc   0x000010ca        0x0 /opt/local/lib/gcc/avr/14.2.0/avr4/libgcc.a(_copy_data.o)
  .text.libgcc.prologue
-                0x00001148        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_tablejump2.o)
+                0x000010ca        0x0 /opt/local/lib/gcc/avr/14.2.0/avr4/libgcc.a(_copy_data.o)
  .text.libgcc.builtins
-                0x00001148        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_tablejump2.o)
+                0x000010ca        0x0 /opt/local/lib/gcc/avr/14.2.0/avr4/libgcc.a(_copy_data.o)
  .text.libgcc.fmul
-                0x00001148        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_tablejump2.o)
+                0x000010ca        0x0 /opt/local/lib/gcc/avr/14.2.0/avr4/libgcc.a(_copy_data.o)
  .text.libgcc.fixed
-                0x00001148        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_tablejump2.o)
+                0x000010ca        0x0 /opt/local/lib/gcc/avr/14.2.0/avr4/libgcc.a(_copy_data.o)
  .text.libgcc.mul
-                0x00001148        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_copy_data.o)
+                0x000010ca        0x0 /opt/local/lib/gcc/avr/14.2.0/avr4/libgcc.a(_clear_bss.o)
  .text.libgcc.div
-                0x00001148        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_copy_data.o)
- .text.libgcc   0x00001148        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_copy_data.o)
+                0x000010ca        0x0 /opt/local/lib/gcc/avr/14.2.0/avr4/libgcc.a(_clear_bss.o)
+ .text.libgcc   0x000010ca        0x0 /opt/local/lib/gcc/avr/14.2.0/avr4/libgcc.a(_clear_bss.o)
  .text.libgcc.prologue
-                0x00001148        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_copy_data.o)
+                0x000010ca        0x0 /opt/local/lib/gcc/avr/14.2.0/avr4/libgcc.a(_clear_bss.o)
  .text.libgcc.builtins
-                0x00001148        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_copy_data.o)
+                0x000010ca        0x0 /opt/local/lib/gcc/avr/14.2.0/avr4/libgcc.a(_clear_bss.o)
  .text.libgcc.fmul
-                0x00001148        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_copy_data.o)
+                0x000010ca        0x0 /opt/local/lib/gcc/avr/14.2.0/avr4/libgcc.a(_clear_bss.o)
  .text.libgcc.fixed
-                0x00001148        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_copy_data.o)
- .text.libgcc.mul
-                0x00001148        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_clear_bss.o)
- .text.libgcc.div
-                0x00001148        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_clear_bss.o)
- .text.libgcc   0x00001148        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_clear_bss.o)
- .text.libgcc.prologue
-                0x00001148        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_clear_bss.o)
- .text.libgcc.builtins
-                0x00001148        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_clear_bss.o)
- .text.libgcc.fmul
-                0x00001148        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_clear_bss.o)
- .text.libgcc.fixed
-                0x00001148        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_clear_bss.o)
-                0x00001148                        . = ALIGN (0x2)
+                0x000010ca        0x0 /opt/local/lib/gcc/avr/14.2.0/avr4/libgcc.a(_clear_bss.o)
+                0x000010ca                        . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x00001148        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_exit.o)
-                0x00001148                exit
-                0x00001148                _exit
+ .fini9         0x000010ca        0x0 /opt/local/lib/gcc/avr/14.2.0/avr4/libgcc.a(_exit.o)
+                0x000010ca                exit
+                0x000010ca                _exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -344,86 +333,84 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x00001148        0x4 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_exit.o)
+ .fini0         0x000010ca        0x4 /opt/local/lib/gcc/avr/14.2.0/avr4/libgcc.a(_exit.o)
  *(.fini0)
  *(.hightext)
  *(.hightext*)
  *(.progmemx.*)
-                0x0000114c                        . = ALIGN (0x2)
+                0x000010ce                        . = ALIGN (0x2)
  *(.jumptables)
  *(.jumptables*)
  .jumptables.gcc.usbFunctionSetup
-                0x0000114c       0xfe main.o
-                0x0000124a                        _etext = .
+                0x000010ce       0xfe main.o
+                0x000011cc                        _etext = .
 
-.data           0x00800060        0x4 load address 0x0000124a
-                0x00800060                        PROVIDE (__data_start = .)
+.data           0x00800100        0x4 load address 0x000011cc
+                0x00800100                        PROVIDE (__data_start = .)
  *(.data)
- .data          0x00800060        0x0 /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/crtatmega32.o
- .data          0x00800060        0x2 usbdrv/usbdrv.o
-                0x00800061                usbTxLen
- .data          0x00800062        0x0 usbdrv/usbdrvasm.o
- .data          0x00800062        0x0 usbdrv/oddebug.o
- .data          0x00800062        0x2 isp.o
-                0x00800062                ispTransmit
- .data          0x00800064        0x0 clock.o
- .data          0x00800064        0x0 tpi.o
- .data          0x00800064        0x0 main.o
- .data          0x00800064        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_exit.o)
- .data          0x00800064        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_tablejump2.o)
- .data          0x00800064        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_copy_data.o)
- .data          0x00800064        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_clear_bss.o)
+ .data          0x00800100        0x0 /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr4/crtatmega88.o
+ .data          0x00800100        0x2 usbdrv/usbdrv.o
+                0x00800101                usbTxLen
+ .data          0x00800102        0x0 usbdrv/usbdrvasm.o
+ .data          0x00800102        0x0 usbdrv/oddebug.o
+ .data          0x00800102        0x2 isp.o
+                0x00800102                ispTransmit
+ .data          0x00800104        0x0 clock.o
+ .data          0x00800104        0x0 tpi.o
+ .data          0x00800104        0x0 main.o
+ .data          0x00800104        0x0 /opt/local/lib/gcc/avr/14.2.0/avr4/libgcc.a(_exit.o)
+ .data          0x00800104        0x0 /opt/local/lib/gcc/avr/14.2.0/avr4/libgcc.a(_copy_data.o)
+ .data          0x00800104        0x0 /opt/local/lib/gcc/avr/14.2.0/avr4/libgcc.a(_clear_bss.o)
  *(.data*)
  *(.gnu.linkonce.d*)
  *(.rodata)
  *(.rodata*)
  *(.gnu.linkonce.r*)
-                0x00800064                        . = ALIGN (0x2)
-                0x00800064                        _edata = .
-                0x00800064                        PROVIDE (__data_end = .)
+                0x00800104                        . = ALIGN (0x2)
+                0x00800104                        _edata = .
+                0x00800104                        PROVIDE (__data_end = .)
 
-.bss            0x00800064       0x46
-                0x00800064                        PROVIDE (__bss_start = .)
+.bss            0x00800104       0x46
+                0x00800104                        PROVIDE (__bss_start = .)
  *(.bss)
- .bss           0x00800064        0x0 /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/crtatmega32.o
- .bss           0x00800064       0x2b usbdrv/usbdrv.o
-                0x00800064                usbMsgPtr
-                0x00800066                usbTxBuf
-                0x00800071                usbRxToken
-                0x00800072                usbCurrentTok
-                0x00800073                usbRxLen
-                0x00800074                usbConfiguration
-                0x00800075                usbNewDeviceAddr
-                0x00800076                usbDeviceAddr
-                0x00800077                usbInputBufOffset
-                0x00800078                usbRxBuf
- .bss           0x0080008f        0x0 usbdrv/usbdrvasm.o
- .bss           0x0080008f        0x0 usbdrv/oddebug.o
- .bss           0x0080008f        0x4 isp.o
-                0x0080008f                isp_hiaddr
-                0x00800090                sck_spsr
-                0x00800091                sck_spcr
-                0x00800092                sck_sw_delay
- .bss           0x00800093        0x0 clock.o
- .bss           0x00800093        0x0 tpi.o
- .bss           0x00800093       0x15 main.o
- .bss           0x008000a8        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_exit.o)
- .bss           0x008000a8        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_tablejump2.o)
- .bss           0x008000a8        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_copy_data.o)
- .bss           0x008000a8        0x0 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_clear_bss.o)
+ .bss           0x00800104        0x0 /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr4/crtatmega88.o
+ .bss           0x00800104       0x2b usbdrv/usbdrv.o
+                0x00800104                usbMsgPtr
+                0x00800106                usbTxBuf
+                0x00800111                usbRxToken
+                0x00800112                usbCurrentTok
+                0x00800113                usbRxLen
+                0x00800114                usbConfiguration
+                0x00800115                usbNewDeviceAddr
+                0x00800116                usbDeviceAddr
+                0x00800117                usbInputBufOffset
+                0x00800118                usbRxBuf
+ .bss           0x0080012f        0x0 usbdrv/usbdrvasm.o
+ .bss           0x0080012f        0x0 usbdrv/oddebug.o
+ .bss           0x0080012f        0x4 isp.o
+                0x0080012f                isp_hiaddr
+                0x00800130                sck_spsr
+                0x00800131                sck_spcr
+                0x00800132                sck_sw_delay
+ .bss           0x00800133        0x0 clock.o
+ .bss           0x00800133        0x0 tpi.o
+ .bss           0x00800133       0x15 main.o
+ .bss           0x00800148        0x0 /opt/local/lib/gcc/avr/14.2.0/avr4/libgcc.a(_exit.o)
+ .bss           0x00800148        0x0 /opt/local/lib/gcc/avr/14.2.0/avr4/libgcc.a(_copy_data.o)
+ .bss           0x00800148        0x0 /opt/local/lib/gcc/avr/14.2.0/avr4/libgcc.a(_clear_bss.o)
  *(.bss*)
  *(COMMON)
- COMMON         0x008000a8        0x2 tpi.o
-                0x008000a8                tpi_dly_cnt
-                0x008000aa                        PROVIDE (__bss_end = .)
-                0x0000124a                        __data_load_start = LOADADDR (.data)
-                0x0000124e                        __data_load_end = (__data_load_start + SIZEOF (.data))
+ COMMON         0x00800148        0x2 tpi.o
+                0x00800148                tpi_dly_cnt
+                0x0080014a                        PROVIDE (__bss_end = .)
+                0x000011cc                        __data_load_start = LOADADDR (.data)
+                0x000011d0                        __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x008000aa        0x0
+.noinit         0x0080014a        0x0
                 [!provide]                        PROVIDE (__noinit_start = .)
  *(.noinit .noinit.* .gnu.linkonce.n.*)
                 [!provide]                        PROVIDE (__noinit_end = .)
-                0x008000aa                        _end = .
+                0x0080014a                        _end = .
                 [!provide]                        PROVIDE (__heap_start = .)
 
 .eeprom         0x00810000        0x0
@@ -472,7 +459,10 @@ END GROUP
 .note.gnu.avr.deviceinfo
                 0x00000000       0x3c
  .note.gnu.avr.deviceinfo
-                0x00000000       0x3c /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/crtatmega32.o
+                0x00000000       0x3c /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr4/crtatmega88.o
+
+.avr.prop       0x00000000       0x16
+ .avr.prop      0x00000000       0x16 main.o
 
 .gnu.build.attributes
  *(.gnu.build.attributes .gnu.build.attributes.*)
@@ -492,54 +482,48 @@ END GROUP
 .debug_sfnames
  *(.debug_sfnames)
 
-.debug_aranges  0x00000000       0x80
+.debug_aranges  0x00000000       0x60
  *(.debug_aranges)
  .debug_aranges
-                0x00000000       0x20 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_exit.o)
+                0x00000000       0x20 /opt/local/lib/gcc/avr/14.2.0/avr4/libgcc.a(_exit.o)
  .debug_aranges
-                0x00000020       0x20 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_tablejump2.o)
+                0x00000020       0x20 /opt/local/lib/gcc/avr/14.2.0/avr4/libgcc.a(_copy_data.o)
  .debug_aranges
-                0x00000040       0x20 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_copy_data.o)
- .debug_aranges
-                0x00000060       0x20 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_clear_bss.o)
+                0x00000040       0x20 /opt/local/lib/gcc/avr/14.2.0/avr4/libgcc.a(_clear_bss.o)
 
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000      0x576
+.debug_info     0x00000000      0x660
  *(.debug_info .gnu.linkonce.wi.*)
- .debug_info    0x00000000      0x4e6 /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/crtatmega32.o
- .debug_info    0x000004e6       0x24 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_exit.o)
- .debug_info    0x0000050a       0x24 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_tablejump2.o)
- .debug_info    0x0000052e       0x24 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_copy_data.o)
- .debug_info    0x00000552       0x24 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_clear_bss.o)
+ .debug_info    0x00000000      0x5f4 /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr4/crtatmega88.o
+ .debug_info    0x000005f4       0x24 /opt/local/lib/gcc/avr/14.2.0/avr4/libgcc.a(_exit.o)
+ .debug_info    0x00000618       0x24 /opt/local/lib/gcc/avr/14.2.0/avr4/libgcc.a(_copy_data.o)
+ .debug_info    0x0000063c       0x24 /opt/local/lib/gcc/avr/14.2.0/avr4/libgcc.a(_clear_bss.o)
 
-.debug_abbrev   0x00000000      0x4f3
+.debug_abbrev   0x00000000      0x5de
  *(.debug_abbrev)
- .debug_abbrev  0x00000000      0x4a3 /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/crtatmega32.o
- .debug_abbrev  0x000004a3       0x14 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_exit.o)
- .debug_abbrev  0x000004b7       0x14 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_tablejump2.o)
- .debug_abbrev  0x000004cb       0x14 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_copy_data.o)
- .debug_abbrev  0x000004df       0x14 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_clear_bss.o)
+ .debug_abbrev  0x00000000      0x5a2 /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr4/crtatmega88.o
+ .debug_abbrev  0x000005a2       0x14 /opt/local/lib/gcc/avr/14.2.0/avr4/libgcc.a(_exit.o)
+ .debug_abbrev  0x000005b6       0x14 /opt/local/lib/gcc/avr/14.2.0/avr4/libgcc.a(_copy_data.o)
+ .debug_abbrev  0x000005ca       0x14 /opt/local/lib/gcc/avr/14.2.0/avr4/libgcc.a(_clear_bss.o)
 
-.debug_line     0x00000000      0x1d3
+.debug_line     0x00000000      0x16a
  *(.debug_line .debug_line.* .debug_line_end)
- .debug_line    0x00000000       0x1d /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/crtatmega32.o
- .debug_line    0x0000001d       0x51 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_exit.o)
- .debug_line    0x0000006e       0x69 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_tablejump2.o)
- .debug_line    0x000000d7       0x87 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_copy_data.o)
- .debug_line    0x0000015e       0x75 /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_clear_bss.o)
+ .debug_line    0x00000000       0x1d /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr4/crtatmega88.o
+ .debug_line    0x0000001d       0x51 /opt/local/lib/gcc/avr/14.2.0/avr4/libgcc.a(_exit.o)
+ .debug_line    0x0000006e       0x87 /opt/local/lib/gcc/avr/14.2.0/avr4/libgcc.a(_copy_data.o)
+ .debug_line    0x000000f5       0x75 /opt/local/lib/gcc/avr/14.2.0/avr4/libgcc.a(_clear_bss.o)
 
 .debug_frame
  *(.debug_frame)
 
-.debug_str      0x00000000      0x2b1
+.debug_str      0x00000000      0x323
  *(.debug_str)
- .debug_str     0x00000000      0x196 /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr5/crtatmega32.o
- .debug_str     0x00000196      0x11b /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_exit.o)
- .debug_str     0x000002b1      0x11b /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_tablejump2.o)
- .debug_str     0x000002b1      0x11b /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_copy_data.o)
- .debug_str     0x000002b1      0x11b /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_clear_bss.o)
+ .debug_str     0x00000000      0x208 /opt/local/lib/gcc/avr/14.2.0/../../../../avr/lib/avr4/crtatmega88.o
+ .debug_str     0x00000208      0x11b /opt/local/lib/gcc/avr/14.2.0/avr4/libgcc.a(_exit.o)
+ .debug_str     0x00000323      0x11b /opt/local/lib/gcc/avr/14.2.0/avr4/libgcc.a(_copy_data.o)
+ .debug_str     0x00000323      0x11b /opt/local/lib/gcc/avr/14.2.0/avr4/libgcc.a(_clear_bss.o)
 
 .debug_loc
  *(.debug_loc)
@@ -572,13 +556,11 @@ END GROUP
                 0x00000000      0x10f
  *(.debug_line_str)
  .debug_line_str
-                0x00000000      0x10f /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_exit.o)
+                0x00000000      0x10f /opt/local/lib/gcc/avr/14.2.0/avr4/libgcc.a(_exit.o)
  .debug_line_str
-                0x0000010f      0x10f /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_tablejump2.o)
+                0x0000010f      0x10f /opt/local/lib/gcc/avr/14.2.0/avr4/libgcc.a(_copy_data.o)
  .debug_line_str
-                0x0000010f      0x10f /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_copy_data.o)
- .debug_line_str
-                0x0000010f      0x10f /opt/local/lib/gcc/avr/14.2.0/avr5/libgcc.a(_clear_bss.o)
+                0x0000010f      0x10f /opt/local/lib/gcc/avr/14.2.0/avr4/libgcc.a(_clear_bss.o)
 
 .debug_loclists
  *(.debug_loclists)
